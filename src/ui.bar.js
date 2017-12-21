@@ -1,4 +1,5 @@
 /* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
 (function ($) {
   Mavo.attributes.push('mv-bar');

@@ -1,4 +1,5 @@
 /* global Mavo, Bliss, Stretchy */
+/* eslint new-cap: "off" */
 
 /**
  * Mavo: Create web applications by writing HTML and CSS!

@@ -1,0 +1,9 @@
+Unexpected todo comment.
+Unexpected todo comment.
+Unexpected todo comment.
+Method constructor has a complexity of 26.
+Blocks are nested too deeply (5).
+Unexpected todo comment.
+Unexpected todo comment.
+Unexpected todo comment.
+Unexpected fixme comment.

@@ -1,0 +1,106 @@
+  52 Unexpected chained assignment.
+  41 Unexpected var, use let or const instead.
+  39 Expected !== and instead saw !=.
+  22 Unexpected mix of && and ||.
+  21 evt is defined but never used.
+  18 Unexpected mix of || and &&.
+  18 The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.
+  17 property used outside of binding context.
+  16 Split let declarations into multiple statements.
+  15 item used outside of binding context.
+  12 ret used outside of binding context.
+  12 length property should be compared to a value.
+  11 Arrow function should not return assignment.
+  10 j used outside of binding context.
+   9 Unexpected negated condition.
+   9 Return statement should not contain assignment.
+   7 name used outside of binding context.
+   7 i used outside of binding context.
+   7 button used outside of binding context.
+   7 The catch parameter should be named err.
+   7 Expected an assignment or function call and instead saw an expression.
+   7 $u was used before it was defined.
+   6 id used outside of binding context.
+   6 Unexpected mix of + and *.
+   5 ord used outside of binding context.
+   5 Format used outside of binding context.
+   4 o is defined but never used.
+   4 Expected a conditional expression and instead saw an assignment.
+   3 records is defined but never used.
+   3 observer was used before it was defined.
+   3 observer used outside of binding context.
+   3 name is already defined.
+   3 e is defined but never used.
+   3 Expected a default case.
+   2 x is defined but never used.
+   2 url used outside of binding context.
+   2 u is defined but never used.
+   2 ret is never reassigned. Use const instead.
+   2 ret is assigned a value but never used.
+   2 property is already defined.
+   2 ord was used before it was defined.
+   2 onload was used before it was defined.
+   2 jsep is not defined.
+   2 backend is defined but never used.
+   2 _ is assigned a value but never used.
+   2 Unnecessary escape character: \/.
+   2 Unexpected mix of + and %.
+   2 ResizeObserver is not defined.
+   2 Papa is not defined.
+   2 Empty block statement.                                                                                       no-empty
+   2 Do not use new for side effects.
+   1 xhr is defined but never used.
+   1 wasPrimitive used outside of binding context.
+   1 url is defined but never used.
+   1 url is already defined.
+   1 type used outside of binding context.
+   1 timer is defined but never used.
+   1 text is assigned a value but never used.
+   1 test is defined but never used.
+   1 source is defined but never used.
+   1 roles is assigned a value but never used.
+   1 ret is already defined.
+   1 results is never reassigned. Use const instead.
+   1 repoInfo is defined but never used.
+   1 reject is defined but never used.
+   1 record is defined but never used.
+   1 r is defined but never used.
+   1 properties is never reassigned. Use const instead.
+   1 previousValue used outside of binding context.
+   1 previousMode is never reassigned. Use const instead.
+   1 previous is never reassigned. Use const instead.
+   1 path is defined but never used.
+   1 parentValue used outside of binding context.
+   1 oldIndex is assigned a value but never used.
+   1 obj is assigned a value but never used.
+   1 o is assigned a value but never used.
+   1 node is not defined.
+   1 node is defined but never used.
+   1 newValue used outside of binding context.
+   1 me is assigned a value but never used.
+   1 json is assigned a value but never used.
+   1 j is already defined.
+   1 item is already defined.
+   1 input was used before it was defined.
+   1 index is not defined.
+   1 idObserver is assigned a value but never used.
+   1 id is already defined.
+   1 fileInfo is defined but never used.
+   1 f is defined but never used.
+   1 existingType is assigned a value but never used.
+   1 entries is defined but never used.
+   1 editor used outside of binding context.
+   1 dragula is not defined.
+   1 db is never reassigned. Use const instead.
+   1 dateB is never reassigned. Use const instead.
+   1 dateA is never reassigned. Use const instead.
+   1 data is never reassigned. Use const instead.
+   1 da is never reassigned. Use const instead.
+   1 context is never reassigned. Use const instead.
+   1 arr2 is never reassigned. Use const instead.
+   1 args is never reassigned. Use const instead.
+   1 all is not modified in this loop.
+   1 Unnecessary escape character: \-.
+   1 The Function constructor is eval.
+   1 Format is already defined.
+   1 $$ is not defined.

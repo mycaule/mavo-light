@@ -1,4 +1,5 @@
 /* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
 (function ($, $$) {
   const _ = Mavo.Locale = $.Class({
