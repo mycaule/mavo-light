@@ -1,7 +1,9 @@
+/* global Mavo, Bliss */
+
 (function ($, $$) {
   Mavo.attributes.push('mv-multiple', 'mv-order', 'mv-accepts');
 
-  var _ = Mavo.Collection = $.Class({
+  const _ = Mavo.Collection = $.Class({
     extends: Mavo.Node,
     nodeType: 'Collection',
     constructor(element, mavo, o) {
@@ -178,7 +180,7 @@
       if (this.mavo.expressions.active && !o.silent) {
         requestAnimationFrame(() => {
           env.changed.forEach(i => {
-            i.dataChanged(i == env.item && env.previousIndex === undefined ? 'add' : 'move');
+            i.dataChanged(i === env.item && env.previousIndex === undefined ? 'add' : 'move');
             i.unsavedChanges = true;
           });
 
@@ -437,7 +439,7 @@
 
       const items = this.children.filter(item => !item.deleted && !item.hidden);
 
-      if (this.property == property) {
+      if (this.property === property) {
         return o.collections ? this : items;
       }
 
@@ -449,8 +451,8 @@
     },
 
     isCompatible(c) {
-      return c && this.itemTemplate.nodeType == c.itemTemplate.nodeType && (c === this ||
-           c.template == this || this.template == c || this.template && this.template == c.template ||
+      return c && this.itemTemplate.nodeType === c.itemTemplate.nodeType && (c === this ||
+           c.template === this || this.template === c || this.template && this.template === c.template ||
            this.accepts.indexOf(c.property) > -1);
     },
 
@@ -498,7 +500,7 @@
           return false;
         },
         moves: (el, container, handle) => {
-          return handle.classList.contains('mv-drag-handle') && handle.closest(Mavo.selectors.multiple) == el;
+          return handle.classList.contains('mv-drag-handle') && handle.closest(Mavo.selectors.multiple) === el;
         },
         accepts(el, target, source, next) {
           if (el.contains(target)) {

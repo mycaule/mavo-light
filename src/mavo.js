@@ -1,10 +1,12 @@
+/* global Mavo, Bliss, Stretchy */
+
 /**
  * Mavo: Create web applications by writing HTML and CSS!
  * @author Lea Verou and contributors
  * @version %%VERSION%%
  */
 (function ($, $$) {
-  var _ = self.Mavo = $.Class({
+  const _ = self.Mavo = $.Class({
     constructor(element) {
       this.treeBuilt = Mavo.defer();
       this.dataLoaded = Mavo.defer();
@@ -109,14 +111,14 @@
 
       this.permissions.can('login', () => {
       // We also support a URL param to trigger login, in case the user doesn't want visible login UI
-        if (Mavo.Functions.url('login') !== null && this.index == 1 || Mavo.Functions.url(this.id + '-login') !== null) {
+        if (Mavo.Functions.url('login') !== null && this.index === 1 || Mavo.Functions.url(this.id + '-login') !== null) {
           this.primaryBackend.login();
         }
       });
 
     // Update login status
       $.bind(this.element, 'mv-login.mavo', evt => {
-        if (evt.backend == (this.source || this.storage)) {
+        if (evt.backend === (this.source || this.storage)) {
         // If last time we rendered we got nothing, maybe now we'll have better luck?
           if (!this.root.data && !this.unsavedChanges) {
             this.load();
@@ -164,7 +166,7 @@
                 let previousMode = node.mode,
                   mode;
 
-                if (node.element == element) {
+                if (node.element === element) {
                 // If attribute set directly on a Mavo node, then it forces it into that mode
                 // otherwise, descendant nodes still inherit, unless they are also mode-restricted
                   mode = node.element.getAttribute('mv-mode');
@@ -173,8 +175,8 @@
                 // Inherited
                   if (node.modes) {
                   // Mode-restricted, we cannot change to the other mode
-                  continue;
-                }
+                    continue;
+                  }
 
                   mode = _.getStyle(node.element.parentNode, '--mv-mode');
                 }
@@ -182,7 +184,7 @@
                 node.mode = mode;
 
                 if (previousMode != node.mode) {
-                  node[node.mode == 'edit' ? 'edit' : 'done']();
+                  node[node.mode === 'edit' ? 'edit' : 'done']();
                 }
               }
             });
@@ -263,10 +265,10 @@
     // Keyboard navigation
       this.element.addEventListener('keydown', evt => {
       // Ctrl + S or Cmd + S to save
-        if (this.permissions.save && evt.keyCode == 83 && evt[_.superKey] && !evt.altKey) {
+        if (this.permissions.save && evt.keyCode === 83 && evt[_.superKey] && !evt.altKey) {
           evt.preventDefault();
           this.save();
-        } else if (evt.keyCode == 38 || evt.keyCode == 40) {
+        } else if (evt.keyCode === 38 || evt.keyCode === 40) {
           let element = evt.target;
 
           if (element.matches('textarea, input[type=range], input[type=number]')) {
@@ -282,7 +284,7 @@
           const node = Mavo.Node.get(element);
 
           if (node && node.closestCollection) {
-            const nextNode = node.getCousin(evt.keyCode == 38 ? -1 : 1, {wrap: true});
+            const nextNode = node.getCousin(evt.keyCode === 38 ? -1 : 1, {wrap: true});
 
             if (nextNode) {
               if (editor && nextNode.editing) {
@@ -356,7 +358,7 @@
           const parent = evt.target.parentNode.closest(_.selectors.multiple);
 
           if (parent) {
-            parent.classList.toggle('mv-has-hovered-item', evt.type == 'mouseenter');
+            parent.classList.toggle('mv-has-hovered-item', evt.type === 'mouseenter');
           }
         }
       }, true);
@@ -406,7 +408,7 @@
       let previous = this[role],
         backend;
 
-      if (this.index == 1) {
+      if (this.index === 1) {
         backend = _.Functions.url(role);
       }
 
@@ -417,7 +419,7 @@
       if (backend) {
         backend = backend.trim();
 
-        if (backend == 'none') {
+        if (backend === 'none') {
           backend = null;
         }
       }
@@ -482,7 +484,7 @@
       if (err) {
         const xhr = err instanceof XMLHttpRequest ? err : err.xhr;
 
-        if (xhr && xhr.status == 404) {
+        if (xhr && xhr.status === 404) {
           this.render(null);
         } else {
           let message = this._('problem-loading');
@@ -636,7 +638,7 @@
         if (id instanceof Element) {
         // Get by element
           for (var name in _.all) {
-            if (_.all[name].element == id) {
+            if (_.all[name].element === id) {
               return _.all[name];
             }
           }
@@ -650,7 +652,7 @@
       },
 
       superKey: navigator.platform.indexOf('Mac') === 0 ? 'metaKey' : 'ctrlKey',
-      base: location.protocol == 'about:' ? (document.currentScript ? document.currentScript.src : 'http://mavo.io') : location,
+      base: location.protocol === 'about:' ? (document.currentScript ? document.currentScript.src : 'http://mavo.io') : location,
       dependencies: [],
 
       init(container = document) {

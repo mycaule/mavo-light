@@ -1,5 +1,7 @@
+/* global Mavo, Bliss */
+
 (function ($, $$) {
-  var _ = Mavo.Primitive = $.Class({
+  const _ = Mavo.Primitive = $.Class({
     extends: Mavo.Node,
     nodeType: 'Primitive',
     constructor(element, mavo, o) {
@@ -50,7 +52,7 @@
           if (!this.template) {
             this.originalEditorObserver = new Mavo.Observer(this.originalEditor, 'all', records => {
               this.copies.concat(this).forEach(primitive => {
-                if (primitive.defaultSource == 'editor') {
+                if (primitive.defaultSource === 'editor') {
                   primitive.default = this.originalEditor.value;
                 }
 
@@ -113,7 +115,7 @@
 
       const keepTemplateValue = !this.template || // Not in a collection or first item
                             this.template.templateValue != this.templateValue || // Or different template value than first item
-                this.modes == 'edit'; // Or is always edited
+                this.modes === 'edit'; // Or is always edited
 
       if (this.default === undefined && keepTemplateValue) {
         this.initialValue = this.templateValue;
@@ -249,7 +251,7 @@
       // Find default editor for datatype
         let editor = this.config.editor;
 
-        if (!editor || this.datatype == 'boolean') {
+        if (!editor || this.datatype === 'boolean') {
           editor = Mavo.Elements.defaultConfig[this.datatype || 'string'].editor;
         }
 
@@ -280,7 +282,7 @@
     // Enter should go to the next item or insert a new one
       if (!this.popup && this.closestCollection && this.editor.matches(Mavo.selectors.textInput)) {
         this.editor.addEventListener('keydown', evt => {
-          if (evt.keyCode == 13 && this.closestCollection.editing && (evt.shiftKey || !multiline)) { // Enter
+          if (evt.keyCode === 13 && this.closestCollection.editing && (evt.shiftKey || !multiline)) { // Enter
             let copy = this.getCousin(1);
 
             if (!copy) {
@@ -299,7 +301,7 @@
             if (multiline) {
               evt.preventDefault();
             }
-          } else if (evt.keyCode == 8 && (this.empty && this.collection || evt[Mavo.superKey])) {
+          } else if (evt.keyCode === 8 && (this.empty && this.collection || evt[Mavo.superKey])) {
           // Backspace on empty primitive or Cmd/Ctrl + Backspace should delete item
             this.closestCollection.delete(this.closestItem);
 
@@ -472,7 +474,7 @@
     },
 
     find(property, o = {}) {
-      if (this.property == property && o.exclude !== this) {
+      if (this.property === property && o.exclude !== this) {
         return this;
       }
     },
@@ -523,7 +525,7 @@
 
         value = _.safeCast(value, this.datatype);
 
-        if (!o.force && value == this._value && oldDatatype == this.datatype) {
+        if (!o.force && value === this._value && oldDatatype === this.datatype) {
         // Do nothing if value didn't actually change, unless forced to
           return value;
         }
@@ -569,7 +571,7 @@
 
     live: {
       default(value) {
-        if (this.value == this._default) {
+        if (this.value === this._default) {
           this.value = value;
         }
       },
@@ -580,7 +582,7 @@
 
       datatype(value) {
         if (value !== this._datatype) {
-          if (value == 'boolean' && !this.attribute) {
+          if (value === 'boolean' && !this.attribute) {
             this.attribute = Mavo.Elements.defaultConfig.boolean.attribute;
           }
 
@@ -621,7 +623,7 @@
           return value;
         }
 
-        if (datatype == 'boolean') {
+        if (datatype === 'boolean') {
           if (value === 'false' || value === 0 || value === '') {
             return false;
           }
@@ -633,7 +635,7 @@
           return value;
         }
 
-        if (datatype == 'number') {
+        if (datatype === 'number') {
           if (/^[-+]?[0-9.e]+$/i.test(String(value))) {
             return cast;
           }
@@ -665,7 +667,7 @@
         attribute = config.attribute;
         datatype = config.datatype;
 
-        if (config.getValue && attribute == config.attribute) {
+        if (config.getValue && attribute === config.attribute) {
           return config.getValue(element);
         }
 
@@ -689,11 +691,11 @@
           attribute = element.getAttribute('mv-attribute') || undefined;
         }
 
-        if (attribute == 'null' || attribute == 'none') {
+        if (attribute === 'null' || attribute === 'none') {
           attribute = null;
         }
 
-        if (!datatype && attribute == _.getValueAttribute(element)) {
+        if (!datatype && attribute === _.getValueAttribute(element)) {
           datatype = element.getAttribute('datatype') || undefined;
         }
 
@@ -719,7 +721,7 @@
           o.attribute = o.attribute !== undefined ? o.attribute : o.config.attribute;
           o.datatype = o.datatype !== undefined ? o.datatype : o.config.datatype;
 
-          if (o.config.setValue && o.attribute == o.config.attribute) {
+          if (o.config.setValue && o.attribute === o.config.attribute) {
             return o.config.setValue(element, value, o.attribute);
           }
         }
@@ -740,7 +742,7 @@
 
         // Set attribute anyway, even if we set a property because when
         // they're not in sync it gets really fucking confusing.
-          if (o.datatype == 'boolean') {
+          if (o.datatype === 'boolean') {
             if (value != element.hasAttribute(o.attribute)) {
               $.toggleAttribute(element, o.attribute, value, value);
             }
@@ -772,7 +774,7 @@
           return false;
         }
 
-        if (element.namespaceURI == 'http://www.w3.org/2000/svg') {
+        if (element.namespaceURI === 'http://www.w3.org/2000/svg') {
         // SVG has a fucked up DOM, do not use these properties
           return false;
         }
@@ -783,13 +785,13 @@
       format: (value, o = {}) => {
         if (o.map && /^select$/i.test(o.map.nodeName)) {
           for (var i = 0, option; option = o.map.options[i]; i++) {
-            if (option.value == value) {
+            if (option.value === value) {
               return option.textContent;
             }
           }
         }
 
-        if (($.type(value) === 'number' || o.datatype == 'number')) {
+        if (($.type(value) === 'number' || o.datatype === 'number')) {
           const skipNumberFormatting = o.attribute || o.element && o.element.matches('style, pre');
 
           if (!skipNumberFormatting) {

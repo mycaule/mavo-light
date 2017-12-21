@@ -1,7 +1,9 @@
-(function ($, $$) {
+/* global Mavo, Bliss */
+
+(function ($) {
   Mavo.attributes.push('mv-expressions');
 
-  var _ = Mavo.Expression = $.Class({
+  const _ = Mavo.Expression = $.Class({
     constructor(expression) {
       this.expression = expression;
     },
@@ -58,7 +60,7 @@ Not an expression? Use mv-expressions="none" to disable expressions on an elemen
           return true;
         }
 
-        if (evt.action == 'propertychange') {
+        if (evt.action === 'propertychange') {
           return Mavo.Functions.intersects(identifiers, evt.node.path);
         }
 
@@ -133,4 +135,4 @@ Not an expression? Use mv-expressions="none" to disable expressions on an elemen
   });
 
   _.Syntax.default = new _.Syntax('[', ']');
-})(Bliss, Bliss.$);
+})(Bliss);

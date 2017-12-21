@@ -1,5 +1,7 @@
+/* global Mavo, Bliss */
+
 (function ($, $$) {
-  var _ = Mavo.Group = $.Class({
+  const _ = Mavo.Group = $.Class({
     extends: Mavo.Node,
     nodeType: 'Group',
     constructor(element, mavo, o) {
@@ -73,7 +75,7 @@
 
       const properties = Object.keys(this.children);
 
-      if (properties.length == 1 && properties[0] == this.property) {
+      if (properties.length === 1 && properties[0] === this.property) {
       // {foo: {foo: 5}} should become {foo: 5}
         const options = $.extend($.extend({}, env.options), {forceObjects: true});
         env.data = this.children[this.property].getData(options);
@@ -129,7 +131,7 @@
         return;
       }
 
-      if (this.property == property) {
+      if (this.property === property) {
         return this;
       }
 
@@ -189,7 +191,7 @@
           var property = this.property;
         } else {
           const type = $.type(data);
-          const score = prop => (this.children[prop] instanceof Mavo.Primitive) + (this.children[prop].datatype == type);
+          const score = prop => (this.children[prop] instanceof Mavo.Primitive) + (this.children[prop].datatype === type);
 
           var property = Object.keys(this.children)
           .filter(p => !this.children[p].expressionText)

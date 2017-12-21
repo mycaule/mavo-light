@@ -1,5 +1,7 @@
-(function ($, $$) {
-  var _ = Mavo.Permissions = $.Class({
+/* global Mavo, Bliss */
+
+(function ($) {
+  const _ = Mavo.Permissions = $.Class({
     constructor(o) {
       this.triggers = [];
       this.hooks = new $.Hooks();
@@ -86,7 +88,7 @@
     parentChanged(o = {}) {
       const localValue = this['_' + o.action];
 
-      if (localValue !== undefined || o.from == o.value) {
+      if (localValue !== undefined || o.from === o.value) {
       // We have a local value so we don’t care about parent changes OR nothing changed
         return;
       }
@@ -101,7 +103,7 @@
       from = Boolean(from);
       value = Boolean(value);
 
-      if (value == from) {
+      if (value === from) {
       // Nothing changed
         return;
       }
@@ -143,7 +145,7 @@
       parent(parent) {
         const oldParent = this._parent;
 
-        if (oldParent == parent) {
+        if (oldParent === parent) {
           return;
         }
 
@@ -229,4 +231,4 @@
       this.edit = false;
     }
   });
-})(Bliss, Bliss.$);
+})(Bliss);

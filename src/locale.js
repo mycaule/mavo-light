@@ -1,5 +1,7 @@
+/* global Mavo, Bliss */
+
 (function ($, $$) {
-  var _ = Mavo.Locale = $.Class({
+  const _ = Mavo.Locale = $.Class({
     constructor(lang, phrases) {
       this.lang = lang;
       this.phrases = {};
@@ -48,7 +50,7 @@
       lang(lang) {
         this.baseLang = _.getBaseLang(lang);
 
-        if (lang == this.baseLang) {
+        if (lang === this.baseLang) {
           this.baseLang = null;
         }
       }

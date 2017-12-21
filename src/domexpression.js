@@ -1,5 +1,7 @@
-(function ($, $$) {
-  var _ = Mavo.DOMExpression = $.Class({
+/* global Mavo, Bliss */
+
+(function ($) {
+  const _ = Mavo.DOMExpression = $.Class({
     constructor(o = {}) {
       this.mavo = o.mavo;
       this.template = o.template && o.template.template || o.template;
@@ -20,7 +22,7 @@
 
       Mavo.hooks.run('domexpression-init-start', this);
 
-      if (this.attribute == 'mv-value') {
+      if (this.attribute === 'mv-value') {
         this.originalAttribute = 'mv-value';
         this.attribute = Mavo.Primitive.getValueAttribute(this.element);
         this.fallback = this.fallback || Mavo.Primitive.getValue(this.element, {attribute: this.attribute});
@@ -81,7 +83,7 @@
           this.item = Mavo.Node.get(this.element.closest(Mavo.selectors.item));
         }
 
-        if (this.originalAttribute == 'mv-value' && this.mavoNode && this.mavoNode == this.item.collection) {
+        if (this.originalAttribute === 'mv-value' && this.mavoNode && this.mavoNode === this.item.collection) {
           Mavo.delete(this.item.expressions, this);
         }
 
@@ -98,7 +100,7 @@
     },
 
     changedBy(evt) {
-      if (this.originalAttribute == 'mv-value' && this.mavoNode && !(this.mavoNode instanceof Mavo.Primitive)) {
+      if (this.originalAttribute === 'mv-value' && this.mavoNode && !(this.mavoNode instanceof Mavo.Primitive)) {
       // Just prevent the same node from triggering changes, everything else is game
         return !evt || !this.mavoNode.contains(evt.node);
       }
@@ -323,4 +325,4 @@
     type: 'hashchange',
     target: window
   });
-})(Bliss, Bliss.$);
+})(Bliss);

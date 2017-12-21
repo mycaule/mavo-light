@@ -1,3 +1,5 @@
+/* global Mavo, Bliss */
+
 // Mv-if plugin
 (function ($, $$) {
   Mavo.Expressions.directive('mv-if', {
@@ -16,7 +18,7 @@
         lazy: {
           childProperties() {
             const properties = $$(Mavo.selectors.property, this.element)
-                  .filter(el => el.closest('[mv-if]') == this.element)
+                  .filter(el => el.closest('[mv-if]') === this.element)
                   .map(el => Mavo.Node.get(el));
 
           // When the element is detached, datachange events from properties
@@ -38,7 +40,7 @@
     },
     hooks: {
       'domexpression-init-start'() {
-        if (this.attribute != 'mv-if') {
+        if (this.attribute !== 'mv-if') {
           return;
         }
 
@@ -53,7 +55,7 @@
         }
       },
       'domexpression-update-end'() {
-        if (this.attribute != 'mv-if') {
+        if (this.attribute !== 'mv-if') {
           return;
         }
 

@@ -1,3 +1,5 @@
+/* global Mavo, Bliss */
+
 /**
  * Configuration for different types of elements. Options:
  * - attribute {String}
@@ -12,7 +14,7 @@
  * - default: If there is no attribute, can we use that rule to pick one?
  * @
  */
-(function ($, $$) {
+(function ($) {
   const _ = Mavo.Elements = {};
 
   Object.defineProperties(_, {
@@ -116,7 +118,7 @@
     },
 
     isSVG: {
-      value: e => e.namespaceURI == 'http://www.w3.org/2000/svg'
+      value: e => e.namespaceURI === 'http://www.w3.org/2000/svg'
     },
 
     defaultConfig: {
@@ -166,7 +168,7 @@
         if (this.mavo.uploadBackend && self.FileReader) {
           let popup;
           let type = this.element.nodeName.toLowerCase();
-          type = type == 'img' ? 'image' : type;
+          type = type === 'img' ? 'image' : type;
           const path = this.element.getAttribute('mv-uploads') || type + 's';
 
           const upload = (file, name = file.name) => {
@@ -219,7 +221,7 @@
             paste: evt => {
               const item = evt.clipboardData.items[0];
 
-              if (item.kind == 'file' && item.type.indexOf(type + '/') === 0) {
+              if (item.kind === 'file' && item.type.indexOf(type + '/') === 0) {
               // Is a file of the correct type, upload!
                 const name = `pasted-${type}-${Date.now()}.${item.type.slice(6)}`; // Image, video, audio are all 5 chars
                 upload(item.getAsFile(), name);
@@ -387,7 +389,7 @@
       },
       init(element) {
         this.mavo.element.addEventListener('change', evt => {
-          if (evt.target.name == element.name) {
+          if (evt.target.name === element.name) {
             this.value = this.getValue();
           }
         });
@@ -446,8 +448,8 @@
 
         $.bind(this.element, 'keydown.mavo:edit', evt => {
         // Edit with arrow keys
-          if (evt.target == this.element && (evt.keyCode == 37 || evt.keyCode == 39)) {
-            const increment = step * (evt.keyCode == 39 ? 1 : -1) * (evt.shiftKey ? 10 : 1);
+          if (evt.target === this.element && (evt.keyCode === 37 || evt.keyCode === 39)) {
+            const increment = step * (evt.keyCode === 39 ? 1 : -1) * (evt.shiftKey ? 10 : 1);
             let newValue = this.value + increment;
             newValue = Math.max(min, Math.min(newValue, max));
 
@@ -476,7 +478,7 @@
         const tag = display.indexOf('inline') === 0 ? 'input' : 'textarea';
         const editor = $.create(tag);
 
-        if (tag == 'textarea') {
+        if (tag === 'textarea') {
         // Actually multiline
           const width = this.element.offsetWidth;
 
@@ -583,7 +585,7 @@
         Mavo.revocably.setAttribute(this.element, 'role', 'checkbox');
 
         $.bind(this.element, 'click.mavo:edit keyup.mavo:edit keydown.mavo:edit', evt => {
-          if (evt.type == 'click' || evt.key == ' ' || evt.key == 'Enter') {
+          if (evt.type === 'click' || evt.key === ' ' || evt.key === 'Enter') {
             if (evt.type != 'keydown') {
               this.value = !this.value;
             }
@@ -600,4 +602,4 @@
       }
     }
   });
-})(Bliss, Bliss.$);
+})(Bliss);

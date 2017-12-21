@@ -1,9 +1,11 @@
+/* global Mavo, Bliss */
+
 /**
  * Functions available inside Mavo expressions
  */
 
 (function ($, val) {
-  var _ = Mavo.Functions = {
+  const _ = Mavo.Functions = {
     operators: {
       '=': 'eq'
     },
@@ -40,7 +42,7 @@
           meta.property = [];
 
           ret = obj.filter((e, i) => {
-            const passes = _.get(e, meta.query.property) == meta.query.value;
+            const passes = _.get(e, meta.query.property) === meta.query.value;
 
             if (passes) {
               meta.property.push(i);
@@ -49,7 +51,7 @@
             return passes;
           });
 
-          if (meta.query.property == 'id') {
+          if (meta.query.property === 'id') {
             meta.property = meta.property[0];
             ret = ret[0];
           }
@@ -510,9 +512,9 @@
       let ret = numeric[component](date);
 
     // We don't want years to be formatted like 2,017!
-      ret = new self[component == 'year' ? 'String' : 'Number'](ret);
+      ret = new self[component === 'year' ? 'String' : 'Number'](ret);
 
-      if (component == 'month' || component == 'weekday') {
+      if (component === 'month' || component === 'weekday') {
         ret.name = toLocaleString(date, {[component]: 'long'});
         ret.shortname = toLocaleString(date, {[component]: 'short'});
       }

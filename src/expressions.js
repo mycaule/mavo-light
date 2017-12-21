@@ -1,5 +1,7 @@
+/* global Mavo, Bliss */
+
 (function ($, $$) {
-  var _ = Mavo.Expressions = $.Class({
+  const _ = Mavo.Expressions = $.Class({
     constructor(mavo) {
       this.mavo = mavo;
       this.active = true;
@@ -75,7 +77,7 @@
     },
 
     extract(node, attribute, path, syntax = Mavo.Expression.Syntax.default) {
-      if (attribute && attribute.name == 'mv-expressions') {
+      if (attribute && attribute.name === 'mv-expressions') {
         return;
       }
 
@@ -121,14 +123,14 @@
 
         if (!node.matches('script:not([mv-expressions])')) {
           $$(node.childNodes).forEach(child => {
-            if (child.nodeType == 1) {
+            if (child.nodeType === 1) {
               offset = 0;
               index++;
             } else {
               offset++;
             }
 
-            if (child.nodeType == 1 || child.nodeType == 3) {
+            if (child.nodeType === 1 || child.nodeType === 3) {
               const segment = offset > 0 ? `${index}.${offset}` : index;
               this.traverse(child, [...path || [], segment], syntax);
             }

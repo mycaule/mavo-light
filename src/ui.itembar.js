@@ -1,11 +1,13 @@
+/* global Mavo, Bliss */
+
 (function ($, $$) {
-  var _ = Mavo.UI.Itembar = $.Class({
+  const _ = Mavo.UI.Itembar = $.Class({
     constructor(item) {
       this.item = item;
 
       this.element = $$(`.mv-item-bar:not([mv-rel]), .mv-item-bar[mv-rel="${this.item.property}"]`, this.item.element).filter(el => {
         // Remove item controls meant for other collections
-        return el.closest(Mavo.selectors.multiple) == this.item.element && !Mavo.data(el, 'item');
+        return el.closest(Mavo.selectors.multiple) === this.item.element && !Mavo.data(el, 'item');
       })[0];
 
       if (!this.element && this.item.template && this.item.template.itembar) {
@@ -183,7 +185,7 @@
         }
       }
 
-      if (this.dragHandle == this.item.element) {
+      if (this.dragHandle === this.item.element) {
         this.item.element.classList.add('mv-drag-handle');
       }
     },
@@ -191,7 +193,7 @@
     remove() {
       Mavo.revocably.remove(this.element);
 
-      if (this.dragHandle == this.item.element) {
+      if (this.dragHandle === this.item.element) {
         this.item.element.classList.remove('mv-drag-handle');
       }
     },

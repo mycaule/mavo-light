@@ -1,5 +1,7 @@
+/* global Mavo, Bliss */
+
 (function ($, $$) {
-  var _ = Mavo.Node = $.Class({
+  const _ = Mavo.Node = $.Class({
     abstract: true,
     constructor(element, mavo, options = {}) {
       if (!element || !mavo) {
@@ -66,7 +68,7 @@
       if (this instanceof Mavo.Group || this.collection) {
       // Handle mv-value
       // TODO integrate with the code in Primitive that decides whether this is a computed property
-        const et = Mavo.DOMExpression.search(this.element).filter(et => et.originalAttribute == 'mv-value')[0];
+        const et = Mavo.DOMExpression.search(this.element).filter(et => et.originalAttribute === 'mv-value')[0];
 
         if (et) {
           et.mavoNode = this;
@@ -87,7 +89,7 @@
     },
 
     get editing() {
-      return this.mode == 'edit';
+      return this.mode === 'edit';
     },
 
     get isRoot() {
@@ -110,7 +112,7 @@
    * Runs after the constructor is done (including the constructor of the inheriting class), synchronously
    */
     postInit() {
-      if (this.modes == 'edit') {
+      if (this.modes === 'edit') {
         this.edit();
       }
     },
@@ -339,7 +341,7 @@
       if (ret === undefined) {
       // Still not found, look in ancestors
         ret = this.walkUp(group => {
-          if (group.property == property) {
+          if (group.property === property) {
             return group;
           }
 
@@ -387,7 +389,7 @@
             case '$next':
             case '$previous':
               if (this.closestCollection) {
-                cache[property] = this.closestCollection.getData(options)[this.index + (property == '$next' ? 1 : -1)];
+                cache[property] = this.closestCollection.getData(options)[this.index + (property === '$next' ? 1 : -1)];
                 return true;
               }
 
@@ -430,7 +432,7 @@
       const path = this.path;
       const nodePath = node.path;
 
-      for (var i = 0; i < path.length && nodePath[i] == path[i]; i++) {}
+      for (var i = 0; i < path.length && nodePath[i] === path[i]; i++) {}
 
       return path.slice(i);
     },
@@ -473,7 +475,7 @@
         }
       }
 
-      if (!item || item.isDeleted() || item == this.closestItem) {
+      if (!item || item.isDeleted() || item === this.closestItem) {
         return null;
       }
 
@@ -509,7 +511,7 @@
 
     // Are we only rendering and editing a subset of the data?
       inPath() {
-        const attribute = this.nodeType == 'Collection' ? 'mv-multiple-path' : 'mv-path';
+        const attribute = this.nodeType === 'Collection' ? 'mv-multiple-path' : 'mv-path';
 
         return (this.element.getAttribute(attribute) || '').split('/').filter(p => p.length);
       },
@@ -521,11 +523,11 @@
 
         let ret = new Set(this.property && [this.property]);
 
-        if (this.nodeType == 'Group') {
+        if (this.nodeType === 'Group') {
           for (const property in this.children) {
             ret = Mavo.union(ret, this.children[property].properties);
           }
-        } else if (this.nodeType == 'Collection') {
+        } else if (this.nodeType === 'Collection') {
           ret = Mavo.union(ret, this.itemTemplate.properties);
         }
 
@@ -561,7 +563,7 @@
 
           if (!(this instanceof Mavo.Collection) && [null, '', 'read', 'edit'].indexOf(this.element.getAttribute('mv-mode')) > -1) {
           // If attribute is not one of the recognized values, leave it alone
-            const set = this.modes || value == 'edit';
+            const set = this.modes || value === 'edit';
             Mavo.Observer.sneak(this.mavo.modeObserver, () => {
               $.toggleAttribute(this.element, 'mv-mode', value, set);
             });

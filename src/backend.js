@@ -1,8 +1,10 @@
-(function ($, $$) {
+/* global Mavo, Bliss */
+
+(function ($) {
 /**
  * Base class for all backends
  */
-  var _ = Mavo.Backend = $.Class({
+  const _ = Mavo.Backend = $.Class({
     constructor(url, o = {}) {
       this.source = url;
       this.url = new URL(this.source, Mavo.base);
@@ -62,7 +64,7 @@
     },
 
     equals(backend) {
-      return backend === this || (backend && this.id == backend.id && this.source == backend.source);
+      return backend === this || (backend && this.id === backend.id && this.source === backend.source);
     },
 
   /**
@@ -83,7 +85,7 @@
       }
 
       if ($.type(req.data) === 'object') {
-        if (req.method == 'GET') {
+        if (req.method === 'GET') {
           req.data = Object.keys(req.data).map(p => p + '=' + encodeURIComponent(req.data[p])).join('&');
         } else {
           req.data = JSON.stringify(req.data);
@@ -93,7 +95,7 @@
       call = new URL(call, this.constructor.apiDomain);
 
     // Prevent getting a cached response. Cache-control is often not allowed via CORS
-      if (req.method == 'GET') {
+      if (req.method === 'GET') {
         call.searchParams.set('timestamp', Date.now());
       }
 
@@ -105,7 +107,7 @@
 
         this.mavo.error('Something went wrong while connecting to ' + this.id, err);
       })
-      .then(xhr => req.method == 'HEAD' ? xhr : xhr.response);
+      .then(xhr => req.method === 'HEAD' ? xhr : xhr.response);
     },
 
   /**
@@ -152,7 +154,7 @@
 
             addEventListener('message', evt => {
               if (evt.source === this.authPopup) {
-                if (evt.data.backend == this.id) {
+                if (evt.data.backend === this.id) {
                   this.accessToken = localStorage[`mavo:${id}token`] = evt.data.token;
                 }
 
@@ -290,7 +292,7 @@
     },
 
     static: {
-      test: value => value == 'local'
+      test: value => value === 'local'
     }
   }));
-})(Bliss, Bliss.$);
+})(Bliss);

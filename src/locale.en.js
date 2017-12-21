@@ -1,3 +1,5 @@
+/* global Mavo */
+
 Mavo.Locale.register('en', {
   edit: 'Edit',
   save: 'Save',

@@ -1,7 +1,9 @@
+/* global Mavo, Bliss */
+
 (function ($, $$) {
   Mavo.attributes.push('mv-plugins');
 
-  var _ = Mavo.Plugins = {
+  const _ = Mavo.Plugins = {
     loaded: {},
 
     load() {
@@ -57,7 +59,7 @@
       Mavo.hooks.add(o.hooks);
 
       for (const Class in o.extend) {
-        const existing = Class == 'Mavo' ? Mavo : Mavo[Class];
+        const existing = Class === 'Mavo' ? Mavo : Mavo[Class];
 
         if ($.type(existing) === 'function') {
           $.Class(existing, o.extend[Class]);

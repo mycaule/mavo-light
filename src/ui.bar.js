@@ -1,7 +1,9 @@
-(function ($, $$) {
+/* global Mavo, Bliss */
+
+(function ($) {
   Mavo.attributes.push('mv-bar');
 
-  var _ = Mavo.UI.Bar = $.Class({
+  const _ = Mavo.UI.Bar = $.Class({
     constructor(mavo) {
       this.mavo = mavo;
 
@@ -174,7 +176,7 @@
         const all = Object.keys(_.controls);
 
         if (template && (template = template.trim())) {
-          if (template == 'none') {
+          if (template === 'none') {
             return [];
           }
 
@@ -311,7 +313,7 @@
               }
             });
 
-            var input = $.create('input', {
+            const input = $.create('input', {
               type: 'file',
               inside: button,
               events: {
@@ -319,21 +321,21 @@
                   const file = evt.target.files[0];
 
                   if (file) {
-                    var reader = $.extend(new FileReader(), {
-                    onload: evt => {
-                      this.inProgress = false;
+                    const reader = $.extend(new FileReader(), {
+                      onload: evt => {
+                        this.inProgress = false;
 
-                      try {
-                        const json = JSON.parse(reader.result);
-                        this.render(json);
-                      } catch (e) {
-                        this.error(this._('cannot-parse'));
+                        try {
+                          const json = JSON.parse(reader.result);
+                          this.render(json);
+                        } catch (e) {
+                          this.error(this._('cannot-parse'));
+                        }
+                      },
+                      onerror: evt => {
+                        this.error(this._('problem-loading'));
                       }
-                    },
-                    onerror: evt => {
-                      this.error(this._('problem-loading'));
-                    }
-                  });
+                    });
 
                     this.inProgress = this._('uploading');
                     reader.readAsText(file);
@@ -363,4 +365,4 @@
       }
     }
   });
-})(Bliss, Bliss.$);
+})(Bliss);

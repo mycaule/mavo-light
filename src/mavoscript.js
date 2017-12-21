@@ -1,5 +1,7 @@
+/* global Mavo, Bliss */
+
 (function ($, val, $u) {
-  var _ = Mavo.Script = {
+  const _ = Mavo.Script = {
     addUnaryOperator(name, o) {
       if (o.symbol) {
       // Build map of symbols to function names for easy rewriting
@@ -190,7 +192,7 @@
       },
       eq: {
         logical: true,
-        scalar: (a, b) => a == b,
+        scalar: (a, b) => a === b,
         symbol: ['=', '=='],
         identity: true,
         precedence: 6
@@ -294,8 +296,8 @@
         }
       },
       CallExpression: node => {
-        if (node.callee.type == 'Identifier') {
-          if (node.callee.name == 'if') {
+        if (node.callee.type === 'Identifier') {
+          if (node.callee.name === 'if') {
             node.callee.name = 'iff';
           }
 

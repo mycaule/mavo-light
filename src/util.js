@@ -1,5 +1,7 @@
+/* global Mavo, Bliss */
+
 (function ($, $$) {
-  var _ = $.extend(Mavo, {
+  const _ = $.extend(Mavo, {
   /**
    * Load a file, only once
    */
@@ -106,7 +108,7 @@
 
     delete: (arr, element, all) => {
       do {
-        var index = arr && arr.indexOf(element);
+        const index = arr && arr.indexOf(element);
 
         if (index > -1) {
           arr.splice(index, 1);
@@ -169,7 +171,7 @@
       let data = _.elementData.get(element) || {},
         ret;
 
-      if (arguments.length == 2) {
+      if (arguments.length === 2) {
         ret = data[name];
       } else if (value === undefined) {
         delete data[name];
@@ -193,7 +195,7 @@
     elementPath(ancestor, element) {
       if (Array.isArray(element)) {
       // Get element by path
-        var path = element;
+        const path = element;
 
         let ret = path.reduce((acc, cur) => {
           return acc.children[cur >> 0] || acc;
@@ -203,7 +205,7 @@
 
         if (last != (last >> 0)) {
         // We are returning a non-element node
-          var offset = Number((String(last)).split('.')[1]);
+          let offset = Number((String(last)).split('.')[1]);
 
           if (last >> 0 < 0) {
             ret = ret.firstChild;
@@ -218,19 +220,19 @@
         return ret;
       }
       // Get path
-      var path = [];
+      const path = [];
 
-      for (var parent = element; parent && parent != ancestor; parent = parent.parentNode) {
+      for (let parent = element; parent && parent != ancestor; parent = parent.parentNode) {
         let index = 0;
         let countNonElementSiblings = parent === element && element.nodeType !== 1;
-        var offset = countNonElementSiblings ? 1 : 0;
+        let offset = countNonElementSiblings ? 1 : 0;
         let sibling = parent;
 
         while (sibling = sibling[`previous${countNonElementSiblings ? '' : 'Element'}Sibling`]) {
           if (countNonElementSiblings) {
             offset++;
 
-            if (sibling.nodeType == 1) {
+            if (sibling.nodeType === 1) {
               countNonElementSiblings = false;
             }
           } else {
@@ -344,7 +346,7 @@
 
           observer.observe(element);
 
-          var callback = evt => {
+          const callback = evt => {
             element.removeEventListener('mv-inview', callback);
             evt.stopPropagation();
             resolve();
@@ -437,7 +439,7 @@
     },
 
     subset(obj, path, value) {
-      if (arguments.length == 3) {
+      if (arguments.length === 3) {
       // Put
         if (path.length) {
           const last = path[path.length - 1];
@@ -525,8 +527,8 @@
         const contentRect = entries[entries.length - 1].contentRect;
 
         if (previousRect &&
-        previousRect.width == contentRect.width &&
-        previousRect.height == contentRect.height) {
+        previousRect.width === contentRect.width &&
+        previousRect.height === contentRect.height) {
           return;
         }
 
@@ -556,12 +558,12 @@
         if (attribute) {
           $.extend(this.options, {
             attributes: true,
-            attributeFilter: this.attribute == 'all' ? undefined : Mavo.toArray(this.attribute),
+            attributeFilter: this.attribute === 'all' ? undefined : Mavo.toArray(this.attribute),
             attributeOldValue: Boolean(o.oldValue)
           });
         }
 
-        if (!this.attribute || this.attribute == 'all') {
+        if (!this.attribute || this.attribute === 'all') {
           $.extend(this.options, {
             characterData: true,
             childList: true,
@@ -598,7 +600,7 @@
       sneak(callback) {
         if (this.running) {
           this.stop();
-          var ret = callback();
+          const ret = callback();
           this.run();
         } else {
           var ret = callback();
@@ -651,7 +653,7 @@
     thenAll(iterable) {
     // Turn rejected promises into resolved ones
       $$(iterable).forEach(promise => {
-        if ($.type(promise) == 'promise') {
+        if ($.type(promise) === 'promise') {
           promise = promise.catch(err => err);
         }
       });

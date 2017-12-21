@@ -1,5 +1,7 @@
-(function ($, $$) {
-  var _ = Mavo.Backend.register($.Class({
+/* global Mavo, Bliss */
+
+(function ($) {
+  const _ = Mavo.Backend.register($.Class({
     extends: Mavo.Backend,
     id: 'Github',
     constructor() {
@@ -101,7 +103,7 @@
             .then(forkInfo => {
               // Ensure that fork is created (they take a while)
               let timeout;
-              var test = (resolve, reject) => {
+              const test = (resolve, reject) => {
                 clearTimeout(timeout);
                 this.request(`repos/${forkInfo.full_name}/commits`, {until: '1970-01-01T00:00:00Z'}, 'HEAD')
                   .then(x => {
@@ -128,7 +130,7 @@
           branch: this.branch,
           sha: fileInfo.sha
         }, 'PUT'), xhr => {
-          if (xhr.status == 404) {
+          if (xhr.status === 404) {
             // File does not exist, create it
             return this.request(fileCall, {
               message: commitPrefix + 'Created file',
@@ -232,7 +234,7 @@
       return this.oAuthenticate(passive)
       .then(() => this.getUser())
       .catch(xhr => {
-        if (xhr.status == 401) {
+        if (xhr.status === 401) {
           // Unauthorized. Access token we have is invalid, discard it
           this.logout();
         }
@@ -262,7 +264,7 @@
 
     // Repo does not exist so we can't check permissions
     // Just check if authenticated user is the same as our URL username
-      return this.user && this.user.username.toLowerCase() == this.username.toLowerCase();
+      return this.user && this.user.username.toLowerCase() === this.username.toLowerCase();
     },
 
     oAuthParams: () => '&scope=repo,gist',
@@ -342,9 +344,9 @@
 
           return {
             apiCall,
-            apiData: apiCall == 'graphql' ? {query: data} : data
+            apiData: apiCall === 'graphql' ? {query: data} : data
           };
-        } else if (path[0] == 'blob') {
+        } else if (path[0] === 'blob') {
           path.shift();
           ret.branch = path.shift();
         }
@@ -371,4 +373,4 @@
       atob: str => decodeURIComponent(escape(window.atob(str)))
     }
   }));
-})(Bliss, Bliss.$);
+})(Bliss);

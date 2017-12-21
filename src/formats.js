@@ -1,4 +1,6 @@
-(function ($, $$) {
+/* global Mavo, Bliss */
+
+(function ($) {
   const _ = Mavo.Formats = {};
 
   const base = _.Base = $.Class({
@@ -111,7 +113,7 @@
         for (var id in _) {
           var Format = _[id];
 
-          if (id.toLowerCase() == format) {
+          if (id.toLowerCase() === format) {
             return new Format(backend);
           }
         }
@@ -134,4 +136,4 @@
       }
     }
   });
-})(Bliss, Bliss.$);
+})(Bliss);

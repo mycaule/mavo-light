@@ -1,5 +1,7 @@
-(function ($, $$) {
-  var _ = Mavo.Backend.register($.Class({
+/* global Mavo, Bliss */
+
+(function ($) {
+  const _ = Mavo.Backend.register($.Class({
     extends: Mavo.Backend,
     id: 'Dropbox',
     constructor() {
@@ -98,4 +100,4 @@
       }
     }
   }));
-})(Bliss, Bliss.$);
+})(Bliss);

@@ -1,4 +1,6 @@
-(function ($, $$) {
+/* global Mavo, Bliss */
+
+(function ($) {
   const _ = Mavo.UI.Message = $.Class({
     constructor(mavo, message, o) {
       this.mavo = mavo;
@@ -18,7 +20,7 @@
         this.element.classList.add(o.classes);
       }
 
-      if (o.type == 'error') {
+      if (o.type === 'error') {
         this.element.setAttribute('role', 'alert');
       } else {
         this.element.setAttribute('aria-live', 'polite');
@@ -72,4 +74,4 @@
       });
     }
   });
-})(Bliss, Bliss.$);
+})(Bliss);

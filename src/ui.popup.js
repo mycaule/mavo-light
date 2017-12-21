@@ -1,4 +1,6 @@
-(function ($, $$) {
+/* global Mavo, Bliss */
+
+(function ($) {
   const _ = Mavo.UI.Popup = $.Class({
     constructor(primitive) {
       this.primitive = primitive;
@@ -8,7 +10,7 @@
         const bounds = this.primitive.element.getBoundingClientRect();
         const x = bounds.left;
         let y = bounds.bottom;
-        var pointDown = false;
+        let pointDown = false;
 
         if (this.element.offsetHeight) {
         // Is in the DOM, check if it fits
@@ -20,7 +22,7 @@
 
         // Perhaps placing it above is better
           if (bounds.top - this.height > 20) {
-            var pointDown = true;
+            pointDown = true;
             y = bounds.top - this.height - 20;
           } else {
           // Nah, just raise it a bit
@@ -48,7 +50,7 @@
         },
         events: {
           keyup: evt => {
-            if (evt.keyCode == 13 || evt.keyCode == 27) {
+            if (evt.keyCode === 13 || evt.keyCode === 27) {
               if (this.element.contains(document.activeElement)) {
                 this.primitive.element.focus();
               }
@@ -130,4 +132,4 @@
       editor: 'primitive'
     }
   });
-})(Bliss, Bliss.$);
+})(Bliss);
