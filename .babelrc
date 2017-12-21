@@ -1,0 +1,14 @@
+{
+  "presets": [["env", {
+    "targets": {
+      "browsers": ["last 4 versions", "Chrome >= 41", "IE 11"]
+    }
+  }]],
+  "plugins": [
+    ["transform-runtime", {
+      "polyfill": false,
+      "regenerator": true
+    }]
+  ],
+  "compact": false
+}

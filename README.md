@@ -12,10 +12,9 @@
 
 ## Roadmap
 
-- [ ] ES6
-- [ ] Unit tests
-- [ ] Support for Node.js bundlers
-- [ ] Modularize by imports to keep only interesting stuff
+- [ ] ES6, unit tests and modern build tools
+- [ ] Modularize by ES6 imports, Support for Node.js bundlers
 - [ ] Remove funky dependencies
+- [x] Remove CSS stuff
 
 Please visit https://mavo.io for info on using Mavo, and read [CONTRIBUTING.md](https://github.com/mavoweb/mavo/blob/master/CONTRIBUTING.md) for info on contributing to Mavo.
