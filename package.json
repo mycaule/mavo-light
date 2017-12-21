@@ -4,7 +4,7 @@
   "description": "Create web applications with HTML and CSS",
   "main": "dist/mavo.js",
   "scripts": {
-    "test": "xo && ava --verbose"
+    "test": "gulp && ava --verbose"
   },
   "repository": {
     "type": "git",
@@ -33,7 +33,7 @@
   },
   "xo": {
     "space": true,
-    "semicolon": false,
+    "semicolon": true,
     "ignore": [
       "**/dist/**",
       "**/lib/**"

@@ -1,138 +1,136 @@
-(function($, $$) {
+(function ($, $$) {
+  Mavo.attributes.push('mv-expressions');
 
-Mavo.attributes.push("mv-expressions");
+  var _ = Mavo.Expression = $.Class({
+    constructor(expression) {
+      this.expression = expression;
+    },
 
-var _ = Mavo.Expression = $.Class({
-	constructor: function(expression) {
-		this.expression = expression;
-	},
+    eval(data) {
+      Mavo.hooks.run('expression-eval-beforeeval', this);
 
-	eval: function(data) {
-		Mavo.hooks.run("expression-eval-beforeeval", this);
+      try {
+        if (!this.function) {
+          this.function = Mavo.Script.compile(this.expression);
+        }
 
-		try {
-			if (!this.function) {
-				this.function = Mavo.Script.compile(this.expression);
-			}
-
-			return this.function(data);
-		}
-		catch (exception) {
-			console.info("%cExpression error!", "color: red; font-weight: bold", `${exception.message} in expression ${this.expression}`, `
+        return this.function(data);
+      } catch (exception) {
+        console.info('%cExpression error!', 'color: red; font-weight: bold', `${exception.message} in expression ${this.expression}`, `
 Not an expression? Use mv-expressions="none" to disable expressions on an element and its descendants.`);
 
-			Mavo.hooks.run("expression-eval-error", {context: this, exception});
+        Mavo.hooks.run('expression-eval-error', {context: this, exception});
 
-			return exception;
-		}
-	},
+        return exception;
+      }
+    },
 
-	toString() {
-		return this.expression;
-	},
+    toString() {
+      return this.expression;
+    },
 
-	changedBy: function(evt) {
-		return _.changedBy(this.identifiers, evt);
-	},
+    changedBy(evt) {
+      return _.changedBy(this.identifiers, evt);
+    },
 
-	live: {
-		expression: function(value) {
-			this.function = null;
-			this.identifiers = value.match(/[$a-z][$\w]*/ig) || [];
-		}
-	},
+    live: {
+      expression(value) {
+        this.function = null;
+        this.identifiers = value.match(/[$a-z][$\w]*/ig) || [];
+      }
+    },
 
-	static: {
-		changedBy: function(identifiers, evt) {
-			if (!evt) {
-				return true;
-			}
+    static: {
+      changedBy(identifiers, evt) {
+        if (!evt) {
+          return true;
+        }
 
-			if (!identifiers) {
-				return false;
-			}
+        if (!identifiers) {
+          return false;
+        }
 
-			if (identifiers.indexOf(evt.property) > -1) {
-				return true;
-			}
+        if (identifiers.indexOf(evt.property) > -1) {
+          return true;
+        }
 
-			if (Mavo.Functions.intersects(evt.properties, identifiers)) {
-				return true;
-			}
+        if (Mavo.Functions.intersects(evt.properties, identifiers)) {
+          return true;
+        }
 
-			if (evt.action == "propertychange") {
-				return Mavo.Functions.intersects(identifiers, evt.node.path);
-			}
-			else {
-				if (Mavo.Functions.intersects(["$index", "$previous", "$next"], identifiers)) {
-					return true;
-				}
+        if (evt.action == 'propertychange') {
+          return Mavo.Functions.intersects(identifiers, evt.node.path);
+        }
 
-				var collection = evt.node.collection || evt.node;
+        if (Mavo.Functions.intersects(['$index', '$previous', '$next'], identifiers)) {
+          return true;
+        }
 
-				if (Mavo.Functions.intersects(collection.properties, identifiers)) {
-					return true;
-				}
-			}
+        const collection = evt.node.collection || evt.node;
 
-			return false;
-		},
-	}
-});
+        if (Mavo.Functions.intersects(collection.properties, identifiers)) {
+          return true;
+        }
 
-_.Syntax = $.Class({
-	constructor: function(start, end) {
-		this.start = start;
-		this.end = end;
-		this.regex = RegExp(`${Mavo.escapeRegExp(start)}([\\S\\s]+?)${Mavo.escapeRegExp(end)}`, "gi");
-	},
+        return false;
+      }
+    }
+  });
 
-	test: function(str) {
-		this.regex.lastIndex = 0;
+  _.Syntax = $.Class({
+    constructor(start, end) {
+      this.start = start;
+      this.end = end;
+      this.regex = RegExp(`${Mavo.escapeRegExp(start)}([\\S\\s]+?)${Mavo.escapeRegExp(end)}`, 'gi');
+    },
 
-		return this.regex.test(str);
-	},
+    test(str) {
+      this.regex.lastIndex = 0;
 
-	tokenize: function(str) {
-		var match, ret = [], lastIndex = 0;
+      return this.regex.test(str);
+    },
 
-		this.regex.lastIndex = 0;
+    tokenize(str) {
+      let match,
+        ret = [],
+        lastIndex = 0;
 
-		while ((match = this.regex.exec(str)) !== null) {
-			// Literal before the expression
-			if (match.index > lastIndex) {
-				ret.push(str.substring(lastIndex, match.index));
-			}
+      this.regex.lastIndex = 0;
 
-			lastIndex = this.regex.lastIndex;
+      while ((match = this.regex.exec(str)) !== null) {
+      // Literal before the expression
+        if (match.index > lastIndex) {
+          ret.push(str.substring(lastIndex, match.index));
+        }
 
-			ret.push(new Mavo.Expression(match[1]));
-		}
+        lastIndex = this.regex.lastIndex;
 
-		// Literal at the end
-		if (lastIndex < str.length) {
-			ret.push(str.substring(lastIndex));
-		}
+        ret.push(new Mavo.Expression(match[1]));
+      }
 
-		return ret;
-	},
+    // Literal at the end
+      if (lastIndex < str.length) {
+        ret.push(str.substring(lastIndex));
+      }
 
-	static: {
-		create: function(element) {
-			if (element) {
-				var syntax = element.getAttribute("mv-expressions");
+      return ret;
+    },
 
-				if (syntax) {
-					syntax = syntax.trim();
-					return /\s/.test(syntax)? new _.Syntax(...syntax.split(/\s+/)) : _.Syntax.ESCAPE;
-				}
-			}
-		},
+    static: {
+      create(element) {
+        if (element) {
+          let syntax = element.getAttribute('mv-expressions');
 
-		ESCAPE: -1
-	}
-});
+          if (syntax) {
+            syntax = syntax.trim();
+            return /\s/.test(syntax) ? new _.Syntax(...syntax.split(/\s+/)) : _.Syntax.ESCAPE;
+          }
+        }
+      },
 
-_.Syntax.default = new _.Syntax("[", "]");
+      ESCAPE: -1
+    }
+  });
 
+  _.Syntax.default = new _.Syntax('[', ']');
 })(Bliss, Bliss.$);

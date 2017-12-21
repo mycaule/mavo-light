@@ -12,8 +12,8 @@
 
 ## Roadmap
 
-- [ ] ES6, unit tests and modern build tools
-- [ ] Modularize by ES6 imports, Support for Node.js bundlers
+- [ ] ES6, unit tests and modern build tools with Node.js v8.9.3 LTS
+- [ ] Modularize by ES6 imports, Support for JS bundlers
 - [ ] Remove funky dependencies
 - [x] Remove CSS stuff
 
