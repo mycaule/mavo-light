@@ -7,9 +7,16 @@ e.style.height=e.scrollHeight+o+"px";else if("input"==l)if(e.style.width="1000px
 e(i||t.selectors.base).forEach(function(e){t.resize(e)})},active:!0,resizes:function(e){return e&&e.parentNode&&e.matches&&e.matches(t.selectors.base)&&e.matches(t.selectors.filter)},init:function(){t.selectors.filter=t.script.getAttribute("data-filter")||(e("[data-stretchy-filter]").pop()||document.body).getAttribute("data-stretchy-filter")||Stretchy.selectors.filter||"*",t.resizeAll()},$$:e};"loading"!==document.readyState?t.init():document.addEventListener("DOMContentLoaded",t.init);var i=function(e){t.active&&t.resize(e.target)};document.documentElement.addEventListener("input",i),document.documentElement.addEventListener("change",i),self.MutationObserver&&new MutationObserver(function(e){t.active&&e.forEach(function(e){"childList"==e.type&&Stretchy.resizeAll(e.addedNodes)})}).observe(document.documentElement,{childList:!0,subtree:!0})}}();
 //# sourceMappingURL=stretchy.min.js.map
 
-"use strict";
+'use strict';
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss, Stretchy */
+/* eslint new-cap: "off" */
 
 /**
  * Mavo: Create web applications by writing HTML and CSS!
@@ -17,7 +24,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
  * @version v0.1.5
  */
 (function ($, $$) {
-
   var _ = self.Mavo = $.Class({
     constructor: function constructor(element) {
       var _this = this;
@@ -35,12 +41,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       // Convert any data-mv-* attributes to mv-*
       var selector = _.attributes.map(function (attribute) {
-        return "[data-" + attribute + "]";
-      }).join(", ");
+        return '[data-' + attribute + ']';
+      }).join(', ');
 
-      [this.element].concat(_toConsumableArray($$(selector, this.element))).forEach(function (element) {
+      [this.element].concat((0, _toConsumableArray3.default)($$(selector, this.element))).forEach(function (element) {
         _.attributes.forEach(function (attribute) {
-          var value = element.getAttribute("data-" + attribute);
+          var value = element.getAttribute('data-' + attribute);
 
           if (value !== null) {
             element.setAttribute(attribute, value);
@@ -49,7 +55,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       });
 
       // Assign a unique (for the page) id to this mavo instance
-      this.id = Mavo.getAttribute(this.element, "mv-app", "id") || "mavo" + this.index;
+      this.id = Mavo.getAttribute(this.element, 'mv-app', 'id') || 'mavo' + this.index;
 
       if (this.id in _.all) {
         // Duplicate app name
@@ -58,32 +64,32 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
 
       _.all[this.id] = this;
-      this.element.setAttribute("mv-app", this.id);
+      this.element.setAttribute('mv-app', this.id);
 
-      var lang = $.value(this.element.closest("[lang]"), "lang") || Mavo.locale;
+      var lang = $.value(this.element.closest('[lang]'), 'lang') || Mavo.locale;
       this.locale = Mavo.Locale.get(lang);
 
       // Should we start in edit mode?
-      this.autoEdit = this.element.classList.contains("mv-autoedit");
+      this.autoEdit = this.element.classList.contains('mv-autoedit');
 
       // Should we save automatically?
-      this.autoSave = this.element.hasAttribute("mv-autosave");
-      this.autoSaveDelay = (this.element.getAttribute("mv-autosave") || 3) * 1000;
+      this.autoSave = this.element.hasAttribute('mv-autosave');
+      this.autoSaveDelay = (this.element.getAttribute('mv-autosave') || 3) * 1000;
 
-      this.element.setAttribute("typeof", "");
+      this.element.setAttribute('typeof', '');
 
-      Mavo.hooks.run("init-start", this);
+      Mavo.hooks.run('init-start', this);
 
       // Apply heuristic for groups
-      $$(_.selectors.primitive + "," + _.selectors.multiple, this.element).forEach(function (element) {
-        var hasChildren = $(_.selectors.not(_.selectors.formControl) + ", " + _.selectors.property, element);
+      $$(_.selectors.primitive + ',' + _.selectors.multiple, this.element).forEach(function (element) {
+        var hasChildren = $(_.selectors.not(_.selectors.formControl) + ', ' + _.selectors.property, element);
 
         if (hasChildren) {
           var config = Mavo.Primitive.getConfig(element);
-          var isCollection = Mavo.is("multiple", element);
+          var isCollection = Mavo.is('multiple', element);
 
           if (isCollection || !config.attribute && !config.hasChildren) {
-            element.setAttribute("typeof", "");
+            element.setAttribute('typeof', '');
           }
         }
       });
@@ -91,16 +97,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this.expressions = new Mavo.Expressions(this);
 
       // Build mavo objects
-      Mavo.hooks.run("init-tree-before", this);
+      Mavo.hooks.run('init-tree-before', this);
 
       this.root = new Mavo.Group(this.element, this);
       this.treeBuilt.resolve();
 
-      Mavo.hooks.run("init-tree-after", this);
+      Mavo.hooks.run('init-tree-after', this);
 
       this.permissions = new Mavo.Permissions();
 
-      var backendTypes = ["source", "storage", "init"]; // order is significant!
+      var backendTypes = ['source', 'storage', 'init']; // Order is significant!
 
       // Figure out backends for storage, data reads, and initialization respectively
       backendTypes.forEach(function (role) {
@@ -108,12 +114,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       });
 
       this.backendObserver = new Mavo.Observer(this.element, backendTypes.map(function (role) {
-        return "mv-" + role;
+        return 'mv-' + role;
       }), function (records) {
         var changed = {};
 
         var roles = records.map(function (record) {
-          var role = record.attributeName.replace(/^mv-/, "");
+          var role = record.attributeName.replace(/^mv-/, '');
           changed[role] = _this.updateBackend(role);
 
           return role;
@@ -121,7 +127,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
         // Do we need to re-load data?
         if (changed.source) {
-          // if source changes, always reload
+          // If source changes, always reload
           _this.load();
         } else if (!_this.source) {
           if (changed.storage || changed.init && !_this.root.data) {
@@ -130,16 +136,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       });
 
-      this.permissions.can("login", function () {
+      this.permissions.can('login', function () {
         // We also support a URL param to trigger login, in case the user doesn't want visible login UI
-        if (Mavo.Functions.url("login") !== null && _this.index == 1 || Mavo.Functions.url(_this.id + "-login") !== null) {
+        if (Mavo.Functions.url('login') !== null && _this.index === 1 || Mavo.Functions.url(_this.id + '-login') !== null) {
           _this.primaryBackend.login();
         }
       });
 
       // Update login status
-      $.bind(this.element, "mv-login.mavo", function (evt) {
-        if (evt.backend == (_this.source || _this.storage)) {
+      $.bind(this.element, 'mv-login.mavo', function (evt) {
+        if (evt.backend === (_this.source || _this.storage)) {
           // If last time we rendered we got nothing, maybe now we'll have better luck?
           if (!_this.root.data && !_this.unsavedChanges) {
             _this.load();
@@ -150,8 +156,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this.bar = new Mavo.UI.Bar(this);
 
       // Prevent editing properties inside <summary> to open and close the summary (fix bug #82)
-      if ($("summary [property]:not([typeof])")) {
-        this.element.addEventListener("click", function (evt) {
+      if ($('summary [property]:not([typeof])')) {
+        this.element.addEventListener('click', function (evt) {
           if (evt.target != document.activeElement) {
             evt.preventDefault();
           }
@@ -167,7 +173,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         var action = _ref.action,
             value = _ref.value;
 
-        var permissions = _this.element.getAttribute("mv-permissions") || "";
+        var permissions = _this.element.getAttribute('mv-permissions') || '';
         permissions = permissions.trim().split(/\s+/).filter(function (a) {
           return a != action;
         });
@@ -176,41 +182,41 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           permissions.push(action);
         }
 
-        _this.element.setAttribute("mv-permissions", permissions.join(" "));
+        _this.element.setAttribute('mv-permissions', permissions.join(' '));
       });
 
       if (this.needsEdit) {
-        this.permissions.can(["edit", "add", "delete"], function () {
+        this.permissions.can(['edit', 'add', 'delete'], function () {
           // Observe entire tree for mv-mode changes
-          _this.modeObserver = new Mavo.Observer(_this.element, "mv-mode", function (records) {
+          _this.modeObserver = new Mavo.Observer(_this.element, 'mv-mode', function (records) {
             records.forEach(function (record) {
               var element = record.target;
               var nodes = _.Node.children(element);
 
-              nodeloop: for (var _i = 0; _i < nodes.length; _i++) {
+              for (var _i = 0; _i < nodes.length; _i++) {
                 var node = nodes[_i];
                 var previousMode = node.mode,
                     mode = void 0;
 
-                if (node.element == element) {
+                if (node.element === element) {
                   // If attribute set directly on a Mavo node, then it forces it into that mode
                   // otherwise, descendant nodes still inherit, unless they are also mode-restricted
-                  mode = node.element.getAttribute("mv-mode");
+                  mode = node.element.getAttribute('mv-mode');
                   node.modes = mode;
                 } else {
                   // Inherited
                   if (node.modes) {
                     // Mode-restricted, we cannot change to the other mode
-                    continue nodeloop;
+                    continue;
                   }
 
-                  mode = _.getStyle(node.element.parentNode, "--mv-mode");
+                  mode = _.getStyle(node.element.parentNode, '--mv-mode');
                 }
 
                 node.mode = mode;
 
                 if (previousMode != node.mode) {
-                  node[node.mode == "edit" ? "edit" : "done"]();
+                  node[node.mode === 'edit' ? 'edit' : 'done']();
                 }
               }
             });
@@ -220,27 +226,27 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             _this.edit();
           }
         }, function () {
-          // cannot
+          // Cannot
           _this.modeObserver && _this.modeObserver.destroy();
         });
       }
 
       if (this.storage || this.source) {
         // Fetch existing data
-        this.permissions.can("read", function () {
+        this.permissions.can('read', function () {
           return _this.load();
         });
       } else {
         // No storage or source
         requestAnimationFrame(function () {
           _this.dataLoaded.resolve();
-          $.fire(_this.element, "mv-load");
+          $.fire(_this.element, 'mv-load');
         });
       }
 
       // Dynamic ids
-      if (location.hash) {
-        $.bind(this.element, "mv-load.mavo", function (evt) {
+      $.bind(this.element, 'mv-load.mavo', function (evt) {
+        if (location.hash) {
           var callback = function callback(records) {
             var target = document.getElementById(location.hash.slice(1));
 
@@ -263,10 +269,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
           if (!callback()) {
             // No target, perhaps not yet?
-            var observer = new Mavo.Observer(_this.element, "id", callback, { subtree: true });
+            var observer = new Mavo.Observer(_this.element, 'id', callback, { subtree: true });
           }
+        }
+
+        requestAnimationFrame(function () {
+          return Stretchy.resizeAll();
         });
-      }
+      });
 
       if (this.autoSave) {
         this.dataLoaded.then(function (evt) {
@@ -281,38 +291,38 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           };
 
           requestAnimationFrame(function () {
-            _this.permissions.can("save", function () {
-              $.bind(_this.element, "mv-change.mavo:autosave", callback);
+            _this.permissions.can('save', function () {
+              $.bind(_this.element, 'mv-change.mavo:autosave', callback);
             }, function () {
-              $.unbind(_this.element, "mv-change.mavo:autosave", callback);
+              $.unbind(_this.element, 'mv-change.mavo:autosave', callback);
             });
           });
         });
       }
 
       // Keyboard navigation
-      this.element.addEventListener("keydown", function (evt) {
+      this.element.addEventListener('keydown', function (evt) {
         // Ctrl + S or Cmd + S to save
-        if (_this.permissions.save && evt.keyCode == 83 && evt[_.superKey] && !evt.altKey) {
+        if (_this.permissions.save && evt.keyCode === 83 && evt[_.superKey] && !evt.altKey) {
           evt.preventDefault();
           _this.save();
-        } else if (evt.keyCode == 38 || evt.keyCode == 40) {
-          var element = evt.target;
+        } else if (evt.keyCode === 38 || evt.keyCode === 40) {
+          var _element = evt.target;
 
-          if (element.matches("textarea, input[type=range], input[type=number]")) {
+          if (_element.matches('textarea, input[type=range], input[type=number]')) {
             // Arrow keys are meaningful here
             return;
           }
 
-          if (element.matches(".mv-editor")) {
+          if (_element.matches('.mv-editor')) {
             var editor = true;
-            element = element.parentNode;
+            _element = _element.parentNode;
           }
 
-          var node = Mavo.Node.get(element);
+          var node = Mavo.Node.get(_element);
 
           if (node && node.closestCollection) {
-            var nextNode = node.getCousin(evt.keyCode == 38 ? -1 : 1, { wrap: true });
+            var nextNode = node.getCousin(evt.keyCode === 38 ? -1 : 1, { wrap: true });
 
             if (nextNode) {
               if (editor && nextNode.editing) {
@@ -329,8 +339,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       });
 
-      Mavo.hooks.run("init-end", this);
+      Mavo.hooks.run('init-end', this);
     },
+
 
     get editing() {
       return this.root.editing;
@@ -339,19 +350,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     getData: function getData(o) {
       return this.root.getData(o);
     },
-
     toJSON: function toJSON() {
       return _.toJSON(this.getData());
     },
-
     message: function message(_message, options) {
       return new _.UI.Message(this, _message, options);
     },
-
     error: function error(message) {
       this.message(message, {
-        type: "error",
-        dismiss: ["button", "timeout"]
+        type: 'error',
+        dismiss: ['button', 'timeout']
       });
 
       // Log more info for programmers
@@ -363,17 +371,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       if (log.length > 0) {
         var _console;
 
-        (_console = console).log.apply(_console, ["%c" + this.id + ": " + message, "color: red; font-weight: bold"].concat(log));
+        (_console = console).log.apply(_console, ['%c' + this.id + ': ' + message, 'color: red; font-weight: bold'].concat((0, _toConsumableArray3.default)(log)));
       }
     },
-
     render: function render(data) {
       var _this2 = this;
 
       this.expressions.active = false;
 
       var env = { context: this, data: data };
-      _.hooks.run("render-start", env);
+      _.hooks.run('render-start', env);
 
       if (env.data) {
         this.root.render(env.data);
@@ -386,20 +393,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return _this2.expressions.update();
       });
 
-      _.hooks.run("render-end", env);
+      _.hooks.run('render-end', env);
     },
-
     edit: function edit() {
       this.root.edit();
 
-      $.bind(this.element, "mouseenter.mavo:edit mouseleave.mavo:edit", function (evt) {
+      $.bind(this.element, 'mouseenter.mavo:edit mouseleave.mavo:edit', function (evt) {
         if (evt.target.matches(_.selectors.multiple)) {
-          evt.target.classList.remove("mv-has-hovered-item");
+          evt.target.classList.remove('mv-has-hovered-item');
 
           var parent = evt.target.parentNode.closest(_.selectors.multiple);
 
           if (parent) {
-            parent.classList.toggle("mv-has-hovered-item", evt.type == "mouseenter");
+            parent.classList.toggle('mv-has-hovered-item', evt.type === 'mouseenter');
           }
         }
       }, true);
@@ -407,15 +413,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this.setUnsavedChanges();
     },
 
+
     /**
-   * Set this mavo instance’s unsavedChanges flag.
-   * @param {Boolean} [value]
-   *        If true, just sets the flag to true, no traversal.
-   *        If false, sets the flag of the Mavo instance and every tree node to false
-   *        If not provided, traverses the tree and recalculates the flag value.
-   */
+     * Set this mavo instance’s unsavedChanges flag.
+     * @param {Boolean} [value]
+     *        If true, just sets the flag to true, no traversal.
+     *        If false, sets the flag of the Mavo instance and every tree node to false
+     *        If not provided, traverses the tree and recalculates the flag value.
+     */
     setUnsavedChanges: function setUnsavedChanges(value) {
-      var unsavedChanges = !!value;
+      var unsavedChanges = Boolean(value);
 
       if (!value) {
         this.walk(function (obj) {
@@ -434,33 +441,35 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return this.unsavedChanges = unsavedChanges;
     },
 
+
     // Conclude editing
     done: function done() {
       this.root.done();
-      $.unbind(this.element, ".mavo:edit");
+      $.unbind(this.element, '.mavo:edit');
       this.unsavedChanges = false;
     },
 
+
     /**
-   * Update the backend for a given role
-   * @return {Boolean} true if a change occurred, false otherwise
-   */
+     * Update the backend for a given role
+     * @return {Boolean} true if a change occurred, false otherwise
+     */
     updateBackend: function updateBackend(role) {
       var previous = this[role],
-          backend;
+          backend = void 0;
 
-      if (this.index == 1) {
+      if (this.index === 1) {
         backend = _.Functions.url(role);
       }
 
       if (!backend) {
-        backend = _.Functions.url(this.id + "-" + role) || this.element.getAttribute("mv-" + role) || null;
+        backend = _.Functions.url(this.id + '-' + role) || this.element.getAttribute('mv-' + role) || null;
       }
 
       if (backend) {
         backend = backend.trim();
 
-        if (backend == "none") {
+        if (backend === 'none') {
           backend = null;
         }
       }
@@ -469,14 +478,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         // We have a string, convert to a backend object if different than existing
         this[role] = backend = _.Backend.create(backend, {
           mavo: this,
-          format: this.element.getAttribute("mv-" + role + "-format") || this.element.getAttribute("mv-format")
-        }, this.element.getAttribute("mv-" + role + "-type"));
+          format: this.element.getAttribute('mv-' + role + '-format') || this.element.getAttribute('mv-format')
+        }, this.element.getAttribute('mv-' + role + '-type'));
       } else if (!backend) {
         // We had a backend and now we will un-have it
         this[role] = null;
       }
 
-      var changed = backend ? !backend.equals(previous) : !!previous;
+      var changed = backend ? !backend.equals(previous) : Boolean(previous);
 
       if (changed) {
         // A change occured
@@ -496,11 +505,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return changed;
     },
 
+
     /**
-   * load - Fetch data from source and render it.
-   *
-   * @return {Promise}  A promise that resolves when the data is loaded.
-   */
+     * Load - Fetch data from source and render it.
+     *
+     * @return {Promise}  A promise that resolves when the data is loaded.
+     */
     load: function load() {
       var _this3 = this;
 
@@ -510,7 +520,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return Promise.resolve();
       }
 
-      this.inProgress = "Loading";
+      this.inProgress = 'Loading';
 
       return backend.ready.then(function () {
         return backend.load();
@@ -529,13 +539,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         if (err) {
           var xhr = err instanceof XMLHttpRequest ? err : err.xhr;
 
-          if (xhr && xhr.status == 404) {
+          if (xhr && xhr.status === 404) {
             _this3.render(null);
           } else {
-            var message = _this3._("problem-loading");
+            var message = _this3._('problem-loading');
 
             if (xhr) {
-              message += xhr.status ? _this3._("http-error", err) : ": " + _this3._("cant-connect");
+              message += xhr.status ? _this3._('http-error', err) : ': ' + _this3._('cant-connect');
             }
 
             _this3.error(message, err);
@@ -548,11 +558,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         _this3.inProgress = false;
         requestAnimationFrame(function () {
           _this3.dataLoaded.resolve();
-          $.fire(_this3.element, "mv-load");
+          $.fire(_this3.element, 'mv-load');
         });
       });
     },
-
     store: function store() {
       var _this4 = this;
 
@@ -560,14 +569,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return Promise.resolve();
       }
 
-      this.inProgress = "Saving";
+      this.inProgress = 'Saving';
 
       return this.storage.store(this.getData()).catch(function (err) {
         if (err) {
-          var message = _this4._("problem-saving");
+          var message = _this4._('problem-saving');
 
           if (err instanceof XMLHttpRequest) {
-            message += ": " + (err.status ? _this4._("http-error", err) : _this4._("cant-connect"));
+            message += ': ' + (err.status ? _this4._('http-error', err) : _this4._('cant-connect'));
           }
 
           _this4.error(message, err);
@@ -579,34 +588,32 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return saved;
       });
     },
-
     upload: function upload(file) {
       var _this5 = this;
 
-      var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "images/" + file.name;
+      var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'images/' + file.name;
 
       if (!this.uploadBackend) {
         return Promise.reject();
       }
 
-      this.inProgress = this._("uploading");
+      this.inProgress = this._('uploading');
 
       return this.uploadBackend.upload(file, path).then(function (url) {
         _this5.inProgress = false;
         return url;
       }).catch(function (err) {
-        _this5.error(_this5._("error-uploading"), err);
+        _this5.error(_this5._('error-uploading'), err);
         _this5.inProgress = false;
         return null;
       });
     },
-
     save: function save() {
       var _this6 = this;
 
       return this.store().then(function (saved) {
         if (saved) {
-          $.fire(_this6.element, "mv-save", saved);
+          $.fire(_this6.element, 'mv-save', saved);
 
           _this6.lastSaved = Date.now();
           _this6.root.save();
@@ -614,13 +621,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       });
     },
-
     walk: function walk() {
       var _root;
 
       return (_root = this.root).walk.apply(_root, arguments);
     },
-
     calculateNeedsEdit: function calculateNeedsEdit(test) {
       var needsEdit = false;
 
@@ -631,7 +636,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
 
         // True if both modes are allowed and node is not group
-        needsEdit = !obj.modes && obj.nodeType != "Group";
+        needsEdit = !obj.modes && obj.nodeType != 'Group';
 
         return !obj.modes;
       }, undefined, { descentReturn: true });
@@ -639,21 +644,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return needsEdit;
     },
 
+
     live: {
       inProgress: function inProgress(value) {
-        $.toggleAttribute(this.element, "mv-progress", value, value);
-        $.toggleAttribute(this.element, "aria-busy", !!value, !!value);
-        this.element.style.setProperty("--mv-progress-text", value ? "\"" + this._(value) + "\"" : "");
+        $.toggleAttribute(this.element, 'mv-progress', value, value);
+        $.toggleAttribute(this.element, 'aria-busy', Boolean(value), Boolean(value));
+        this.element.style.setProperty('--mv-progress-text', value ? '"' + this._(value) + '"' : '');
       },
-
       unsavedChanges: function unsavedChanges(value) {
-        this.element.classList.toggle("mv-unsaved-changes", value);
+        this.element.classList.toggle('mv-unsaved-changes', value);
       },
-
       needsEdit: function needsEdit(value) {
-        this.bar.toggle("edit", value && this.permissions.edit);
+        this.bar.toggle('edit', value && this.permissions.edit);
       },
-
       storage: function storage(value) {
         if (value !== this._storage && !value) {
           var permissions = new Mavo.Permissions({ edit: true, save: false });
@@ -661,7 +664,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           this.permissions.parent = permissions;
         }
       },
-
       primaryBackend: function primaryBackend(value) {
         value = value || null;
 
@@ -669,6 +671,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           return value;
         }
       },
+
 
       uploadBackend: {
         get: function get() {
@@ -681,7 +684,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     },
 
     static: {
-      version: "v0.1.5",
+      version: 'v0.1.5',
 
       all: {},
 
@@ -689,7 +692,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         if (id instanceof Element) {
           // Get by element
           for (var name in _.all) {
-            if (_.all[name].element == id) {
+            if (_.all[name].element === id) {
               return _.all[name];
             }
           }
@@ -697,13 +700,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           return null;
         }
 
-        var name = typeof id === "number" ? Object.keys(_.all)[id] : id;
+        var name = typeof id === 'number' ? Object.keys(_.all)[id] : id;
 
         return _.all[name] || null;
       },
 
-      superKey: navigator.platform.indexOf("Mac") === 0 ? "metaKey" : "ctrlKey",
-      base: location.protocol == "about:" ? document.currentScript ? document.currentScript.src : "http://mavo.io" : location,
+
+      superKey: navigator.platform.indexOf('Mac') === 0 ? 'metaKey' : 'ctrlKey',
+      base: location.protocol === 'about:' ? document.currentScript ? document.currentScript.src : 'http://mavo.io' : location,
       dependencies: [],
 
       init: function init() {
@@ -711,56 +715,58 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
         var mavos = Array.isArray(arguments[0]) ? arguments[0] : $$(_.selectors.init, container);
 
-        return mavos.filter(function (element) {
+        var ret = mavos.filter(function (element) {
           return !_.get(element);
-        }) // not already inited
+        }) // Not already inited
         .map(function (element) {
           return new _(element);
         });
+
+        return ret;
       },
+
 
       UI: {},
 
       hooks: new $.Hooks(),
 
-      attributes: ["mv-app", "mv-storage", "mv-source", "mv-init", "mv-path", "mv-multiple-path", "mv-format", "mv-attribute", "mv-default", "mv-mode", "mv-edit", "mv-permisssions", "mv-rel", "mv-value"],
+      attributes: ['mv-app', 'mv-storage', 'mv-source', 'mv-init', 'mv-path', 'mv-multiple-path', 'mv-format', 'mv-attribute', 'mv-default', 'mv-mode', 'mv-edit', 'mv-permisssions', 'mv-rel', 'mv-value'],
 
       lazy: {
         locale: function locale() {
-          return document.documentElement.lang || "en-GB";
+          return document.documentElement.lang || 'en-GB';
         },
         toNode: function toNode() {
-          return Symbol("toNode");
+          return Symbol('toNode');
         }
       }
     }
   });
 
-  Object.defineProperty(_.all, "length", {
+  Object.defineProperty(_.all, 'length', {
     get: function get() {
       return Object.keys(this).length;
     }
   });
 
   {
-
     var s = _.selectors = {
-      init: ".mv-app, [mv-app], [data-mv-app]",
-      property: "[property], [itemprop]",
+      init: '.mv-app, [mv-app], [data-mv-app]',
+      property: '[property], [itemprop]',
       specificProperty: function specificProperty(name) {
-        return "[property=" + name + "], [itemprop=" + name + "]";
+        return '[property=' + name + '], [itemprop=' + name + ']';
       },
-      group: "[typeof], [itemscope], [itemtype], [mv-group]",
-      multiple: "[mv-multiple]",
-      formControl: "input, select, option, textarea",
-      textInput: ["text", "email", "url", "tel", "search"].map(function (t) {
-        return "input[type=" + t + "]";
-      }).join(", ") + ", input:not([type]), textarea",
-      ui: ".mv-ui",
+      group: '[typeof], [itemscope], [itemtype], [mv-group]',
+      multiple: '[mv-multiple]',
+      formControl: 'input, select, option, textarea',
+      textInput: ['text', 'email', 'url', 'tel', 'search'].map(function (t) {
+        return 'input[type=' + t + ']';
+      }).join(', ') + ', input:not([type]), textarea',
+      ui: '.mv-ui',
       container: {
         // "li": "ul, ol",
-        "tr": "table",
-        "option": "select"
+        tr: 'table',
+        option: 'select'
         // "dt": "dl",
         // "dd": "dl"
       }
@@ -771,23 +777,23 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     };
     var not = s.not = function (selector) {
       return arr(selector).map(function (s) {
-        return ":not(" + s + ")";
-      }).join("");
+        return ':not(' + s + ')';
+      }).join('');
     };
     var or = s.or = function (selector1, selector2) {
-      return selector1 + ", " + selector2;
+      return selector1 + ', ' + selector2;
     };
     var and = s.and = function (selector1, selector2) {
       var ret = [],
           arr2 = arr(selector2);
 
       arr(selector1).forEach(function (s1) {
-        return ret.push.apply(ret, _toConsumableArray(arr2.map(function (s2) {
+        return ret.push.apply(ret, (0, _toConsumableArray3.default)(arr2.map(function (s2) {
           return s1 + s2;
         })));
       });
 
-      return ret.join(", ");
+      return ret.join(', ');
     };
     var andNot = s.andNot = function (selector1, selector2) {
       return and(selector1, not(selector2));
@@ -797,7 +803,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       primitive: andNot(s.property, s.group),
       rootGroup: andNot(s.group, s.property),
       item: or(s.multiple, s.group),
-      output: or(s.specificProperty("output"), ".mv-output")
+      output: or(s.specificProperty('output'), '.mv-output')
     });
   }
 
@@ -806,20 +812,20 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     var polyfills = [];
 
     $.each({
-      "blissfuljs": Array.from && document.documentElement.closest && self.URL && "searchParams" in URL.prototype,
-      "Intl.~locale.en": self.Intl,
-      "IntersectionObserver": self.IntersectionObserver,
-      "Symbol": self.Symbol,
-      "Element.prototype.remove": Element.prototype.remove
+      blissfuljs: Array.from && document.documentElement.closest && self.URL && 'searchParams' in URL.prototype,
+      'Intl.~locale.en': self.Intl,
+      IntersectionObserver: self.IntersectionObserver,
+      Symbol: self.Symbol,
+      'Element.prototype.remove': Element.prototype.remove
     }, function (id, supported) {
       if (!supported) {
         polyfills.push(id);
       }
     });
 
-    var polyfillURL = "https://cdn.polyfill.io/v2/polyfill.min.js?unknown=polyfill&features=" + polyfills.map(function (a) {
-      return a + "|gated";
-    }).join(",");
+    var polyfillURL = 'https://cdn.polyfill.io/v2/polyfill.min.js?unknown=polyfill&features=' + polyfills.map(function (a) {
+      return a + '|gated';
+    }).join(',');
 
     _.dependencies.push(
     // Plugins.load() must be run after DOM load to pick up all mv-plugins attributes
@@ -828,7 +834,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }), $.include(!polyfills.length, polyfillURL));
 
     _.inited = $.ready().then(function () {
-      $.attributes($$(_.selectors.init), { "mv-progress": "Loading" });
+      $.attributes($$(_.selectors.init), { 'mv-progress': 'Loading' });
       return _.ready;
     }).catch(console.error).then(function () {
       return Mavo.init();
@@ -837,33 +843,43 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     _.ready = _.thenAll(_.dependencies);
   });
 
-  Stretchy.selectors.filter = ".mv-editor:not([property]), .mv-autosize";
+  Stretchy.selectors.filter = '.mv-editor:not([property]), .mv-autosize';
 
   // Define $ and $$ if they are not already defined
   // Primarily for backwards compat since we used to use Bliss Full.
   self.$ = self.$ || $;
   self.$$ = self.$$ || $$;
 })(Bliss, Bliss.$);
-"use strict";
+'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _typeof2 = require('babel-runtime/helpers/typeof');
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
 (function ($, $$) {
-
   var _ = $.extend(Mavo, {
     /**
-   * Load a file, only once
-   */
+     * Load a file, only once
+     */
     load: function load(url) {
       var base = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document.currentScript ? document.currentScript.src : location;
 
       _.loaded = _.loaded || new Set();
 
-      if (_.loaded.has(url + "")) {
+      if (_.loaded.has(String(url))) {
         return;
       }
 
@@ -871,10 +887,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (/\.css$/.test(url.pathname)) {
         // CSS file
-        $.create("link", {
-          "href": url,
-          "rel": "stylesheet",
-          "inside": document.head
+        $.create('link', {
+          href: url,
+          rel: 'stylesheet',
+          inside: document.head
         });
 
         // No need to wait for stylesheets
@@ -886,7 +902,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
 
     readFile: function readFile(file) {
-      var format = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "DataURL";
+      var format = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'DataURL';
 
       var reader = new FileReader();
 
@@ -895,31 +911,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           return resolve(reader.result);
         };
         reader.onerror = reader.onabort = reject;
-        reader["readAs" + format](file);
+        reader['readAs' + format](file);
       });
     },
 
     toJSON: function toJSON(data) {
       if (data === null) {
-        return "";
+        return '';
       }
 
-      if (typeof data === "string") {
+      if (typeof data === 'string') {
         // Do not stringify twice!
         return data;
       }
 
-      return JSON.stringify(data, null, "\t");
+      return JSON.stringify(data, null, '\t');
     },
 
     /**
-   * toJSON without cycles
-   */
+     * ToJSON without cycles
+     */
     safeToJSON: function safeToJSON(o) {
       var cache = self.WeakSet ? new WeakSet() : new Set();
 
       return JSON.stringify(o, function (key, value) {
-        if ((typeof value === "undefined" ? "undefined" : _typeof(value)) === "object" && value !== null) {
+        if ((typeof value === 'undefined' ? 'undefined' : (0, _typeof3.default)(value)) === 'object' && value !== null) {
           // No circular reference found
 
           if (cache.has(value)) {
@@ -933,20 +949,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
 
+
     objectify: function objectify(value, properties) {
       var primitive = Mavo.value(value);
 
-      if ((typeof value === "undefined" ? "undefined" : _typeof(value)) !== "object" || value === null) {
+      if ((typeof value === 'undefined' ? 'undefined' : (0, _typeof3.default)(value)) !== 'object' || value === null) {
         if (value === null) {
           var _value;
 
-          value = (_value = {}, _defineProperty(_value, Symbol.toStringTag, "Null"), _defineProperty(_value, "toJSON", function toJSON() {
+          value = (_value = {}, (0, _defineProperty3.default)(_value, Symbol.toStringTag, 'Null'), (0, _defineProperty3.default)(_value, 'toJSON', function toJSON() {
             return null;
           }), _value);
         } else {
-          var constructor = value.constructor;
-          value = new constructor(primitive);
-          value[Symbol.toStringTag] = constructor.name;
+          var _constructor = value.constructor;
+          value = new _constructor(primitive);
+          value[Symbol.toStringTag] = _constructor.name;
         }
 
         value.valueOf = value[Symbol.toPrimitive] = function () {
@@ -962,8 +979,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
 
     /**
-   * Array & set utlities
-   */
+     * Array & set utlities
+     */
 
     // If the passed value is not an array, convert to an array
     toArray: function toArray(arr) {
@@ -972,10 +989,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     delete: function _delete(arr, element, all) {
       do {
-        var index = arr && arr.indexOf(element);
+        var _index = arr && arr.indexOf(element);
 
-        if (index > -1) {
-          arr.splice(index, 1);
+        if (_index > -1) {
+          arr.splice(_index, 1);
         }
       } while (index > -1 && all);
     },
@@ -999,12 +1016,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
 
     union: function union(set1, set2) {
-      return new Set([].concat(_toConsumableArray(set1 || []), _toConsumableArray(set2 || [])));
+      return new Set([].concat((0, _toConsumableArray3.default)(set1 || []), (0, _toConsumableArray3.default)(set2 || [])));
     },
 
     /**
-   * DOM element utilities
-   */
+     * DOM element utilities
+     */
 
     is: function is(thing) {
       for (var _len = arguments.length, elements = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -1022,9 +1039,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return false;
     },
 
+
     /**
-   * Get the current value of a CSS property on an element
-   */
+     * Get the current value of a CSS property on an element
+     */
     getStyle: function getStyle(element, property) {
       if (element) {
         var value = getComputedStyle(element).getPropertyValue(property);
@@ -1035,13 +1053,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     },
     /**
-   * Get/set data on an element
-   */
+     * Get/set data on an element
+     */
     data: function data(element, name, value) {
       var data = _.elementData.get(element) || {},
-          ret;
+          ret = void 0;
 
-      if (arguments.length == 2) {
+      if (arguments.length === 2) {
         ret = data[name];
       } else if (value === undefined) {
         delete data[name];
@@ -1053,29 +1071,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return ret;
     },
 
+
     elementData: new WeakMap(),
 
     /**
-   * Get node from path or get path of a node to an ancestor
-   * For maximum robustness, all but the last path segment refer to elements only.
-   * The last part of the path is a decimal: the integer part of the decimal is element index,
-   * the decimal part is node index *after* that element and starts from 1.
-   * If the node has no previous element sibling, the integer part of the index will be -1.
-   */
+     * Get node from path or get path of a node to an ancestor
+     * For maximum robustness, all but the last path segment refer to elements only.
+     * The last part of the path is a decimal: the integer part of the decimal is element index,
+     * the decimal part is node index *after* that element and starts from 1.
+     * If the node has no previous element sibling, the integer part of the index will be -1.
+     */
     elementPath: function elementPath(ancestor, element) {
       if (Array.isArray(element)) {
         // Get element by path
-        var path = element;
+        var _path = element;
 
-        var ret = path.reduce(function (acc, cur) {
+        var ret = _path.reduce(function (acc, cur) {
           return acc.children[cur >> 0] || acc;
         }, ancestor);
 
-        var last = path[path.length - 1];
+        var last = _path[_path.length - 1];
 
         if (last != last >> 0) {
           // We are returning a non-element node
-          var offset = +(last + "").split(".")[1];
+          var offset = Number(String(last).split('.')[1]);
 
           if (last >> 0 < 0) {
             ret = ret.firstChild;
@@ -1088,42 +1107,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
 
         return ret;
-      } else {
-        // Get path
-        var path = [];
+      }
+      // Get path
+      var path = [];
 
-        for (var parent = element; parent && parent != ancestor; parent = parent.parentNode) {
-          var index = 0;
-          var countNonElementSiblings = parent === element && element.nodeType !== 1;
-          var offset = countNonElementSiblings ? 1 : 0;
-          var sibling = parent;
+      for (var _parent = element; _parent && _parent != ancestor; _parent = _parent.parentNode) {
+        var _index2 = 0;
+        var countNonElementSiblings = _parent === element && element.nodeType !== 1;
+        var _offset = countNonElementSiblings ? 1 : 0;
+        var sibling = _parent;
 
-          while (sibling = sibling["previous" + (countNonElementSiblings ? "" : "Element") + "Sibling"]) {
-            if (countNonElementSiblings) {
-              offset++;
+        while (sibling = sibling['previous' + (countNonElementSiblings ? '' : 'Element') + 'Sibling']) {
+          if (countNonElementSiblings) {
+            _offset++;
 
-              if (sibling.nodeType == 1) {
-                countNonElementSiblings = false;
-              }
-            } else {
-              index++;
+            if (sibling.nodeType === 1) {
+              countNonElementSiblings = false;
             }
+          } else {
+            _index2++;
           }
-
-          if (offset > 0) {
-            index = index - 1 + "." + offset;
-          }
-
-          path.unshift(index);
         }
 
-        return parent ? path : null;
+        if (_offset > 0) {
+          _index2 = _index2 - 1 + '.' + _offset;
+        }
+
+        path.unshift(_index2);
       }
+
+      return parent ? path : null;
     },
 
+
     /**
-   * Revocably add/remove elements from the DOM
-   */
+     * Revocably add/remove elements from the DOM
+     */
     revocably: {
       add: function add(element, parent) {
         var comment = _.revocably.isRemoved(element);
@@ -1137,17 +1156,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return comment;
       },
-
       remove: function remove(element, commentText) {
         if (!element) {
           return;
         }
 
-        var comment = _.data(element, "commentstub");
+        var comment = _.data(element, 'commentstub');
 
         if (!comment) {
           commentText = commentText || element.id || element.className || element.nodeName;
-          comment = _.data(element, "commentstub", document.createComment(commentText));
+          comment = _.data(element, 'commentstub', document.createComment(commentText));
         }
 
         if (element.parentNode) {
@@ -1157,13 +1175,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return comment;
       },
-
       isRemoved: function isRemoved(element) {
         if (!element || element.parentNode) {
           return false;
         }
 
-        var comment = _.data(element, "commentstub");
+        var comment = _.data(element, 'commentstub');
 
         if (comment && comment.parentNode) {
           return comment;
@@ -1171,25 +1188,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return false;
       },
-
       setAttribute: function setAttribute(element, attribute, value) {
-        var previousValue = _.data(element, "attribute-" + attribute);
+        var previousValue = _.data(element, 'attribute-' + attribute);
 
         if (previousValue === undefined) {
           // Only set this when there's no old value stored, otherwise
           // if called multiple times, it could result in losing the original value
-          _.data(element, "attribute-" + attribute, element.getAttribute(attribute));
+          _.data(element, 'attribute-' + attribute, element.getAttribute(attribute));
         }
 
         element.setAttribute(attribute, value);
       },
-
       restoreAttribute: function restoreAttribute(element, attribute) {
-        var previousValue = _.data(element, "attribute-" + attribute);
+        var previousValue = _.data(element, 'attribute-' + attribute);
 
         if (previousValue !== undefined) {
           $.toggleAttribute(element, attribute, previousValue);
-          _.data(element, "attribute-" + attribute, undefined);
+          _.data(element, 'attribute-' + attribute, undefined);
         }
       }
     },
@@ -1198,8 +1213,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       is: function is(element) {
         var r = element.getBoundingClientRect();
 
-        return (0 <= r.bottom && r.bottom <= innerHeight || 0 <= r.top && r.top <= innerHeight) && ( // vertical
-        0 <= r.right && r.right <= innerWidth || 0 <= r.left && r.left <= innerWidth); // horizontal
+        return (r.bottom >= 0 && r.bottom <= innerHeight || r.top >= 0 && r.top <= innerHeight) && ( // Vertical
+        r.right >= 0 && r.right <= innerWidth || r.left >= 0 && r.left <= innerWidth); // Horizontal
       },
 
       when: function when(element) {
@@ -1208,7 +1223,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           entries.forEach(function (entry) {
             _this.unobserve(entry.target);
-            $.fire(entry.target, "mv-inview", { entry: entry });
+            $.fire(entry.target, 'mv-inview', { entry: entry });
           });
         });
 
@@ -1220,34 +1235,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           observer.observe(element);
 
           var callback = function callback(evt) {
-            element.removeEventListener("mv-inview", callback);
+            element.removeEventListener('mv-inview', callback);
             evt.stopPropagation();
             resolve();
           };
 
-          element.addEventListener("mv-inview", callback);
+          element.addEventListener('mv-inview', callback);
         });
       }
     },
 
     scrollIntoViewIfNeeded: function scrollIntoViewIfNeeded(element) {
       if (element && !Mavo.inView.is(element)) {
-        element.scrollIntoView({ behavior: "smooth" });
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     },
 
     /**
-   * Set attribute only if it doesn’t exist
-   */
+     * Set attribute only if it doesn’t exist
+     */
     setAttributeShy: function setAttributeShy(element, attribute, value) {
       if (!element.hasAttribute(attribute)) {
         element.setAttribute(attribute, value);
       }
     },
 
+
     /**
-   * Get the value of an attribute, with fallback attributes in priority order.
-   */
+     * Get the value of an attribute, with fallback attributes in priority order.
+     */
     getAttribute: function getAttribute(element) {
       for (var _len2 = arguments.length, attributes = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
         attributes[_key2 - 1] = arguments[_key2];
@@ -1264,31 +1280,34 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return null;
     },
 
+
     /**
-   * Get the element identified by the URL hash
-   */
+     * Get the element identified by the URL hash
+     */
     getTarget: function getTarget() {
       var id = location.hash.substr(1);
       return document.getElementById(id);
     },
 
-    /**
-   * Object utilities
-   */
 
     /**
-   * Check if property exists in object. Like the in operator but more robust and does not throw.
-   * Why not just in? E.g. "foo".length is 3 but "length" in "foo" throws
-   */
+     * Object utilities
+     */
+
+    /**
+     * Check if property exists in object. Like the in operator but more robust and does not throw.
+     * Why not just in? E.g. "foo".length is 3 but "length" in "foo" throws
+     */
     in: function _in(obj, property) {
       if (obj) {
-        return (typeof obj === "undefined" ? "undefined" : _typeof(obj)) === "object" && property in obj || obj[property] !== undefined;
+        return (typeof obj === 'undefined' ? 'undefined' : (0, _typeof3.default)(obj)) === 'object' && property in obj || obj[property] !== undefined;
       }
     },
 
+
     /**
-   * Get real property name from case insensitive property
-   */
+     * Get real property name from case insensitive property
+     */
     getCanonicalProperty: function getCanonicalProperty(obj, property) {
       if (obj && (property || property === 0)) {
         // Property in object?
@@ -1316,26 +1335,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       }
     },
-
     subset: function subset(obj, path, value) {
-      if (arguments.length == 3) {
+      if (arguments.length === 3) {
         // Put
         if (path.length) {
           var last = path[path.length - 1];
-          var parent = $.value.apply($, [obj].concat(_toConsumableArray(path.slice(0, -1))));
+          var _parent2 = $.value.apply($, [obj].concat((0, _toConsumableArray3.default)(path.slice(0, -1))));
 
-          if (Array.isArray(parent) && Array.isArray(value)) {
+          if (Array.isArray(_parent2) && Array.isArray(value)) {
             // Merge arrays instead of adding array inside array
-            parent.splice.apply(parent, [last, 1].concat(_toConsumableArray(value)));
-          } else {
-            parent[path[path.length - 1]] = value;
+            _parent2.splice.apply(_parent2, [last, 1].concat((0, _toConsumableArray3.default)(value)));
+          } else if (_parent2) {
+            _parent2[path[path.length - 1]] = value;
           }
 
           return obj;
         }
 
         return value;
-      } else if ((typeof obj === "undefined" ? "undefined" : _typeof(obj)) == "object" && path && path.length) {
+      } else if ((typeof obj === 'undefined' ? 'undefined' : (0, _typeof3.default)(obj)) === 'object' && path && path.length) {
         // Get
         return path.reduce(function (obj, property, i) {
           var meta = {};
@@ -1347,19 +1365,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           if (ret === undefined && meta.query) {
             // Not found, return dummy if query
-            ret = _defineProperty({}, meta.query.property, meta.query.value);
+            ret = (0, _defineProperty3.default)({}, meta.query.property, meta.query.value);
           }
 
           return ret;
         }, obj);
-      } else {
-        return obj;
       }
-    },
 
+      return obj;
+    },
     clone: function clone(o) {
       return JSON.parse(_.safeToJSON(o));
     },
+
 
     // Credit: https://remysharp.com/2010/07/21/throttling-function-calls
     debounce: function debounce(fn, delay) {
@@ -1369,7 +1387,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       var timer = null,
-          _code;
+          _code = void 0;
 
       return function () {
         var context = this,
@@ -1377,14 +1395,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         _code = function code() {
           fn.apply(context, args);
-          removeEventListener("beforeunload", _code);
+          removeEventListener('beforeunload', _code);
         };
 
         clearTimeout(timer);
         timer = setTimeout(_code, delay);
-        addEventListener("beforeunload", _code);
+        addEventListener('beforeunload', _code);
       };
     },
+
 
     timeout: function timeout(delay) {
       return new Promise(function (resolve) {
@@ -1393,17 +1412,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
 
     escapeRegExp: function escapeRegExp(s) {
-      return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+      return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     },
 
     matches: function matches(str, regex) {
-      var ret = (str + "").match(regex);
+      var ret = String(str).match(regex);
       return ret ? ret : [];
     },
 
     match: function match(str, regex) {
       var i = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-      return _.matches(str, regex)[i] || "";
+      return _.matches(str, regex)[i] || '';
     },
 
     observeResize: function observeResize(element, callbackOrObserver) {
@@ -1415,7 +1434,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var ro = callbackOrObserver instanceof ResizeObserver ? callbackOrObserver : new ResizeObserver(function (entries) {
         var contentRect = entries[entries.length - 1].contentRect;
 
-        if (previousRect && previousRect.width == contentRect.width && previousRect.height == contentRect.height) {
+        if (previousRect && previousRect.width === contentRect.width && previousRect.height === contentRect.height) {
           return;
         }
 
@@ -1428,6 +1447,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return ro;
     },
+
 
     Observer: $.Class({
       constructor: function constructor(element, attribute, callback) {
@@ -1447,23 +1467,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         if (attribute) {
           $.extend(this.options, {
             attributes: true,
-            attributeFilter: this.attribute == "all" ? undefined : Mavo.toArray(this.attribute),
-            attributeOldValue: !!o.oldValue
+            attributeFilter: this.attribute === 'all' ? undefined : Mavo.toArray(this.attribute),
+            attributeOldValue: Boolean(o.oldValue)
           });
         }
 
-        if (!this.attribute || this.attribute == "all") {
+        if (!this.attribute || this.attribute === 'all') {
           $.extend(this.options, {
             characterData: true,
             childList: true,
             subtree: true,
-            characterDataOldValue: !!o.oldValue
+            characterDataOldValue: Boolean(o.oldValue)
           });
         }
 
         this.run();
       },
-
       stop: function stop() {
         if (this.observer) {
           this.observer.disconnect();
@@ -1473,7 +1492,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return this;
       },
-
       run: function run() {
         if (this.observer) {
           this.observer.observe(this.element, this.options);
@@ -1483,13 +1501,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return this;
       },
 
+
       /**
-    * Disconnect an observer, run some code, then observe again
-    */
+       * Disconnect an observer, run some code, then observe again
+       */
       sneak: function sneak(callback) {
         if (this.running) {
           this.stop();
-          var ret = callback();
+          var _ret2 = callback();
           this.run();
         } else {
           var ret = callback();
@@ -1497,11 +1516,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return ret;
       },
-
       destroy: function destroy() {
         this.stop();
         this.observer = this.element = null;
       },
+
 
       static: {
         sneak: function sneak(observer, callback) {
@@ -1511,7 +1530,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }),
 
     defer: function defer(constructor) {
-      var res, rej;
+      var res = void 0,
+          rej = void 0;
 
       var promise = new Promise(function (resolve, reject) {
         if (constructor) {
@@ -1535,14 +1555,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return promise;
     },
 
+
     /**
-   * Similar to Promise.all() but can handle post-hoc additions
-   * and does not reject if one promise rejects.
-   */
+     * Similar to Promise.all() but can handle post-hoc additions
+     * and does not reject if one promise rejects.
+     */
     thenAll: function thenAll(iterable) {
       // Turn rejected promises into resolved ones
       $$(iterable).forEach(function (promise) {
-        if ($.type(promise) == "promise") {
+        if ($.type(promise) === 'promise') {
           promise = promise.catch(function (err) {
             return err;
           });
@@ -1562,13 +1583,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
 
+
     /**
-   * Run & Return a function
-   */
+     * Run & Return a function
+     */
     rr: function rr(f) {
       f();
       return f;
     },
+
 
     // Get out of bounds array index to wrap around
     wrap: function wrap(index, length) {
@@ -1576,20 +1599,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
 
     /**
-   * Parses a simple CSS-like text format for declaring key-value options:
-   * Pairs are comma or semicolon-separated, key and value are colon separated.
-   * Escapes are supported, via backslash. Useful for attributes.
-   */
+     * Parses a simple CSS-like text format for declaring key-value options:
+     * Pairs are comma or semicolon-separated, key and value are colon separated.
+     * Escapes are supported, via backslash. Useful for attributes.
+     */
     options: function options(str) {
       var ret = {};
 
       (str.trim().match(/(?:\\[,;]|[^,;])+/g) || []).forEach(function (option) {
         if (option) {
-          option = option.trim().replace(/\\([,;])/g, "$1");
+          option = option.trim().replace(/\\([,;])/g, '$1');
           var pair = option.match(/^\s*((?:\\:|[^:])+?)\s*:\s*(.+)$/);
 
           if (pair) {
-            ret[pair[1].replace(/\\:/g, ":")] = pair[2];
+            ret[pair[1].replace(/\\:/g, ':')] = pair[2];
           } else {
             // If no value, it's boolean
             ret[option] = true;
@@ -1603,7 +1626,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
   // Bliss plugins
 
-  $.add("toggleAttribute", function (name, value) {
+  $.add('toggleAttribute', function (name, value) {
     var test = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : value !== null;
 
     if (test) {
@@ -1622,6 +1645,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       set: function set(value) {
         this[proxy][property] = value;
       },
+
       configurable: true,
       enumerable: true
     });
@@ -1646,9 +1670,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   // :target-within shim
   function updateTargetWithin() {
     var element = _.getTarget();
-    var cl = "mv-target-within";
+    var cl = 'mv-target-within';
 
-    $$("." + cl).forEach(function (el) {
+    $$('.' + cl).forEach(function (el) {
       return el.classList.remove(cl);
     });
 
@@ -1656,21 +1680,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       element.classList.add(cl);
       element = element.parentNode;
     }
-  };
+  }
 
-  addEventListener("hashchange", updateTargetWithin);
-  var idObserver = new Mavo.Observer(document.documentElement, "id", updateTargetWithin);
+  addEventListener('hashchange', updateTargetWithin);
+  var idObserver = new Mavo.Observer(document.documentElement, 'id', updateTargetWithin);
 })(Bliss, Bliss.$);
-"use strict";
+'use strict';
+
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
 (function ($, $$) {
-
   var _ = Mavo.Locale = $.Class({
     constructor: function constructor(lang, phrases) {
       this.lang = lang;
       this.phrases = {};
       this.extend(phrases);
     },
+
 
     get fallback() {
       // TODO should we fallback to other dialects? I.e. should en-US fallback to en-GB if en didn't exist?
@@ -1686,7 +1713,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     extend: function extend(phrases) {
       $.extend(this.phrases, phrases);
     },
-
     phrase: function phrase(id, vars) {
       var key = id.toLowerCase();
       var phrase = this.phrases[key];
@@ -1704,7 +1730,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
         Mavo.Functions.unique(keys).forEach(function (name) {
           if (name in vars) {
-            phrase = phrase.replace(RegExp("{" + name + "}", "gi"), vars[name]);
+            phrase = phrase.replace(RegExp('{' + name + '}', 'gi'), vars[name]);
           }
         });
       }
@@ -1712,11 +1738,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return phrase;
     },
 
+
     live: {
       lang: function lang(_lang) {
         this.baseLang = _.getBaseLang(_lang);
 
-        if (_lang == this.baseLang) {
+        if (_lang === this.baseLang) {
           this.baseLang = null;
         }
       }
@@ -1726,8 +1753,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       all: {},
 
       /**
-    * Register new locale or extend existing locale
-    */
+       * Register new locale or extend existing locale
+       */
       register: function register(lang, phrases) {
         if (_.all[lang]) {
           _.all[lang].extend(phrases);
@@ -1735,20 +1762,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _.all[lang] = new _(lang, phrases);
         }
       },
-
       match: function match() {
-        var lang = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+        var lang = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
         return _.all[lang] || _.all[_.getBaseLang(lang)];
       },
-
       get: function get(lang) {
         return _.match(lang) || _.default;
       },
-
       getBaseLang: function getBaseLang(lang) {
-        return lang.split("-")[0];
+        return lang.split('-')[0];
       },
+
 
       lazy: {
         default: function _default() {
@@ -1759,15 +1784,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   });
 
   /**
-  * Use phrase
-  */
+   * Use phrase
+   */
   Mavo.prototype._ = function (id, vars) {
     return this.locale && id ? this.locale.phrase(id, vars) : id;
   };
 
   $.ready().then(function () {
-    $$("datalist.mv-phrases[lang]").forEach(function (datalist) {
-      var phrases = $$("option", datalist).reduce(function (o, option) {
+    $$('datalist.mv-phrases[lang]').forEach(function (datalist) {
+      var phrases = $$('option', datalist).reduce(function (o, option) {
         o[option.value] = option.textContent.trim();
         return o;
       }, {});
@@ -1776,51 +1801,59 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     });
   });
 })(Bliss, Bliss.$);
-"use strict";
+'use strict';
 
-Mavo.Locale.register("en", {
-  "edit": "Edit",
-  "save": "Save",
-  "import": "Import",
-  "export": "Export",
-  "logout": "Logout",
-  "login": "Login",
-  "loading": "Loading",
-  "uploading": "Uploading",
-  "saving": "Saving",
-  "logged-in-as": "Logged in to {id} as ",
-  "login-to": "Login to {id}",
-  "error-uploading": "Error uploading file",
-  "cannot-load-uploaded-file": "Cannot load uploaded file",
-  "problem-saving": "Problem saving data",
-  "problem-loading": "Problem loading data",
-  "cannot-parse": "Can’t understand this file",
-  "http-error": "HTTP error {status}: {statusText}",
-  "cant-connect": "Can’t connect to the Internet",
-  "add-item": "Add {name}",
-  "add-item-before": "Add new {name} before",
-  "add-item-after": "Add new {name} after",
-  "drag-to-reorder": "Drag to reorder {name}",
-  "delete-item": "Delete this {name}",
-  "gh-updated-file": "Updated {name}",
-  "gh-edit-suggestion-saved-in-profile": "Your edits are saved to <a href=\"{previewURL}\" target=\"_blank\">your own profile</a>, because you are not allowed to edit this page.",
-  "gh-edit-suggestion-instructions": "Write a short description of your edits below to suggest them to the page admins:",
-  "gh-edit-suggestion-notreviewed": "You have selected to suggest your edits to the page admins. Your suggestions have not been reviewed yet.",
-  "gh-edit-suggestion-send": "Send edit suggestion",
-  "gh-edit-suggestion-revoke": "Revoke edit suggestion",
-  "gh-edit-suggestion-reason-placeholder": "I added / corrected / deleted ...",
-  "gh-edit-suggestion-cancelled": "Edit suggestion cancelled successfully!",
-  "gh-edit-suggestion-title": "Suggested edits to data",
-  "gh-edit-suggestion-body": "Hello there! I used Mavo to suggest the following edits:\n{description}\nPreview my changes here: {previewURL}",
-  "gh-edit-suggestion-sent": "Edit suggestion sent successfully!"
+/* global Mavo */
+
+Mavo.Locale.register('en', {
+  edit: 'Edit',
+  save: 'Save',
+  import: 'Import',
+  export: 'Export',
+  logout: 'Logout',
+  login: 'Login',
+  loading: 'Loading',
+  uploading: 'Uploading',
+  saving: 'Saving',
+  'logged-in-as': 'Logged in to {id} as ',
+  'login-to': 'Login to {id}',
+  'error-uploading': 'Error uploading file',
+  'cannot-load-uploaded-file': 'Cannot load uploaded file',
+  'problem-saving': 'Problem saving data',
+  'problem-loading': 'Problem loading data',
+  'cannot-parse': 'Can’t understand this file',
+  'http-error': 'HTTP error {status}: {statusText}',
+  'cant-connect': 'Can’t connect to the Internet',
+  'add-item': 'Add {name}',
+  'add-item-before': 'Add new {name} before',
+  'add-item-after': 'Add new {name} after',
+  'drag-to-reorder': 'Drag to reorder {name}',
+  'delete-item': 'Delete this {name}',
+  'gh-updated-file': 'Updated {name}',
+  'gh-edit-suggestion-saved-in-profile': 'Your edits are saved to <a href="{previewURL}" target="_blank">your own profile</a>, because you are not allowed to edit this page.',
+  'gh-edit-suggestion-instructions': 'Write a short description of your edits below to suggest them to the page admins:',
+  'gh-edit-suggestion-notreviewed': 'You have selected to suggest your edits to the page admins. Your suggestions have not been reviewed yet.',
+  'gh-edit-suggestion-send': 'Send edit suggestion',
+  'gh-edit-suggestion-revoke': 'Revoke edit suggestion',
+  'gh-edit-suggestion-reason-placeholder': 'I added / corrected / deleted ...',
+  'gh-edit-suggestion-cancelled': 'Edit suggestion cancelled successfully!',
+  'gh-edit-suggestion-title': 'Suggested edits to data',
+  'gh-edit-suggestion-body': 'Hello there! I used Mavo to suggest the following edits:\n{description}\nPreview my changes here: {previewURL}',
+  'gh-edit-suggestion-sent': 'Edit suggestion sent successfully!'
 });
-"use strict";
+'use strict';
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
 (function ($, $$) {
-
-  Mavo.attributes.push("mv-plugins");
+  Mavo.attributes.push('mv-plugins');
 
   var _ = Mavo.Plugins = {
     loaded: {},
@@ -1828,8 +1861,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     load: function load() {
       _.plugins = new Set();
 
-      $$("[mv-plugins]").forEach(function (element) {
-        element.getAttribute("mv-plugins").trim().split(/\s+/).forEach(function (plugin) {
+      $$('[mv-plugins]').forEach(function (element) {
+        element.getAttribute('mv-plugins').trim().split(/\s+/).forEach(function (plugin) {
           return _.plugins.add(plugin);
         });
       });
@@ -1839,30 +1872,35 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
 
       // Fetch plugin index
-      return $.fetch(_.url + "/plugins.json", {
-        responseType: "json"
+      return $.fetch(_.url + '/plugins.json', {
+        responseType: 'json'
       }).then(function (xhr) {
         // Fetch plugins
         return Mavo.thenAll(xhr.response.plugin.filter(function (plugin) {
           return _.plugins.has(plugin.id);
         }).map(function (plugin) {
           // Load plugin
+          var filename = 'mavo-' + plugin.id + '.js';
 
           if (plugin.repo) {
             // Plugin hosted in a separate repo
-            var base = "https://raw.githubusercontent.com/" + plugin.repo + "/";
-          } else {
-            // Plugin hosted in the mavo-plugins repo
-            var base = _.url + "/" + plugin.id + "/";
+            var url = 'https://raw.githubusercontent.com/' + plugin.repo + '/master/' + filename;
+
+            return _.loaded[plugin.id] ? Promise.resolve() : $.fetch(url).then(function (xhr) {
+              $.create('script', {
+                textContent: xhr.responseText,
+                inside: document.head
+              });
+            });
           }
 
-          var url = base + "mavo-" + plugin.id + ".js";
+          // Plugin hosted in the mavo-plugins repo
+          var url = _.url + '/' + plugin.id + '/' + filename;
 
           return $.include(_.loaded[plugin.id], url);
         }));
       });
     },
-
     register: function register(name) {
       var o = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -1874,9 +1912,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       Mavo.hooks.add(o.hooks);
 
       for (var Class in o.extend) {
-        var existing = Class == "Mavo" ? Mavo : Mavo[Class];
+        var existing = Class === 'Mavo' ? Mavo : Mavo[Class];
 
-        if ($.type(existing) === "function") {
+        if ($.type(existing) === 'function') {
           $.Class(existing, o.extend[Class]);
         } else {
           $.extend(existing, o.extend[Class]);
@@ -1894,7 +1932,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         var dependencies = o.dependencies.map(function (url) {
           return Mavo.load(url, base);
         });
-        ready.push.apply(ready, _toConsumableArray(dependencies));
+        ready.push.apply(ready, (0, _toConsumableArray3.default)(dependencies));
       }
 
       if (ready.length) {
@@ -1912,14 +1950,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
     },
 
-    url: "https://plugins.mavo.io"
+
+    url: 'https://plugins.mavo.io'
   };
 })(Bliss, Bliss.$);
-"use strict";
+'use strict';
 
-(function ($, $$) {
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
-  Mavo.attributes.push("mv-bar");
+(function ($) {
+  Mavo.attributes.push('mv-bar');
 
   var _ = Mavo.UI.Bar = $.Class({
     constructor: function constructor(mavo) {
@@ -1927,37 +1968,37 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       this.mavo = mavo;
 
-      this.element = $(".mv-bar", this.mavo.element);
-      this.template = this.mavo.element.getAttribute("mv-bar") || "";
+      this.element = $('.mv-bar', this.mavo.element);
+      this.template = this.mavo.element.getAttribute('mv-bar') || '';
 
       if (this.element) {
         this.custom = true;
-        this.template += " " + (this.element.getAttribute("mv-bar") || "");
+        this.template += ' ' + (this.element.getAttribute('mv-bar') || '');
         this.template = this.template.trim();
 
         for (var id in _.controls) {
-          this[id] = $(".mv-" + id, this.element);
+          this[id] = $('.mv-' + id, this.element);
 
           if (this[id]) {
-            this.template = this.template || "with";
-            this.template += " " + id;
+            this.template = this.template || 'with';
+            this.template += ' ' + id;
           }
         }
       } else {
         this.element = $.create({
-          className: "mv-bar mv-ui",
+          className: 'mv-bar mv-ui',
           start: this.mavo.element,
-          innerHTML: "<button>&nbsp;</button>"
+          innerHTML: '<button>&nbsp;</button>'
         });
       }
 
-      if (this.element.classList.contains("mv-compact")) {
+      if (this.element.classList.contains('mv-compact')) {
         this.noResize = true;
       }
 
-      // yes- is deprecated and will be removed
+      // Yes- is deprecated and will be removed
       if (/\byes-\w+/.test(this.template)) {
-        console.warn(this.mavo.id + ": You used mv-bar=\"" + this.template + "\". Note that yes-* in mv-bar is deprecated and will be removed in v0.1.6. Please use the new syntax: http://mavo.io/docs/ui/#bar");
+        console.warn(this.mavo.id + ': You used mv-bar="' + this.template + '". Note that yes-* in mv-bar is deprecated and will be removed in v0.1.6. Please use the new syntax: http://mavo.io/docs/ui/#bar');
       }
 
       this.controls = _.getControls(this.template);
@@ -1968,7 +2009,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
 
       if (!this.custom) {
-        this.element.innerHTML = "";
+        this.element.innerHTML = '';
       }
 
       this.controls.forEach(function (id) {
@@ -1982,8 +2023,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         if (o.create) {
           _this[id] = o.create.call(_this.mavo, _this[id]);
         } else if (!_this[id]) {
-          _this[id] = $.create("button", {
-            className: "mv-" + id,
+          _this[id] = $.create('button', {
+            className: 'mv-' + id,
             textContent: _this.mavo._(id)
           });
         }
@@ -2011,7 +2052,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         var o = _.controls[_id];
 
         if (o.action) {
-          $.delegate(_this.mavo.element, "click", ".mv-" + _id, function (evt) {
+          $.delegate(_this.mavo.element, 'click', '.mv-' + _id, function (evt) {
             if (!o.permission || _this.permissions.is(o.permission)) {
               o.action.call(_this.mavo);
               evt.preventDefault();
@@ -2034,7 +2075,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       }
     },
-
     resize: function resize() {
       if (!this.targetHeight) {
         // We don't have a correct measurement for target height, abort
@@ -2044,21 +2084,20 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       this.resizeObserver && this.resizeObserver.disconnect();
 
-      this.element.classList.remove("mv-compact", "mv-tiny");
+      this.element.classList.remove('mv-compact', 'mv-tiny');
 
       // Exceeded single row?
       if (this.element.offsetHeight > this.targetHeight * 1.6) {
-        this.element.classList.add("mv-compact");
+        this.element.classList.add('mv-compact');
 
         if (this.element.offsetHeight > this.targetHeight * 1.2) {
           // Still too tall
-          this.element.classList.add("mv-tiny");
+          this.element.classList.add('mv-tiny');
         }
       }
 
       this.resizeObserver && this.resizeObserver.observe(this.element);
     },
-
     add: function add(id) {
       var _this2 = this;
 
@@ -2076,13 +2115,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         });
       }
     },
-
     remove: function remove(id) {
       var _this3 = this;
 
       var o = _.controls[id];
 
-      Mavo.revocably.remove(this[id], "mv-" + id);
+      Mavo.revocably.remove(this[id], 'mv-' + id);
 
       if (o.cleanup) {
         o.cleanup.call(this.mavo);
@@ -2094,13 +2132,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         });
       }
     },
-
     toggle: function toggle(id, add) {
-      return this[add ? "add" : "remove"](id);
+      return this[add ? 'add' : 'remove'](id);
     },
 
+
     proxy: {
-      "permissions": "mavo"
+      permissions: 'mavo'
     },
 
     static: {
@@ -2108,12 +2146,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         var all = Object.keys(_.controls);
 
         if (template && (template = template.trim())) {
-          if (template == "none") {
+          if (template === 'none') {
             return [];
           }
 
           var relative = /^with\s|\b(yes|no)-\w+\b/.test(template);
-          template = template.replace(/\byes-|^with\s+/g, "");
+          template = template.replace(/\byes-|^with\s+/g, '');
           var ids = template.split(/\s+/);
 
           // Drop duplicates (last one wins)
@@ -2122,7 +2160,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           if (relative) {
             return all.filter(function (id) {
               var positive = ids.lastIndexOf(id);
-              var negative = ids.lastIndexOf("no-" + id);
+              var negative = ids.lastIndexOf('no-' + id);
               var keep = positive > Math.max(-1, negative);
               var drop = negative > Math.max(-1, positive);
 
@@ -2139,11 +2177,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         });
       },
 
+
       controls: {
         status: {
           create: function create(custom) {
             return custom || $.create({
-              className: "mv-status"
+              className: 'mv-status'
             });
           },
           prepare: function prepare() {
@@ -2151,20 +2190,21 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
             if (backend && backend.user) {
               var user = backend.user;
-              var html = user.name || "";
+              var html = user.name || '';
 
               if (user.avatar) {
-                html = "<img class=\"mv-avatar\" src=\"" + user.avatar + "\" /> " + html;
+                html = '<img class="mv-avatar" src="' + user.avatar + '" /> ' + html;
               }
 
               if (user.url) {
-                html = "<a href=\"" + user.url + "\" target=\"_blank\">" + html + "</a>";
+                html = '<a href="' + user.url + '" target="_blank">' + html + '</a>';
               }
 
-              this.bar.status.innerHTML = "<span>" + this._("logged-in-as", backend) + "</span> " + html;
+              this.bar.status.innerHTML = '<span>' + this._('logged-in-as', backend) + '</span> ' + html;
             }
           },
-          permission: "logout"
+
+          permission: 'logout'
         },
 
         edit: {
@@ -2175,7 +2215,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
               this.edit();
             }
           },
-          permission: ["edit", "add", "delete"],
+
+          permission: ['edit', 'add', 'delete'],
           cleanup: function cleanup() {
             if (this.editing) {
               this.done();
@@ -2190,15 +2231,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           action: function action() {
             this.save();
           },
+
           events: {
-            "mouseenter focus": function mouseenterFocus() {
-              this.element.classList.add("mv-highlight-unsaved");
+            'mouseenter focus': function mouseenterFocus() {
+              this.element.classList.add('mv-highlight-unsaved');
             },
-            "mouseleave blur": function mouseleaveBlur() {
-              this.element.classList.remove("mv-highlight-unsaved");
+            'mouseleave blur': function mouseleaveBlur() {
+              this.element.classList.remove('mv-highlight-unsaved');
             }
           },
-          permission: "save",
+          permission: 'save',
           condition: function condition() {
             return !this.autoSave || this.autoSaveDelay > 0;
           }
@@ -2206,30 +2248,31 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
         export: {
           create: function create(custom) {
-            var a;
+            var a = void 0;
 
             if (custom) {
-              a = custom.matches("a") ? custom : $.create("a", {
-                className: "mv-button",
+              a = custom.matches('a') ? custom : $.create('a', {
+                className: 'mv-button',
                 around: custom
               });
             } else {
-              a = $.create("a", {
-                className: "mv-export mv-button",
-                textContent: this._("export")
+              a = $.create('a', {
+                className: 'mv-export mv-button',
+                textContent: this._('export')
               });
             }
 
-            a.setAttribute("download", this.id + ".json");
+            a.setAttribute('download', this.id + '.json');
 
             return a;
           },
+
           events: {
             mousedown: function mousedown() {
-              this.bar.export.href = "data:application/json;charset=UTF-8," + encodeURIComponent(this.toJSON());
+              this.bar.export.href = 'data:application/json;charset=UTF-8,' + encodeURIComponent(this.toJSON());
             }
           },
-          permission: "edit",
+          permission: 'edit',
           optional: true
         },
 
@@ -2237,11 +2280,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           create: function create(custom) {
             var _this4 = this;
 
-            var button = custom || $.create("span", {
-              role: "button",
-              tabIndex: "0",
-              className: "mv-import mv-button",
-              textContent: this._("import"),
+            var button = custom || $.create('span', {
+              role: 'button',
+              tabIndex: '0',
+              className: 'mv-import mv-button',
+              textContent: this._('import'),
               events: {
                 focus: function focus(evt) {
                   input.focus();
@@ -2249,8 +2292,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
               }
             });
 
-            var input = $.create("input", {
-              type: "file",
+            var input = $.create('input', {
+              type: 'file',
               inside: button,
               events: {
                 change: function change(evt) {
@@ -2265,15 +2308,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                           var json = JSON.parse(reader.result);
                           _this4.render(json);
                         } catch (e) {
-                          _this4.error(_this4._("cannot-parse"));
+                          _this4.error(_this4._('cannot-parse'));
                         }
                       },
                       onerror: function onerror(evt) {
-                        _this4.error(_this4._("problem-loading"));
+                        _this4.error(_this4._('problem-loading'));
                       }
                     });
 
-                    _this4.inProgress = _this4._("uploading");
+                    _this4.inProgress = _this4._('uploading');
                     reader.readAsText(file);
                   }
                 }
@@ -2282,6 +2325,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
             return button;
           },
+
           optional: true
         },
 
@@ -2289,25 +2333,33 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           action: function action() {
             this.primaryBackend.login();
           },
-          permission: "login"
+
+          permission: 'login'
         },
 
         logout: {
           action: function action() {
             this.primaryBackend.logout();
           },
-          permission: "logout"
+
+          permission: 'logout'
         }
       }
     }
   });
-})(Bliss, Bliss.$);
-"use strict";
+})(Bliss);
+'use strict';
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
-(function ($, $$) {
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
+
+(function ($) {
   var _ = Mavo.UI.Message = $.Class({
     constructor: function constructor(mavo, message, o) {
       var _this = this;
@@ -2316,29 +2368,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.message = message;
       this.closed = Mavo.defer();
 
-      this.element = $.create(_defineProperty({
-        className: "mv-ui mv-message" + (o.type ? " mv-" + o.type : ""),
+      this.element = $.create((0, _defineProperty3.default)({
+        className: 'mv-ui mv-message' + (o.type ? ' mv-' + o.type : ''),
         innerHTML: this.message,
         events: {
           click: function click(e) {
             return Mavo.scrollIntoViewIfNeeded(_this.mavo.element);
           }
         }
-      }, this.mavo.bar ? "after" : "start", (this.mavo.bar || this.mavo).element));
+      }, this.mavo.bar ? 'after' : 'start', (this.mavo.bar || this.mavo).element));
 
       if (o.classes) {
         this.element.classList.add(o.classes);
       }
 
-      if (o.type == "error") {
-        this.element.setAttribute("role", "alert");
+      if (o.type === 'error') {
+        this.element.setAttribute('role', 'alert');
       } else {
-        this.element.setAttribute("aria-live", "polite");
+        this.element.setAttribute('aria-live', 'polite');
       }
 
       o.dismiss = o.dismiss || {};
 
-      if (typeof o.dismiss == "string" || Array.isArray(o.dismiss)) {
+      if (typeof o.dismiss === 'string' || Array.isArray(o.dismiss)) {
         var dismiss = {};
 
         Mavo.toArray(o.dismiss).forEach(function (prop) {
@@ -2349,11 +2401,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       if (o.dismiss.button) {
-        $.create("button", {
-          className: "mv-close mv-ui",
-          textContent: "×",
+        $.create('button', {
+          className: 'mv-close mv-ui',
+          textContent: '×',
           events: {
-            "click": function click(evt) {
+            click: function click(evt) {
               return _this.close();
             }
           },
@@ -2362,8 +2414,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       if (o.dismiss.timeout) {
-        var timeout = typeof o.dismiss.timeout === "number" ? o.dismiss.timeout : 5000;
-        var closeTimeout;
+        var timeout = typeof o.dismiss.timeout === 'number' ? o.dismiss.timeout : 5000;
+        var closeTimeout = void 0;
 
         $.bind(this.element, {
           mouseenter: function mouseenter(e) {
@@ -2378,13 +2430,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       if (o.dismiss.submit) {
-        this.element.addEventListener("submit", function (evt) {
+        this.element.addEventListener('submit', function (evt) {
           evt.preventDefault();
           _this.close(evt.target);
         });
       }
     },
-
     close: function close(resolve) {
       var _this2 = this;
 
@@ -2394,11 +2445,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     }
   });
-})(Bliss, Bliss.$);
-"use strict";
+})(Bliss);
+'use strict';
 
-(function ($, $$) {
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
+(function ($) {
   var _ = Mavo.Permissions = $.Class({
     constructor: function constructor(o) {
       this.triggers = [];
@@ -2410,12 +2463,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.set(o);
     },
 
+
     // Set multiple permissions at once
     set: function set(o) {
       for (var action in o) {
         this[action] = o[action];
       }
     },
+
 
     // Set a bunch of permissions to true. Chainable.
     on: function on(actions) {
@@ -2427,6 +2482,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return this;
     },
+
 
     // Set a bunch of permissions to false. Chainable.
     off: function off(actions) {
@@ -2441,6 +2497,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this;
     },
 
+
     // Fired once at least one of the actions passed can be performed
     // Kind of like a Promise that can be resolved multiple times.
     can: function can(actions, callback, cannot) {
@@ -2452,10 +2509,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     },
 
+
     // Fired once NONE of the actions can be performed
     cannot: function cannot(actions, callback) {
       this.observe(actions, false, callback);
     },
+
 
     // Schedule a callback for when a set of permissions changes value
     observe: function observe(actions, value, callback) {
@@ -2470,6 +2529,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.triggers.push({ actions: actions, value: value, callback: callback, active: true });
     },
 
+
     // Compare a set of permissions with true or false
     // If comparing with true, we want at least one to be true, i.e. OR
     // If comparing with false, we want ALL to be false, i.e. NOR
@@ -2479,7 +2539,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var able = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
       var or = Mavo.toArray(actions).map(function (action) {
-        return !!_this3[action];
+        return Boolean(_this3[action]);
       }).reduce(function (prev, current) {
         return prev || current;
       });
@@ -2487,53 +2547,53 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return able ? or : !or;
     },
 
+
     // Monitor all changes
     onchange: function onchange(callback) {
       var _this4 = this;
 
       // Future changes
-      this.hooks.add("change", callback);
+      this.hooks.add('change', callback);
 
       // Fire for current values
       _.actions.forEach(function (action) {
         callback.call(_this4, { action: action, value: _this4[action] });
       });
     },
-
     parentChanged: function parentChanged() {
       var o = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-      var localValue = this["_" + o.action];
+      var localValue = this['_' + o.action];
 
-      if (localValue !== undefined || o.from == o.value) {
+      if (localValue !== undefined || o.from === o.value) {
         // We have a local value so we don’t care about parent changes OR nothing changed
         return;
       }
 
       this.fireTriggers(o.action);
 
-      this.hooks.run("change", $.extend({ context: this }, o));
+      this.hooks.run('change', $.extend({ context: this }, o));
     },
+
 
     // A single permission changed value
     changed: function changed(action, value, from) {
-      from = !!from;
-      value = !!value;
+      from = Boolean(from);
+      value = Boolean(value);
 
-      if (value == from) {
+      if (value === from) {
         // Nothing changed
         return;
       }
 
       // $.live() calls the setter before the actual property is set so we
       // need to set it manually, otherwise it still has its previous value
-      this["_" + action] = value;
+      this['_' + action] = value;
 
       this.fireTriggers(action);
 
-      this.hooks.run("change", { action: action, value: value, from: from, context: this });
+      this.hooks.run('change', { action: action, value: value, from: from, context: this });
     },
-
     fireTriggers: function fireTriggers(action) {
       var _this5 = this;
 
@@ -2541,7 +2601,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var match = _this5.is(trigger.actions, trigger.value);
 
         if (trigger.active && trigger.actions.indexOf(action) > -1 && match) {
-
           trigger.active = false;
           trigger.callback();
         } else if (!match) {
@@ -2552,7 +2611,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
-
     or: function or(permissions) {
       var _this6 = this;
 
@@ -2563,13 +2621,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this;
     },
 
+
     live: {
       parent: function parent(_parent) {
         var _this7 = this;
 
         var oldParent = this._parent;
 
-        if (oldParent == _parent) {
+        if (oldParent === _parent) {
           return;
         }
 
@@ -2610,7 +2669,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         $.live(_.prototype, action, {
           get: function get() {
-            var ret = this["_" + action];
+            var ret = this['_' + action];
 
             if (ret === undefined && this.parent) {
               return this.parent[action];
@@ -2632,39 +2691,41 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   });
 
-  _.register(["read", "save"]);
+  _.register(['read', 'save']);
 
-  _.register("login", function (can) {
+  _.register('login', function (can) {
     if (can && this.logout) {
       this.logout = false;
     }
   });
 
-  _.register("logout", function (can) {
+  _.register('logout', function (can) {
     if (can && this.login) {
       this.login = false;
     }
   });
 
-  _.register("edit", function (can) {
+  _.register('edit', function (can) {
     if (can) {
       this.add = this.delete = true;
     }
   });
 
-  _.register(["add", "delete"], function (can) {
+  _.register(['add', 'delete'], function (can) {
     if (!can) {
       this.edit = false;
     }
   });
-})(Bliss, Bliss.$);
-"use strict";
+})(Bliss);
+'use strict';
 
-(function ($, $$) {
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
+(function ($) {
   /**
-  * Base class for all backends
-  */
+   * Base class for all backends
+   */
   var _ = Mavo.Backend = $.Class({
     constructor: function constructor(url) {
       var o = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -2677,11 +2738,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       // Permissions of this particular backend.
       this.permissions = new Mavo.Permissions();
     },
-
     get: function get() {
       var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new URL(this.url);
 
-      url.searchParams.set("timestamp", Date.now()); // ensure fresh copy
+      url.searchParams.set('timestamp', Date.now()); // Ensure fresh copy
 
       return $.fetch(url.href).then(function (xhr) {
         return Promise.resolve(xhr.responseText);
@@ -2689,24 +2749,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return Promise.resolve(null);
       });
     },
-
     load: function load() {
       var _this = this;
 
       return this.ready.then(function () {
         return _this.get();
       }).then(function (response) {
-        if (typeof response != "string") {
+        if (typeof response !== 'string') {
           // Backend did the parsing, we're done here
           return response;
         }
 
-        response = response.replace(/^\ufeff/, ""); // Remove Unicode BOM
+        response = response.replace(/^\ufeff/, ''); // Remove Unicode BOM
 
         return _this.format.parse(response);
       });
     },
-
     store: function store(data) {
       var _this2 = this;
 
@@ -2716,7 +2774,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           format = _ref$format === undefined ? this.format : _ref$format;
 
       return this.ready.then(function () {
-        var serialize = typeof data === "string" ? Promise.resolve(data) : format.stringify(data);
+        var serialize = typeof data === 'string' ? Promise.resolve(data) : format.stringify(data);
 
         return serialize.then(function (serialized) {
           return _this2.put(serialized, path).then(function () {
@@ -2725,6 +2783,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       });
     },
+
 
     // To be be overriden by subclasses
     ready: Promise.resolve(),
@@ -2739,49 +2798,50 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
 
     isAuthenticated: function isAuthenticated() {
-      return !!this.accessToken;
+      return Boolean(this.accessToken);
     },
+
 
     // Any extra params to be passed to the oAuth URL.
     oAuthParams: function oAuthParams() {
-      return "";
+      return '';
     },
 
     toString: function toString() {
-      return this.id + " (" + this.url + ")";
+      return this.id + ' (' + this.url + ')';
+    },
+    equals: function equals(backend) {
+      return backend === this || backend && this.id === backend.id && this.source === backend.source;
     },
 
-    equals: function equals(backend) {
-      return backend === this || backend && this.id == backend.id && this.source == backend.source;
-    },
 
     /**
-   * Helper for making OAuth requests with JSON-based APIs.
-   */
+     * Helper for making OAuth requests with JSON-based APIs.
+     */
     request: function request(call, data) {
       var _this3 = this;
 
-      var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "GET";
+      var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
       var req = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
       req.method = req.method || method;
-      req.responseType = req.responseType || "json";
+      req.responseType = req.responseType || 'json';
 
       req.headers = $.extend({
-        "Content-Type": "application/json; charset=utf-8"
+        'Content-Type': 'application/json; charset=utf-8'
       }, req.headers || {});
 
       req.data = data;
 
       if (this.isAuthenticated()) {
-        req.headers["Authorization"] = req.headers["Authorization"] || "Bearer " + this.accessToken;
+        req.headers.Authorization = req.headers.Authorization || 'Bearer ' + this.accessToken;
       }
 
-      if ($.type(req.data) === "object") {
-        if (req.method == "GET") {
+      if ($.type(req.data) === 'object') {
+        if (req.method === 'GET') {
           req.data = Object.keys(req.data).map(function (p) {
-            return p + "=" + encodeURIComponent(req.data[p]);
-          }).join("&");
+            return p + '=' + encodeURIComponent(req.data[p]);
+          }).join('&');
         } else {
           req.data = JSON.stringify(req.data);
         }
@@ -2790,24 +2850,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       call = new URL(call, this.constructor.apiDomain);
 
       // Prevent getting a cached response. Cache-control is often not allowed via CORS
-      if (req.method == "GET") {
-        call.searchParams.set("timestamp", Date.now());
+      if (req.method === 'GET') {
+        call.searchParams.set('timestamp', Date.now());
       }
 
       return $.fetch(call, req).catch(function (err) {
         if (err && err.xhr) {
           return Promise.reject(err.xhr);
-        } else {
-          _this3.mavo.error("Something went wrong while connecting to " + _this3.id, err);
         }
+
+        _this3.mavo.error('Something went wrong while connecting to ' + _this3.id, err);
       }).then(function (xhr) {
-        return req.method == "HEAD" ? xhr : xhr.response;
+        return req.method === 'HEAD' ? xhr : xhr.response;
       });
     },
 
+
     /**
-   * Helper method for authenticating in OAuth APIs
-   */
+     * Helper method for authenticating in OAuth APIs
+     */
     oAuthenticate: function oAuthenticate(passive) {
       var _this4 = this;
 
@@ -2820,7 +2881,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           var id = _this4.id.toLowerCase();
 
           if (passive) {
-            _this4.accessToken = localStorage["mavo:" + id + "token"];
+            _this4.accessToken = localStorage['mavo:' + id + 'token'];
 
             if (_this4.accessToken) {
               resolve(_this4.accessToken);
@@ -2840,22 +2901,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               backend: _this4.id
             };
 
-            _this4.authPopup = open(_this4.constructor.oAuth + "?client_id=" + _this4.key + "&state=" + encodeURIComponent(JSON.stringify(state)) + _this4.oAuthParams(), "popup", "width=" + popup.width + ",height=" + popup.height + ",left=" + popup.left + ",top=" + popup.top);
+            _this4.authPopup = open(_this4.constructor.oAuth + '?client_id=' + _this4.key + '&state=' + encodeURIComponent(JSON.stringify(state)) + _this4.oAuthParams(), 'popup', 'width=' + popup.width + ',height=' + popup.height + ',left=' + popup.left + ',top=' + popup.top);
 
             if (!_this4.authPopup) {
-              var message = "Login popup was blocked! Please check your popup blocker settings.";
+              var message = 'Login popup was blocked! Please check your popup blocker settings.';
               _this4.mavo.error(message);
               reject(Error(message));
             }
 
-            addEventListener("message", function (evt) {
+            addEventListener('message', function (evt) {
               if (evt.source === _this4.authPopup) {
-                if (evt.data.backend == _this4.id) {
-                  _this4.accessToken = localStorage["mavo:" + id + "token"] = evt.data.token;
+                if (evt.data.backend === _this4.id) {
+                  _this4.accessToken = localStorage['mavo:' + id + 'token'] = evt.data.token;
                 }
 
                 if (!_this4.accessToken) {
-                  reject(Error("Authentication error"));
+                  reject(Error('Authentication error'));
                 }
 
                 resolve(_this4.accessToken);
@@ -2875,28 +2936,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
 
+
     /**
-   * oAuth logout helper
-   */
+     * OAuth logout helper
+     */
     oAuthLogout: function oAuthLogout() {
       if (this.isAuthenticated()) {
         var id = this.id.toLowerCase();
 
-        localStorage.removeItem("mavo:" + id + "token");
+        localStorage.removeItem('mavo:' + id + 'token');
         delete this.accessToken;
 
-        this.permissions.off(["edit", "add", "delete", "save"]).on("login");
+        this.permissions.off(['edit', 'add', 'delete', 'save']).on('login');
 
-        $.fire(this.mavo.element, "mv-logout", { backend: this });
+        $.fire(this.mavo.element, 'mv-logout', { backend: this });
       }
 
       return Promise.resolve();
     },
 
+
     static: {
       // Return the appropriate backend(s) for this url
       create: function create(url, o, type) {
-        var Backend;
+        var Backend = void 0;
 
         if (type) {
           Backend = Mavo.Functions.get(_, type);
@@ -2911,6 +2974,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return Backend ? new Backend(url, o) : null;
       },
 
+
       types: [],
 
       register: function register(Class) {
@@ -2922,43 +2986,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   });
 
   /**
-  * Save in an HTML element
-  */
+   * Save in an HTML element
+   */
   _.register($.Class({
-    id: "Element",
+    id: 'Element',
     extends: _,
     constructor: function constructor() {
-      this.permissions.on(["read", "edit", "save"]);
+      this.permissions.on(['read', 'edit', 'save']);
 
-      this.element = $(this.source) || $.create("script", {
-        type: "application/json",
+      this.element = $(this.source) || $.create('script', {
+        type: 'application/json',
         id: this.source.slice(1),
         inside: document.body
       });
     },
-
     get: function get() {
       return Promise.resolve(this.element.textContent);
     },
-
     put: function put(serialized) {
       return Promise.resolve(this.element.textContent = serialized);
     },
 
+
     static: {
       test: function test(url) {
-        return url.indexOf("#") === 0;
+        return url.indexOf('#') === 0;
       }
     }
   }));
 
   // Load from a remote URL, no save
   _.register($.Class({
-    id: "Remote",
+    id: 'Remote',
     extends: _,
     constructor: function constructor() {
-      this.permissions.on("read");
+      this.permissions.on('read');
     },
+
 
     static: {
       test: function test(url) {
@@ -2970,16 +3034,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   // Save in localStorage
   _.register($.Class({
     extends: _,
-    id: "Local",
+    id: 'Local',
     constructor: function constructor() {
-      this.permissions.on(["read", "edit", "save"]);
+      this.permissions.on(['read', 'edit', 'save']);
       this.key = this.mavo.id;
     },
-
     get: function get() {
-      return Promise[this.key in localStorage ? "resolve" : "reject"](localStorage[this.key]);
+      return Promise[this.key in localStorage ? 'resolve' : 'reject'](localStorage[this.key]);
     },
-
     put: function put(serialized) {
       if (!serialized) {
         delete localStorage[this.key];
@@ -2990,21 +3052,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return Promise.resolve(serialized);
     },
 
+
     static: {
       test: function test(value) {
-        return value == "local";
+        return value === 'local';
       }
     }
   }));
-})(Bliss, Bliss.$);
-"use strict";
+})(Bliss);
+'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof2 = require('babel-runtime/helpers/typeof');
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _typeof3 = _interopRequireDefault(_typeof2);
 
-(function ($, $$) {
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
+
+(function ($) {
   var _ = Mavo.Formats = {};
 
   var base = _.Base = $.Class({
@@ -3012,8 +3083,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     constructor: function constructor(backend) {
       this.backend = backend;
     },
+
     proxy: {
-      "mavo": "backend"
+      mavo: 'backend'
     },
 
     // So that child classes can only override the static methods if they don't
@@ -3024,6 +3096,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     stringify: function stringify(data) {
       return this.constructor.stringify(data, this);
     },
+
 
     static: {
       parse: function parse(serialized) {
@@ -3051,23 +3124,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       stringify: function stringify(data) {
         return Promise.resolve(Mavo.toJSON(data));
       },
-      extensions: [".json", ".jsonld"]
+      extensions: ['.json', '.jsonld']
     }
   });
 
   var text = _.Text = $.Class({
     extends: _.Base,
     constructor: function constructor(backend) {
-      this.property = this.mavo.root.getNames("Primitive")[0];
+      this.property = this.mavo.root.getNames('Primitive')[0];
     },
 
+
     static: {
-      extensions: [".txt"],
+      extensions: ['.txt'],
       parse: function parse(serialized, me) {
-        return Promise.resolve(_defineProperty({}, me ? me.property : "content", serialized));
+        return Promise.resolve((0, _defineProperty3.default)({}, me ? me.property : 'content', serialized));
       },
       stringify: function stringify(data, me) {
-        return Promise.resolve(data[me ? me.property : "content"]);
+        return Promise.resolve(data[me ? me.property : 'content']);
       }
     }
   });
@@ -3075,12 +3149,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var csv = _.CSV = $.Class({
     extends: _.Base,
     constructor: function constructor(backend) {
-      this.property = this.mavo.root.getNames("Collection")[0];
+      this.property = this.mavo.root.getNames('Collection')[0];
       this.options = $.extend({}, _.CSV.defaultOptions);
     },
 
+
     static: {
-      extensions: [".csv", ".tsv"],
+      extensions: ['.csv', '.tsv'],
       defaultOptions: {
         header: true,
         dynamicTyping: true,
@@ -3090,13 +3165,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         test: function test() {
           return self.Papa;
         },
-        url: "https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.4/papaparse.min.js"
+        url: 'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.4/papaparse.min.js'
       }],
       ready: base.ready,
       parse: function parse(serialized, me) {
         return csv.ready().then(function () {
           var data = Papa.parse(serialized, csv.defaultOptions);
-          var property = me ? me.property : "content";
+          var property = me ? me.property : 'content';
 
           if (me) {
             // Get delimiter & linebreak for serialization
@@ -3108,13 +3183,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             throw data.meta.errors.pop();
           }
 
-          return _defineProperty({}, property, data.data);
+          return (0, _defineProperty3.default)({}, property, data.data);
         });
       },
 
       stringify: function stringify(data, me) {
         return csv.ready().then(function () {
-          var property = me ? me.property : "content";
+          var property = me ? me.property : 'content';
           var options = me ? me.options : csv.defaultOptions;
           return Papa.unparse(data[property], options);
         });
@@ -3122,20 +3197,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   });
 
-  Object.defineProperty(_, "create", {
+  Object.defineProperty(_, 'create', {
     value: function value(format, backend) {
-      if (format && (typeof format === "undefined" ? "undefined" : _typeof(format)) === "object") {
+      if (format && (typeof format === 'undefined' ? 'undefined' : (0, _typeof3.default)(format)) === 'object') {
         return format;
       }
 
-      if (typeof format === "string") {
+      if (typeof format === 'string') {
         // Search by id
         format = format.toLowerCase();
 
         for (var id in _) {
           var Format = _[id];
 
-          if (id.toLowerCase() == format) {
+          if (id.toLowerCase() === format) {
             return new Format(backend);
           }
         }
@@ -3143,7 +3218,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (!format) {
         var url = backend.url ? backend.url.pathname : backend.source;
-        var extension = Mavo.match(url, /\.\w+$/) || ".json";
+        var extension = Mavo.match(url, /\.\w+$/) || '.json';
         var Format = _.JSON;
 
         for (var id in _) {
@@ -3158,15 +3233,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     }
   });
-})(Bliss, Bliss.$);
-"use strict";
+})(Bliss);
+'use strict';
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
 (function ($, $$) {
-
   var _ = Mavo.Node = $.Class({
     abstract: true,
     constructor: function constructor(element, mavo) {
@@ -3175,7 +3258,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
       if (!element || !mavo) {
-        throw new Error("Mavo.Node constructor requires an element argument and a mavo object");
+        throw new Error('Mavo.Node constructor requires an element argument and a mavo object');
       }
 
       var env = { context: this, options: options };
@@ -3188,14 +3271,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       $.extend(this, env.options);
 
-      _.all.set(element, [].concat(_toConsumableArray(_.all.get(this.element) || []), [this]));
+      _.all.set(element, [].concat((0, _toConsumableArray3.default)(_.all.get(this.element) || []), [this]));
 
       this.mavo = mavo;
       this.group = this.parentGroup = env.options.group;
 
       this.template = env.options.template;
 
-      this.alias = this.element.getAttribute("mv-alias");
+      this.alias = this.element.getAttribute('mv-alias');
 
       if (this.template) {
         this.template.copies.push(this);
@@ -3204,17 +3287,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         this.copies = [];
       }
 
-      if (!this.fromTemplate("property", "type")) {
+      if (!this.fromTemplate('property', 'type')) {
         this.property = _.getProperty(element);
         this.type = Mavo.Group.normalize(element);
-        this.storage = this.element.getAttribute("mv-storage");
+        this.storage = this.element.getAttribute('mv-storage');
       }
 
-      this.modes = this.element.getAttribute("mv-mode");
+      this.modes = this.element.getAttribute('mv-mode');
 
-      Mavo.hooks.run("node-init-start", env);
+      Mavo.hooks.run('node-init-start', env);
 
-      this.mode = Mavo.getStyle(this.element, "--mv-mode") || "read";
+      this.mode = Mavo.getStyle(this.element, '--mv-mode') || 'read';
 
       this.collection = env.options.collection;
 
@@ -3241,29 +3324,30 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         // Handle mv-value
         // TODO integrate with the code in Primitive that decides whether this is a computed property
         var et = Mavo.DOMExpression.search(this.element).filter(function (et) {
-          return et.originalAttribute == "mv-value";
+          return et.originalAttribute === 'mv-value';
         })[0];
 
         if (et) {
           et.mavoNode = this;
           this.expressionText = et;
-          this.storage = this.storage || "none";
-          this.modes = "read";
+          this.storage = this.storage || 'none';
+          this.modes = 'read';
 
           if (this.collection) {
-            this.collection.expressions = [].concat(_toConsumableArray(this.collection.expressions || []), [et]);
+            this.collection.expressions = [].concat((0, _toConsumableArray3.default)(this.collection.expressions || []), [et]);
             et.mavoNode = this.collection;
-            this.collection.storage = this.collection.storage || "none";
-            this.collection.modes = "read";
+            this.collection.storage = this.collection.storage || 'none';
+            this.collection.modes = 'read';
           }
         }
       }
 
-      Mavo.hooks.run("node-init-end", env);
+      Mavo.hooks.run('node-init-end', env);
     },
 
+
     get editing() {
-      return this.mode == "edit";
+      return this.mode === 'edit';
     },
 
     get isRoot() {
@@ -3275,7 +3359,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     },
 
     get saved() {
-      return this.storage !== "none";
+      return this.storage !== 'none';
     },
 
     get parent() {
@@ -3283,14 +3367,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     },
 
     /**
-   * Runs after the constructor is done (including the constructor of the inheriting class), synchronously
-   */
+     * Runs after the constructor is done (including the constructor of the inheriting class), synchronously
+     */
     postInit: function postInit() {
-      if (this.modes == "edit") {
+      if (this.modes === 'edit') {
         this.edit();
       }
     },
-
     destroy: function destroy() {
       if (this.template) {
         Mavo.delete(this.template.copies, this);
@@ -3306,7 +3389,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         this.itembar.destroy();
       }
     },
-
     getData: function getData() {
       var o = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -3314,7 +3396,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return o.forceObjects ? Mavo.objectify(null) : null;
       }
     },
-
     isDataNull: function isDataNull(o) {
       var env = {
         context: this,
@@ -3322,20 +3403,21 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         result: this.deleted || !this.saved && !o.live
       };
 
-      Mavo.hooks.run("unit-isdatanull", env);
+      Mavo.hooks.run('unit-isdatanull', env);
 
       return env.result;
     },
 
+
     /**
-   * Execute a callback on every node of the Mavo tree
-   * If callback returns (strict) false, walk stops.
-   * @param callback {Function}
-   * @param path {Array} Initial path. Mostly used internally.
-   * @param o {Object} Options:
-   *       - descentReturn {Boolean} If callback returns false, just don't descend
-   * @return false if was stopped via a false return value, true otherwise
-   */
+     * Execute a callback on every node of the Mavo tree
+     * If callback returns (strict) false, walk stops.
+     * @param callback {Function}
+     * @param path {Array} Initial path. Mostly used internally.
+     * @param o {Object} Options:
+     *       - descentReturn {Boolean} If callback returns false, just don't descend
+     * @return false if was stopped via a false return value, true otherwise
+     */
     walk: function walk(callback) {
       var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
       var o = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -3348,7 +3430,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             var _node = obj.children[i];
 
             if (_node instanceof Mavo.Node) {
-              var ret = walker.call(_node, _node, [].concat(_toConsumableArray(path), [i]));
+              var ret = walker.call(_node, _node, [].concat((0, _toConsumableArray3.default)(path), [i]));
 
               if (ret === false && !o.descentReturn) {
                 return false;
@@ -3362,7 +3444,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       return walker(this, path);
     },
-
     walkUp: function walkUp(callback) {
       var group = this;
 
@@ -3374,47 +3455,44 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       }
     },
-
     edit: function edit() {
-      this.mode = "edit";
+      this.mode = 'edit';
 
-      if (this.mode != "edit") {
+      if (this.mode != 'edit') {
         return false;
       }
 
-      $.fire(this.element, "mv-edit", {
+      $.fire(this.element, 'mv-edit', {
         mavo: this.mavo,
         node: this
       });
 
-      Mavo.hooks.run("node-edit-end", this);
+      Mavo.hooks.run('node-edit-end', this);
     },
-
     done: function done() {
-      this.mode = Mavo.getStyle(this.element.parentNode, "--mv-mode") || "read";
+      this.mode = Mavo.getStyle(this.element.parentNode, '--mv-mode') || 'read';
 
-      if (this.mode != "read") {
+      if (this.mode != 'read') {
         return false;
       }
 
-      $.unbind(this.element, ".mavo:edit");
+      $.unbind(this.element, '.mavo:edit');
 
-      $.fire(this.element, "mv-done", {
+      $.fire(this.element, 'mv-done', {
         mavo: this.mavo,
         node: this
       });
 
-      this.propagate("done");
+      this.propagate('done');
 
-      Mavo.hooks.run("node-done-end", this);
+      Mavo.hooks.run('node-done-end', this);
     },
-
     propagate: function propagate(callback) {
       for (var i in this.children) {
         var _node2 = this.children[i];
 
         if (_node2 instanceof Mavo.Node) {
-          if (typeof callback === "function") {
+          if (typeof callback === 'function') {
             callback.call(_node2, _node2);
           } else if (callback in _node2) {
             _node2[callback]();
@@ -3423,7 +3501,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
     },
 
-    propagated: ["save", "destroy"],
+
+    propagated: ['save', 'destroy'],
 
     toJSON: Mavo.prototype.toJSON,
 
@@ -3440,9 +3519,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         });
       }
 
-      return !!this.template;
+      return Boolean(this.template);
     },
-
     render: function render(data) {
       this.oldData = this.data;
       this.data = data;
@@ -3451,18 +3529,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       var env = { context: this, data: data };
 
-      Mavo.hooks.run("node-render-start", env);
+      Mavo.hooks.run('node-render-start', env);
 
-      if (this.nodeType != "Collection" && Array.isArray(data)) {
+      if (this.nodeType != 'Collection' && Array.isArray(data)) {
         // We are rendering an array on a singleton, what to do?
-        var properties;
+        var properties = void 0;
 
-        if (this.isRoot && (properties = Object.keys(this.children)).length === 1 && this.children[properties[0]].nodeType === "Collection") {
+        if (this.isRoot && (properties = this.getNames('Collection')).length === 1) {
           // If it's root with only one collection property, render on that property
-          env.data = _defineProperty({}, properties[0], env.data);
+          env.data = (0, _defineProperty3.default)({}, properties[0], env.data);
         } else {
           // Otherwise, render first item
-          this.inPath.push("0");
+          this.inPath.push('0');
           env.data = env.data[0];
         }
       }
@@ -3477,30 +3555,26 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       this.save();
 
-      Mavo.hooks.run("node-render-end", env);
+      Mavo.hooks.run('node-render-end', env);
     },
-
     dataChanged: function dataChanged(action) {
       var o = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-      $.fire(o.element || this.element, "mv-change", $.extend({
+      $.fire(o.element || this.element, 'mv-change', $.extend({
         property: this.property,
         action: action,
         mavo: this.mavo,
         node: this
       }, o));
     },
-
     toString: function toString() {
-      return "#" + this.uid + ": " + this.nodeType + " (" + this.property + ")";
+      return '#' + this.uid + ': ' + this.nodeType + ' (' + this.property + ')';
     },
-
     getClosestCollection: function getClosestCollection() {
       var closestItem = this.closestItem;
 
       return closestItem ? closestItem.collection : null;
     },
-
     getClosestItem: function getClosestItem() {
       if (this.collection && this.collection.mutable) {
         return this;
@@ -3509,9 +3583,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return this.parentGroup ? this.parentGroup.closestItem : null;
     },
 
+
     /**
-   * Check if this unit is either deleted or inside a deleted group
-   */
+     * Check if this unit is either deleted or inside a deleted group
+     */
     isDeleted: function isDeleted() {
       var ret = this.deleted;
 
@@ -3519,18 +3594,21 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return true;
       }
 
-      return !!this.parentGroup && this.parentGroup.isDeleted();
+      return Boolean(this.parentGroup) && this.parentGroup.isDeleted();
     },
+
 
     // Resolve a property name from this node
     resolve: function resolve(property) {
+      var o = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
       // First look in descendants
-      var ret = this.find(property);
+      var ret = this.find(property, o);
 
       if (ret === undefined) {
         // Still not found, look in ancestors
         ret = this.walkUp(function (group) {
-          if (group.property == property) {
+          if (group.property === property) {
             return group;
           }
 
@@ -3542,11 +3620,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       if (ret === undefined) {
         // Still not found, look anywhere
-        ret = this.mavo.root.find(property);
+        ret = this.mavo.root.find(property, o);
       }
 
       return ret;
     },
+
 
     relativizeData: self.Proxy ? function (data) {
       var _this3 = this;
@@ -3576,13 +3655,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
           // Special values
           switch (property) {
-            case "$index":
+            case '$index':
               cache[property] = _this3.index || 0;
-              return true; // if index is 0 it's falsy and has would return false!
-            case "$next":
-            case "$previous":
+              return true; // If index is 0 it's falsy and has would return false!
+            case '$next':
+            case '$previous':
               if (_this3.closestCollection) {
-                cache[property] = _this3.closestCollection.getData(options)[_this3.index + (property == "$next" ? 1 : -1)];
+                cache[property] = _this3.closestCollection.getData(options)[_this3.index + (property === '$next' ? 1 : -1)];
                 return true;
               }
 
@@ -3618,10 +3697,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         },
 
         set: function set(data) {
-          var property = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+          var property = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
           var value = arguments[2];
 
-          console.warn("You cannot set data via expressions. Attempt to set " + property.toString() + " to " + value + " ignored.");
+          console.warn('You cannot set data via expressions. Attempt to set ' + property.toString() + ' to ' + value + ' ignored.');
           return value;
         }
       });
@@ -3633,21 +3712,21 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var path = this.path;
       var nodePath = node.path;
 
-      for (var i = 0; i < path.length && nodePath[i] == path[i]; i++) {}
+      for (var i = 0; i < path.length && nodePath[i] === path[i]; i++) {}
 
       return path.slice(i);
     },
-
     getDescendant: function getDescendant(path) {
       return path.reduce(function (acc, cur) {
         return acc.children[cur];
       }, this);
     },
 
+
     /**
-   * Get same node in other item in same collection
-   * E.g. for same node in the next item, use an offset of -1
-   */
+     * Get same node in other item in same collection
+     * E.g. for same node in the next item, use an offset of -1
+     */
     getCousin: function getCousin(offset) {
       var o = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -3680,7 +3759,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       }
 
-      if (!item || item.isDeleted() || item == this.closestItem) {
+      if (!item || item.isDeleted() || item === this.closestItem) {
         return null;
       }
 
@@ -3691,7 +3770,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var relativePath = this.pathFrom(this.closestItem);
       return item.getDescendant(relativePath);
     },
-
     contains: function contains(node) {
       do {
         if (node === this) {
@@ -3704,24 +3782,24 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return false;
     },
 
+
     lazy: {
       closestCollection: function closestCollection() {
         return this.getClosestCollection();
       },
-
       closestItem: function closestItem() {
         return this.getClosestItem();
       },
 
-      // Are were only rendering and editing a subset of the data?
-      inPath: function inPath() {
-        var attribute = this.nodeType == "Collection" ? "mv-multiple-path" : "mv-path";
 
-        return (this.element.getAttribute(attribute) || "").split("/").filter(function (p) {
+      // Are we only rendering and editing a subset of the data?
+      inPath: function inPath() {
+        var attribute = this.nodeType === 'Collection' ? 'mv-multiple-path' : 'mv-path';
+
+        return (this.element.getAttribute(attribute) || '').split('/').filter(function (p) {
           return p.length;
         });
       },
-
       properties: function properties() {
         if (this.template) {
           return this.template.properties;
@@ -3729,11 +3807,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
         var ret = new Set(this.property && [this.property]);
 
-        if (this.nodeType == "Group") {
+        if (this.nodeType === 'Group') {
           for (var property in this.children) {
             ret = Mavo.union(ret, this.children[property].properties);
           }
-        } else if (this.nodeType == "Collection") {
+        } else if (this.nodeType === 'Collection') {
           ret = Mavo.union(ret, this.itemTemplate.properties);
         }
 
@@ -3743,19 +3821,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     live: {
       store: function store(value) {
-        $.toggleAttribute(this.element, "mv-storage", value);
+        $.toggleAttribute(this.element, 'mv-storage', value);
       },
-
       unsavedChanges: function unsavedChanges(value) {
         if (value && (!this.saved || !this.editing)) {
           value = false;
         }
 
-        this.element.classList.toggle("mv-unsaved-changes", value);
+        this.element.classList.toggle('mv-unsaved-changes', value);
 
         return value;
       },
-
       mode: function mode(value) {
         var _this4 = this;
 
@@ -3769,20 +3845,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           // result in infinite recursion
           this._mode = value;
 
-          if (!(this instanceof Mavo.Collection) && [null, "", "read", "edit"].indexOf(this.element.getAttribute("mv-mode")) > -1) {
+          if (!(this instanceof Mavo.Collection) && [null, '', 'read', 'edit'].indexOf(this.element.getAttribute('mv-mode')) > -1) {
             // If attribute is not one of the recognized values, leave it alone
-            var set = this.modes || value == "edit";
+            var set = this.modes || value === 'edit';
             Mavo.Observer.sneak(this.mavo.modeObserver, function () {
-              $.toggleAttribute(_this4.element, "mv-mode", value, set);
+              $.toggleAttribute(_this4.element, 'mv-mode', value, set);
             });
           }
 
           return value;
         }
       },
-
       modes: function modes(value) {
-        if (value && value != "read" && value != "edit") {
+        if (value && value != 'read' && value != 'edit') {
           return null;
         }
 
@@ -3792,11 +3867,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           this.mode = value;
         }
       },
-
       deleted: function deleted(value) {
         var _this5 = this;
 
-        this.element.classList.toggle("mv-deleted", value);
+        this.element.classList.toggle('mv-deleted', value);
 
         if (value) {
           // Soft delete, store element contents in a fragment
@@ -3807,46 +3881,47 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           });
 
           $.contents(this.element, [{
-            tag: "button",
-            className: "mv-close mv-ui",
-            textContent: "×",
+            tag: 'button',
+            className: 'mv-close mv-ui',
+            textContent: '×',
             events: {
-              "click": function click(evt) {
+              click: function click(evt) {
                 $.remove(this.parentNode);
               }
             }
-          }, "Deleted " + this.name, {
-            tag: "button",
-            className: "mv-undo mv-ui",
-            textContent: "Undo",
+          }, 'Deleted ' + this.name, {
+            tag: 'button',
+            className: 'mv-undo mv-ui',
+            textContent: 'Undo',
             events: {
-              "click": function click(evt) {
+              click: function click(evt) {
                 return _this5.deleted = false;
               }
             }
           }]);
 
-          this.element.classList.remove("mv-highlight");
+          this.element.classList.remove('mv-highlight');
           this.itembar.remove();
         } else if (this.deleted) {
           // Undelete
-          this.element.textContent = "";
+          this.element.textContent = '';
           this.element.appendChild(this.elementContents);
 
-          // otherwise expressions won't update because this will still seem as deleted
+          // Otherwise expressions won't update because this will still seem as deleted
           // Alternatively, we could fire datachange with a timeout.
           this._deleted = false;
 
-          this.dataChanged("undelete");
+          this.dataChanged('undelete');
           this.itembar.add();
         }
       },
+
 
       path: {
         get: function get() {
           var path = this.parent ? this.parent.path : [];
 
-          return this.property ? [].concat(_toConsumableArray(path), [this.property]) : path;
+          return this.property ? [].concat((0, _toConsumableArray3.default)(path), [this.property]) : path;
         }
       }
     },
@@ -3859,36 +3934,36 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       create: function create(element, mavo) {
         var o = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-        if (Mavo.is("multiple", element) && !o.collection) {
+        if (Mavo.is('multiple', element) && !o.collection) {
           return new Mavo.Collection(element, mavo, o);
         }
 
-        return new Mavo[Mavo.is("group", element) ? "Group" : "Primitive"](element, mavo, o);
+        return new Mavo[Mavo.is('group', element) ? 'Group' : 'Primitive'](element, mavo, o);
       },
 
+
       /**
-    * Get & normalize property name, if exists
-    */
+       * Get & normalize property name, if exists
+       */
       getProperty: function getProperty(element) {
-        var property = element.getAttribute("property") || element.getAttribute("itemprop");
+        var property = element.getAttribute('property') || element.getAttribute('itemprop');
 
         if (!property) {
-          if (element.hasAttribute("property")) {
-            // property used without a value
+          if (element.hasAttribute('property')) {
+            // Property used without a value
             property = element.name || element.id || element.classList[0];
           } else if (element.matches(Mavo.selectors.multiple)) {
-            // mv-multiple used without property, generate name
-            property = element.getAttribute("mv-multiple") || "collection";
+            // Mv-multiple used without property, generate name
+            property = element.getAttribute('mv-multiple') || 'collection';
           }
         }
 
         if (property) {
-          element.setAttribute("property", property);
+          element.setAttribute('property', property);
         }
 
         return property;
       },
-
       get: function get(element, prioritizePrimitive) {
         var nodes = (_.all.get(element) || []).filter(function (node) {
           return !(node instanceof Mavo.Collection);
@@ -3903,14 +3978,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       },
 
+
       /**
-    * Get all properties that are inside an element but not nested into other properties
-    */
+       * Get all properties that are inside an element but not nested into other properties
+       */
       children: function children(element) {
         var ret = Mavo.Node.get(element);
 
         if (ret) {
-          // element is a Mavo node
+          // Element is a Mavo node
           return [ret];
         }
 
@@ -3918,7 +3994,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           return Mavo.Node.get(e);
         }).filter(function (e) {
           return !element.contains(e.parentGroup.element);
-        }) // drop nested properties
+        }) // Drop nested properties
         .map(function (e) {
           return e.collection || e;
         });
@@ -3928,19 +4004,29 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
   });
 })(Bliss, Bliss.$);
-"use strict";
+'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _typeof2 = require('babel-runtime/helpers/typeof');
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
 (function ($, $$) {
-
   var _ = Mavo.Group = $.Class({
     extends: Mavo.Node,
-    nodeType: "Group",
+    nodeType: 'Group',
     constructor: function constructor(element, mavo, o) {
       var _this = this;
 
@@ -3948,7 +4034,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       this.group = this;
 
-      Mavo.hooks.run("group-init-start", this);
+      Mavo.hooks.run('group-init-start', this);
 
       // Should this element also create a primitive?
       if (Mavo.Primitive.getValueAttribute(this.element)) {
@@ -3957,7 +4043,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       // Create Mavo objects for all properties in this group (primitives or groups),
       // but not properties in descendant groups (they will be handled by their group)
-      var properties = $$(Mavo.selectors.property + ", " + Mavo.selectors.multiple, this.element).filter(function (element) {
+      var properties = $$(Mavo.selectors.property + ', ' + Mavo.selectors.multiple, this.element).filter(function (element) {
         return _this.element === element.parentNode.closest(Mavo.selectors.group);
       });
 
@@ -3974,7 +4060,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           // Already exists, must be a collection
           var collection = _this.children[property];
           collection.add(element);
-          collection.mutable = collection.mutable || Mavo.is("multiple", element);
+          collection.mutable = collection.mutable || Mavo.is('multiple', element);
         } else if (propertyNames.indexOf(property) != propertyNames.lastIndexOf(property)) {
           // There are duplicates, so this should be a collection.
           _this.children[property] = new Mavo.Collection(element, _this.mavo, options);
@@ -3984,13 +4070,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       });
 
-      var vocabElement = (this.isRoot ? this.element.closest("[vocab]") : null) || this.element;
-      this.vocab = vocabElement.getAttribute("vocab");
+      var vocabElement = (this.isRoot ? this.element.closest('[vocab]') : null) || this.element;
+      this.vocab = vocabElement.getAttribute('vocab');
 
       this.postInit();
 
-      Mavo.hooks.run("group-init-end", this);
+      Mavo.hooks.run('group-init-end', this);
     },
+
 
     get isRoot() {
       return !this.property;
@@ -3999,13 +4086,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     getNames: function getNames() {
       var _this2 = this;
 
-      var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "Node";
+      var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Node';
 
       return Object.keys(this.children).filter(function (p) {
         return _this2.children[p] instanceof Mavo[type];
       });
     },
-
     getData: function getData() {
       var o = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -4024,7 +4110,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       var properties = Object.keys(this.children);
 
-      if (properties.length == 1 && properties[0] == this.property) {
+      if (properties.length === 1 && properties[0] === this.property) {
         // {foo: {foo: 5}} should become {foo: 5}
         var options = $.extend($.extend({}, env.options), { forceObjects: true });
         env.data = this.children[this.property].getData(options);
@@ -4052,14 +4138,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         if (!properties.length && !this.isRoot) {
           // Avoid {} in the data
           env.data = null;
-        } else if (env.data && _typeof(env.data) === "object") {
+        } else if (env.data && (0, _typeof3.default)(env.data) === 'object') {
           // Add JSON-LD stuff
           if (this.type && this.type != _.DEFAULT_TYPE) {
-            env.data["@type"] = this.type;
+            env.data['@type'] = this.type;
           }
 
           if (this.vocab) {
-            env.data["@context"] = this.vocab;
+            env.data['@context'] = this.vocab;
           }
         }
       } else if (env.data) {
@@ -4067,19 +4153,24 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         env.data = this.relativizeData(env.data);
       }
 
-      Mavo.hooks.run("node-getdata-end", env);
+      Mavo.hooks.run('node-getdata-end', env);
 
       return env.data;
     },
 
+
     /**
-   * Search entire subtree for property, return relative value
-   * @return {Mavo.Node}
-   */
+     * Search entire subtree for property, return relative value
+     * @return {Mavo.Node}
+     */
     find: function find(property) {
       var o = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-      if (this.property == property) {
+      if (o.exclude === this) {
+        return;
+      }
+
+      if (this.property === property) {
         return this;
       }
 
@@ -4092,15 +4183,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
 
       var results = [],
-          returnArray,
-          ret;
+          returnArray = void 0,
+          ret = void 0;
 
       for (var prop in this.children) {
         ret = this.children[prop].find(property, o);
 
         if (ret !== undefined) {
           if (Array.isArray(ret)) {
-            results.push.apply(results, _toConsumableArray(ret));
+            results.push.apply(results, (0, _toConsumableArray3.default)(ret));
             returnArray = true;
           } else {
             results.push(ret);
@@ -4110,7 +4201,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       return returnArray || results.length > 1 ? results : results[0];
     },
-
     edit: function edit() {
       var _this3 = this;
 
@@ -4124,12 +4214,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return _this3.children[prop].edit(o);
       }));
     },
-
     save: function save() {
       this.unsavedChanges = false;
     },
 
-    propagated: ["save", "import"],
+
+    propagated: ['save', 'import'],
 
     // Do not call directly, call this.render() instead
     dataRender: function dataRender(data) {
@@ -4140,7 +4230,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
 
       // What if data is not an object?
-      if ((typeof data === "undefined" ? "undefined" : _typeof(data)) !== "object") {
+      if ((typeof data === 'undefined' ? 'undefined' : (0, _typeof3.default)(data)) !== 'object') {
         var wasPrimitive = true;
 
         // Data is a primitive, render it on this.property or failing that, any writable property
@@ -4149,7 +4239,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         } else {
           var type = $.type(data);
           var score = function score(prop) {
-            return (_this4.children[prop] instanceof Mavo.Primitive) + (_this4.children[prop].datatype == type);
+            return (_this4.children[prop] instanceof Mavo.Primitive) + (_this4.children[prop].datatype === type);
           };
 
           var property = Object.keys(this.children).filter(function (p) {
@@ -4159,12 +4249,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           }).reverse()[0];
         }
 
-        data = _defineProperty({}, property, data);
+        data = (0, _defineProperty3.default)({}, property, data);
 
         this.data = Mavo.subset(this.data, this.inPath, data);
       }
 
-      var copy; // to handle renaming
+      var copy = void 0; // To handle renaming
 
       this.propagate(function (obj) {
         var propertyData = data[obj.property];
@@ -4191,7 +4281,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
 
       if (!wasPrimitive) {
-        // Fire datachange events for properties not in the template,
+        // Fire mv-change events for properties not in the template,
         // since nothing else will and they can still be referenced in expressions
         var oldData = Mavo.subset(this.oldData, this.inPath);
 
@@ -4199,25 +4289,26 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           if (!(property in this.children)) {
             var value = data[property];
 
-            if ((typeof value === "undefined" ? "undefined" : _typeof(value)) != "object" && (!oldData || oldData[property] != value)) {
-              this.dataChanged("propertychange", { property: property });
+            if ((typeof value === 'undefined' ? 'undefined' : (0, _typeof3.default)(value)) !== 'object' && (!oldData || oldData[property] != value)) {
+              this.dataChanged('propertychange', { property: property });
             }
           }
         }
       }
     },
 
+
     static: {
       all: new WeakMap(),
 
-      DEFAULT_TYPE: "Item",
+      DEFAULT_TYPE: 'Item',
 
       normalize: function normalize(element) {
         // Get & normalize typeof name, if exists
-        if (Mavo.is("group", element)) {
-          var type = Mavo.getAttribute(element, "typeof", "itemtype") || _.DEFAULT_TYPE;
+        if (Mavo.is('group', element)) {
+          var type = Mavo.getAttribute(element, 'typeof', 'itemtype') || _.DEFAULT_TYPE;
 
-          element.setAttribute("typeof", type);
+          element.setAttribute('typeof', type);
 
           return type;
         }
@@ -4227,21 +4318,29 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
   });
 })(Bliss, Bliss.$);
-"use strict";
+'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _typeof2 = require('babel-runtime/helpers/typeof');
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
 (function ($, $$) {
-
   var _ = Mavo.Primitive = $.Class({
     extends: Mavo.Node,
-    nodeType: "Primitive",
+    nodeType: 'Primitive',
     constructor: function constructor(element, mavo, o) {
       var _this = this;
 
-      if (!this.fromTemplate("config", "attribute", "templateValue", "originalEditor")) {
+      if (!this.fromTemplate('config', 'attribute', 'templateValue', 'originalEditor')) {
         this.config = _.getConfig(element);
 
         // Which attribute holds the data, if any?
@@ -4251,14 +4350,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.datatype = this.config.datatype;
 
-      if ("modes" in this.config) {
+      if ('modes' in this.config) {
         // If modes are related to element type, this overrides everything
         // because it means the other mode makes no sense for that element
         this.modes = this.config.modes;
-        this.element.setAttribute("mv-mode", this.config.modes);
+        this.element.setAttribute('mv-mode', this.config.modes);
       }
 
-      Mavo.hooks.run("primitive-init-start", this);
+      Mavo.hooks.run('primitive-init-start', this);
 
       // Link primitive with its expressionText object
       // We need to do this before any editing UI is generated
@@ -4267,28 +4366,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (this.expressionText && !this.expressionText.mavoNode) {
         // Computed property
         this.expressionText.primitive = this;
-        this.storage = this.storage || "none";
-        this.modes = "read";
-        this.element.setAttribute("aria-live", "polite");
+        this.storage = this.storage || 'none';
+        this.modes = 'read';
+        this.element.setAttribute('aria-live', 'polite');
       }
 
       /**
-    * Set up input widget
-    */
+       * Set up input widget
+       */
 
       // Linked widgets
-      if (!this.editor && this.element.hasAttribute("mv-edit")) {
+      if (!this.editor && this.element.hasAttribute('mv-edit')) {
         if (!this.originalEditor) {
-          this.originalEditor = $(this.element.getAttribute("mv-edit"));
+          this.originalEditor = $(this.element.getAttribute('mv-edit'));
         }
 
         if (this.originalEditor) {
           // Update editor if original mutates
           // This means that expressions on mv-edit for individual collection items will not be picked up
           if (!this.template) {
-            this.originalEditorObserver = new Mavo.Observer(this.originalEditor, "all", function (records) {
+            this.originalEditorObserver = new Mavo.Observer(this.originalEditor, 'all', function (records) {
               _this.copies.concat(_this).forEach(function (primitive) {
-                if (primitive.defaultSource == "editor") {
+                if (primitive.defaultSource === 'editor') {
                   primitive.default = _this.originalEditor.value;
                 }
 
@@ -4316,8 +4415,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       var editorValue = this.editorValue;
 
-      if (!this.datatype && (typeof editorValue == "number" || typeof editorValue == "boolean")) {
-        this.datatype = typeof editorValue === "undefined" ? "undefined" : _typeof(editorValue);
+      if (!this.datatype && (typeof editorValue === 'number' || typeof editorValue === 'boolean')) {
+        this.datatype = typeof editorValue === 'undefined' ? 'undefined' : (0, _typeof3.default)(editorValue);
       }
 
       if (this.config.init) {
@@ -4334,27 +4433,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.templateValue = this.getValue();
 
-      this._default = this.element.getAttribute("mv-default");
+      this._default = this.element.getAttribute('mv-default');
 
       if (this.default === null) {
-        // no mv-default
+        // No mv-default
         this._default = this.modes ? this.templateValue : editorValue;
-        this.defaultSource = this.modes ? "template" : "editor";
-      } else if (this.default === "") {
-        // mv-default exists, no value, default is template value
+        this.defaultSource = this.modes ? 'template' : 'editor';
+      } else if (this.default === '') {
+        // Mv-default exists, no value, default is template value
         this._default = this.templateValue;
-        this.defaultSource = "template";
+        this.defaultSource = 'template';
       } else {
-        // mv-default with value
-        this.defaultObserver = new Mavo.Observer(this.element, "mv-default", function (record) {
-          _this.default = _this.element.getAttribute("mv-default");
+        // Mv-default with value
+        this.defaultObserver = new Mavo.Observer(this.element, 'mv-default', function (record) {
+          _this.default = _this.element.getAttribute('mv-default');
         });
-        this.defaultSource = "attribute";
+        this.defaultSource = 'attribute';
       }
 
-      var keepTemplateValue = !this.template // not in a collection or first item
-      || this.template.templateValue != this.templateValue // or different template value than first item
-      || this.modes == "edit"; // or is always edited
+      var keepTemplateValue = !this.template || // Not in a collection or first item
+      this.template.templateValue != this.templateValue || // Or different template value than first item
+      this.modes === 'edit'; // Or is always edited
 
       if (this.default === undefined && keepTemplateValue) {
         this.initialValue = this.templateValue;
@@ -4368,10 +4467,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.setValue(this.initialValue, { silent: true });
 
-      Mavo.setAttributeShy(this.element, "aria-label", this.label);
+      Mavo.setAttributeShy(this.element, 'aria-label', this.label);
 
       if (!this.attribute) {
-        Mavo.setAttributeShy(this.element, "mv-attribute", "none");
+        Mavo.setAttributeShy(this.element, 'mv-attribute', 'none');
       }
 
       if (this.config.observer !== false) {
@@ -4387,8 +4486,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.postInit();
 
-      Mavo.hooks.run("primitive-init-end", this);
+      Mavo.hooks.run('primitive-init-end', this);
     },
+
 
     get editorValue() {
       var editor = this.editor || this.originalEditor;
@@ -4398,8 +4498,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           return _.getValue(editor, { datatype: this.datatype });
         }
 
-        // if we're here, this.editor is an entire HTML structure
-        var output = $(Mavo.selectors.output + ", " + Mavo.selectors.formControl, editor);
+        // If we're here, this.editor is an entire HTML structure
+        var output = $(Mavo.selectors.output + ', ' + Mavo.selectors.formControl, editor);
 
         if (output) {
           return _.getValue(output);
@@ -4408,17 +4508,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
 
     set editorValue(value) {
-      if (this.config.setEditorValue && this.datatype !== "boolean") {
+      if (this.config.setEditorValue && this.datatype !== 'boolean') {
         return this.config.setEditorValue.call(this, value);
       }
 
       if (this.editor) {
         if (this.editor.matches(Mavo.selectors.formControl)) {
-
           _.setValue(this.editor, value, { config: this.editorDefaults });
         } else {
-          // if we're here, this.editor is an entire HTML structure
-          var output = $(Mavo.selectors.output + ", " + Mavo.selectors.formControl, this.editor);
+          // If we're here, this.editor is an entire HTML structure
+          var output = $(Mavo.selectors.output + ', ' + Mavo.selectors.formControl, this.editor);
 
           if (output) {
             _.setValue(output, value);
@@ -4433,7 +4532,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.defaultObserver && this.defaultObserver.destroy();
       this.observer && this.observer.destroy();
     },
-
     getData: function getData() {
       var o = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -4446,14 +4544,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (env.data === undefined) {
         env.data = this.value;
 
-        if (env.data === "") {
+        if (env.data === '') {
           env.data = null;
         }
       }
 
       if (env.options.live) {
         if (this.collection || o.forceObjects) {
-          env.data = Mavo.objectify(env.data, _defineProperty({}, Mavo.toNode, this));
+          env.data = Mavo.objectify(env.data, (0, _defineProperty3.default)({}, Mavo.toNode, this));
 
           if (this.collection) {
             // Turn primitive collection items into objects, so we can have $index etc, and their property
@@ -4466,19 +4564,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         env.data = Mavo.subset(this.data, this.inPath, env.data);
       }
 
-      Mavo.hooks.run("node-getdata-end", env);
+      Mavo.hooks.run('node-getdata-end', env);
 
       return env.data;
     },
-
     sneak: function sneak(callback) {
       return Mavo.Observer.sneak(this.observer, callback);
     },
-
     save: function save() {
       this.savedValue = this.value;
       this.unsavedChanges = false;
     },
+
 
     // Called only the first time this primitive is edited
     initEdit: function initEdit() {
@@ -4493,38 +4590,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         // Find default editor for datatype
         var editor = this.config.editor;
 
-        if (!editor || this.datatype == "boolean") {
-          editor = Mavo.Elements.defaultConfig[this.datatype || "string"].editor;
+        if (!editor || this.datatype === 'boolean') {
+          editor = Mavo.Elements.defaultConfig[this.datatype || 'string'].editor;
         }
 
-        this.editor = $.create($.type(editor) === "function" ? editor.call(this) : editor);
+        this.editor = $.create($.type(editor) === 'function' ? editor.call(this) : editor);
         this.editorValue = this.value;
       }
 
       $.bind(this.editor, {
-        "input change": function inputChange(evt) {
+        'input change': function inputChange(evt) {
           _this2.value = _this2.editorValue;
         },
-        "mv-change": function mvChange(evt) {
-          if (evt.property === "output") {
+        'mv-change': function mvChange(evt) {
+          if (evt.property === 'output') {
             evt.stopPropagation();
-            $.fire(_this2.editor, "input");
+            $.fire(_this2.editor, 'input');
           }
         }
       });
 
-      var multiline = this.editor.matches("textarea");
+      var multiline = this.editor.matches('textarea');
 
       if (!multiline) {
-        this.editor.addEventListener("focus", function (evt) {
+        this.editor.addEventListener('focus', function (evt) {
           _this2.editor.select && _this2.editor.select();
         });
       }
 
       // Enter should go to the next item or insert a new one
       if (!this.popup && this.closestCollection && this.editor.matches(Mavo.selectors.textInput)) {
-        this.editor.addEventListener("keydown", function (evt) {
-          if (evt.keyCode == 13 && _this2.closestCollection.editing && (evt.shiftKey || !multiline)) {
+        this.editor.addEventListener('keydown', function (evt) {
+          if (evt.keyCode === 13 && _this2.closestCollection.editing && (evt.shiftKey || !multiline)) {
             // Enter
             var copy = _this2.getCousin(1);
 
@@ -4546,7 +4643,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             if (multiline) {
               evt.preventDefault();
             }
-          } else if (evt.keyCode == 8 && (_this2.empty && _this2.collection || evt[Mavo.superKey])) {
+          } else if (evt.keyCode === 8 && (_this2.empty && _this2.collection || evt[Mavo.superKey])) {
             // Backspace on empty primitive or Cmd/Ctrl + Backspace should delete item
             _this2.closestCollection.delete(_this2.closestItem);
 
@@ -4562,15 +4659,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         });
       }
 
-      if ("placeholder" in this.editor) {
-        this.editor.placeholder = "(" + this.label + ")";
+      if ('placeholder' in this.editor) {
+        this.editor.placeholder = '(' + this.label + ')';
       }
 
       // Copy any mv-edit-* attributes from the element to the editor
       var dataInput = /^mv-edit-/i;
       $$(this.element.attributes).forEach(function (attribute) {
         if (dataInput.test(attribute.name)) {
-          this.editor.setAttribute(attribute.name.replace(dataInput, ""), attribute.value);
+          this.editor.setAttribute(attribute.name.replace(dataInput, ''), attribute.value);
         }
       }, this);
 
@@ -4579,12 +4676,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       if (!this.popup) {
-        this.editor.classList.add("mv-editor");
+        this.editor.classList.add('mv-editor');
       }
 
       this.initEdit = null;
     },
-
     edit: function edit() {
       var _this3 = this;
 
@@ -4596,13 +4692,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       // Make element focusable, so it can actually receive focus
       if (this.element.tabIndex === -1) {
-        Mavo.revocably.setAttribute(this.element, "tabindex", "0");
+        Mavo.revocably.setAttribute(this.element, 'tabindex', '0');
       }
 
       // Prevent default actions while editing
       // e.g. following links etc
       if (!this.modes) {
-        $.bind(this.element, "click.mavo:edit", function (evt) {
+        $.bind(this.element, 'click.mavo:edit', function (evt) {
           return evt.preventDefault();
         });
       }
@@ -4612,14 +4708,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           return resolve();
         }
 
-        var timer;
+        var timer = void 0;
 
-        var events = "click focus dragover dragenter".split(" ").map(function (e) {
-          return e + ".mavo:preedit";
-        }).join(" ");
+        var events = 'click focus dragover dragenter'.split(' ').map(function (e) {
+          return e + '.mavo:preedit';
+        }).join(' ');
         $.bind(_this3.element, events, resolve);
       }).then(function () {
-        return $.unbind(_this3.element, ".mavo:preedit");
+        return $.unbind(_this3.element, '.mavo:preedit');
       });
 
       if (this.config.edit) {
@@ -4642,7 +4738,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           if (!_this3.attribute && !_this3.popup) {
             if (_this3.editor.parentNode != _this3.element) {
               _this3.editorValue = _this3.value;
-              _this3.element.textContent = "";
+              _this3.element.textContent = '';
 
               _this3.element.appendChild(_this3.editor);
             }
@@ -4652,12 +4748,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this3.editor.focus();
               }
 
-              Mavo.revocably.restoreAttribute(_this3.element, "tabindex");
+              Mavo.revocably.restoreAttribute(_this3.element, 'tabindex');
             }
           }
         });
       });
-    }, // edit
+    },
+    // Edit
 
     done: function done() {
       var _this4 = this;
@@ -4666,8 +4763,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return false;
       }
 
-      if ("preEdit" in this) {
-        $.unbind(this.element, ".mavo:preedit .mavo:edit");
+      if ('preEdit' in this) {
+        $.unbind(this.element, '.mavo:preedit .mavo:edit');
       }
 
       this.sneak(function () {
@@ -4691,24 +4788,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
 
       if (!this.collection) {
-        Mavo.revocably.restoreAttribute(this.element, "tabindex");
+        Mavo.revocably.restoreAttribute(this.element, 'tabindex');
       }
     },
-
     dataRender: function dataRender(data) {
-      if (data && (typeof data === "undefined" ? "undefined" : _typeof(data)) === "object") {
+      if (data && (typeof data === 'undefined' ? 'undefined' : (0, _typeof3.default)(data)) === 'object') {
         if (Symbol.toPrimitive in data) {
           data = data[Symbol.toPrimitive]();
         } else {
           // Candidate properties to get a value from
-          var _arr = [this.property, "value", "content"];
-          for (var _i = 0; _i < _arr.length; _i++) {
-            var property = _arr[_i];
-            if (property in data) {
-              data = data[property];
-              this.inPath.push(property);
-              break;
+          var properties = Object.keys(data),
+              property = void 0;
+
+          if (properties.length === 1) {
+            property = properties[0];
+          } else {
+            var _arr = [this.property, 'value', 'content'];
+
+            for (var _i = 0; _i < _arr.length; _i++) {
+              var p = _arr[_i];
+              if (p in data) {
+                property = p;
+                break;
+              }
             }
+          }
+
+          if (property) {
+            data = data[property];
+            this.inPath.push(property);
           }
         }
       }
@@ -4722,16 +4830,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.value = data;
       }
     },
-
     find: function find(property) {
-      if (this.property == property) {
+      var o = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+      if (this.property === property && o.exclude !== this) {
         return this;
       }
     },
 
+
     /**
-   * Get value from the DOM
-   */
+     * Get value from the DOM
+     */
     getValue: function getValue(o) {
       return _.getValue(this.element, {
         config: this.config,
@@ -4740,22 +4850,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
 
+
     lazy: {
       label: function label() {
         return Mavo.Functions.readable(this.property);
       },
-
       emptyValue: function emptyValue() {
         switch (this.datatype) {
-          case "boolean":
+          case 'boolean':
             return false;
-          case "number":
+          case 'number':
             return 0;
         }
 
-        return "";
+        return '';
       },
-
       editorDefaults: function editorDefaults() {
         return this.editor && _.getConfig(this.editor);
       }
@@ -4768,18 +4877,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.sneak(function () {
         // Convert nulls and undefineds to empty string
-        value = value || value === 0 || value === false ? value : "";
+        value = value || value === 0 || value === false ? value : '';
 
         var oldDatatype = _this5.datatype;
 
         // If there's no datatype, adopt that of the value
-        if (!_this5.datatype && (typeof value == "number" || typeof value == "boolean")) {
-          _this5.datatype = typeof value === "undefined" ? "undefined" : _typeof(value);
+        if (!_this5.datatype && (typeof value === 'number' || typeof value === 'boolean')) {
+          _this5.datatype = typeof value === 'undefined' ? 'undefined' : (0, _typeof3.default)(value);
         }
 
         value = _.safeCast(value, _this5.datatype);
 
-        if (!o.force && value == _this5._value && oldDatatype == _this5.datatype) {
+        if (!o.force && value === _this5._value && oldDatatype === _this5.datatype) {
           // Do nothing if value didn't actually change, unless forced to
           return value;
         }
@@ -4813,47 +4922,44 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             _this5.unsavedChanges = _this5.mavo.unsavedChanges = true;
           }
 
-          _this5.dataChanged("propertychange", { value: value });
+          _this5.dataChanged('propertychange', { value: value });
         }
       });
 
       return value;
     },
-
     dataChanged: function dataChanged() {
-      var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "propertychange";
+      var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'propertychange';
       var o = arguments[1];
 
       return this.super.dataChanged.call(this, action, o);
     },
 
+
     live: {
       default: function _default(value) {
-        if (this.value == this._default) {
+        if (this.value === this._default) {
           this.value = value;
         }
       },
-
       value: function value(_value) {
         return this.setValue(_value);
       },
-
       datatype: function datatype(value) {
         if (value !== this._datatype) {
-          if (value == "boolean" && !this.attribute) {
+          if (value === 'boolean' && !this.attribute) {
             this.attribute = Mavo.Elements.defaultConfig.boolean.attribute;
           }
 
-          $.toggleAttribute(this.element, "datatype", value, value && value !== "string");
+          $.toggleAttribute(this.element, 'datatype', value, value && value !== 'string');
         }
       },
-
       empty: function empty(value) {
-        var hide = value && // is empty
-        !this.modes && // and supports both modes
-        !(this.attribute && $(Mavo.selectors.property, this.element)); // and has no property inside
+        var hide = value && // Is empty
+        !this.modes && // And supports both modes
+        !(this.attribute && $(Mavo.selectors.property, this.element)); // And has no property inside
 
-        this.element.classList.toggle("mv-empty", !!hide);
+        this.element.classList.toggle('mv-empty', Boolean(hide));
       }
     },
 
@@ -4863,40 +4969,41 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       getValueAttribute: function getValueAttribute(element) {
         var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Mavo.Elements.search(element);
 
-        var ret = element.getAttribute("mv-attribute") || config.attribute;
+        var ret = element.getAttribute('mv-attribute') || config.attribute;
 
-        if (!ret || ret === "null" || ret === "none") {
+        if (!ret || ret === 'null' || ret === 'none') {
           ret = null;
         }
 
         return ret;
       },
 
+
       /**
-    * Only cast if conversion is lossless
-    */
+       * Only cast if conversion is lossless
+       */
       safeCast: function safeCast(value, datatype) {
-        var existingType = typeof value === "undefined" ? "undefined" : _typeof(value);
+        var existingType = typeof value === 'undefined' ? 'undefined' : (0, _typeof3.default)(value);
         var cast = _.cast(value, datatype);
 
         if (value === null || value === undefined) {
           return value;
         }
 
-        if (datatype == "boolean") {
-          if (value === "false" || value === 0 || value === "") {
+        if (datatype === 'boolean') {
+          if (value === 'false' || value === 0 || value === '') {
             return false;
           }
 
-          if (value === "true" || value > 0) {
+          if (value === 'true' || value > 0) {
             return true;
           }
 
           return value;
         }
 
-        if (datatype == "number") {
-          if (/^[-+]?[0-9.e]+$/i.test(value + "")) {
+        if (datatype === 'number') {
+          if (/^[-+]?[0-9.e]+$/i.test(String(value))) {
             return cast;
           }
 
@@ -4906,22 +5013,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return cast;
       },
 
+
       /**
-    * Cast to a different primitive datatype
-    */
+       * Cast to a different primitive datatype
+       */
       cast: function cast(value, datatype) {
         switch (datatype) {
-          case "number":
-            return +value;
-          case "boolean":
-            return !!value;
-          case "string":
-            return value + "";
+          case 'number':
+            return Number(value);
+          case 'boolean':
+            return Boolean(value);
+          case 'string':
+            return String(value);
         }
 
         return value;
       },
-
       getValue: function getValue(element) {
         var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
             config = _ref.config,
@@ -4935,11 +5042,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         attribute = config.attribute;
         datatype = config.datatype;
 
-        if (config.getValue && attribute == config.attribute) {
+        if (config.getValue && attribute === config.attribute) {
           return config.getValue(element);
         }
 
-        var ret;
+        var ret = void 0;
 
         if (attribute in element && _.useProperty(element, attribute)) {
           // Returning properties (if they exist) instead of attributes
@@ -4948,23 +5055,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         } else if (attribute) {
           ret = element.getAttribute(attribute);
         } else {
-          ret = element.getAttribute("content") || element.textContent || null;
+          ret = element.getAttribute('content') || element.textContent || null;
         }
 
         return _.safeCast(ret, datatype);
       },
-
       getConfig: function getConfig(element, attribute, datatype) {
         if (attribute === undefined) {
-          attribute = element.getAttribute("mv-attribute") || undefined;
+          attribute = element.getAttribute('mv-attribute') || undefined;
         }
 
-        if (attribute == "null" || attribute == "none") {
+        if (attribute === 'null' || attribute === 'none') {
           attribute = null;
         }
 
-        if (!datatype && attribute == _.getValueAttribute(element)) {
-          datatype = element.getAttribute("datatype") || undefined;
+        if (!datatype && attribute === _.getValueAttribute(element)) {
+          datatype = element.getAttribute('datatype') || undefined;
         }
 
         var config = Mavo.Elements.search(element, attribute, datatype);
@@ -4979,7 +5085,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return config;
       },
-
       setValue: function setValue(element, value) {
         var o = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
@@ -4991,7 +5096,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           o.attribute = o.attribute !== undefined ? o.attribute : o.config.attribute;
           o.datatype = o.datatype !== undefined ? o.datatype : o.config.datatype;
 
-          if (o.config.setValue && o.attribute == o.config.attribute) {
+          if (o.config.setValue && o.attribute === o.config.attribute) {
             return o.config.setValue(element, value, o.attribute);
           }
         }
@@ -5014,12 +5119,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           // Set attribute anyway, even if we set a property because when
           // they're not in sync it gets really fucking confusing.
-          if (o.datatype == "boolean") {
+          if (o.datatype === 'boolean') {
             if (value != element.hasAttribute(o.attribute)) {
               $.toggleAttribute(element, o.attribute, value, value);
             }
           } else if (element.getAttribute(o.attribute) != value) {
-            // intentionally non-strict, e.g. "3." !== 3
+            // Intentionally non-strict, e.g. "3." !== 3
             element.setAttribute(o.attribute, value);
           }
         } else {
@@ -5029,7 +5134,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             element.textContent = presentational;
 
             if (element.setAttribute) {
-              element.setAttribute("content", value);
+              element.setAttribute('content', value);
             }
           } else {
             element.textContent = value;
@@ -5037,17 +5142,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       },
 
+
       /**
-    *  Set/get a property or an attribute?
-    * @return {Boolean} true to use a property, false to use the attribute
-    */
+       *  Set/get a property or an attribute?
+       * @return {Boolean} true to use a property, false to use the attribute
+       */
       useProperty: function useProperty(element, attribute) {
-        if (["href", "src"].indexOf(attribute) > -1) {
+        if (['href', 'src'].indexOf(attribute) > -1) {
           // URL properties resolve "" as location.href, fucking up emptiness checks
           return false;
         }
 
-        if (element.namespaceURI == "http://www.w3.org/2000/svg") {
+        if (element.namespaceURI === 'http://www.w3.org/2000/svg') {
           // SVG has a fucked up DOM, do not use these properties
           return false;
         }
@@ -5055,19 +5161,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return true;
       },
 
+
       format: function format(value) {
         var o = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
         if (o.map && /^select$/i.test(o.map.nodeName)) {
           for (var i = 0, option; option = o.map.options[i]; i++) {
-            if (option.value == value) {
+            if (option.value === value) {
               return option.textContent;
             }
           }
         }
 
-        if ($.type(value) === "number" || o.datatype == "number") {
-          var skipNumberFormatting = o.attribute || o.element && o.element.matches("style, pre");
+        if ($.type(value) === 'number' || o.datatype === 'number') {
+          var skipNumberFormatting = o.attribute || o.element && o.element.matches('style, pre');
 
           if (!skipNumberFormatting) {
             return _.formatNumber(value);
@@ -5075,10 +5182,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
 
         if (Array.isArray(value)) {
-          return value.map(_.format).join(", ");
+          return value.map(_.format).join(', ');
         }
 
-        if ($.type(value) === "object") {
+        if ($.type(value) === 'object') {
           // Oops, we have an object. Print something more useful than [object Object]
           return Mavo.toJSON(value);
         }
@@ -5093,7 +5200,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           return function (value) {
             if (value === Infinity || value === -Infinity) {
               // Pretty print infinity
-              return value < 0 ? "-∞" : "∞";
+              return value < 0 ? '-∞' : '∞';
             }
 
             return numberFormat.format(value);
@@ -5103,10 +5210,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   });
 })(Bliss, Bliss.$);
-"use strict";
+'use strict';
 
-(function ($, $$) {
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
+(function ($) {
   var _ = Mavo.UI.Popup = $.Class({
     constructor: function constructor(primitive) {
       var _this = this;
@@ -5130,7 +5239,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
           // Perhaps placing it above is better
           if (bounds.top - _this.height > 20) {
-            var pointDown = true;
+            pointDown = true;
             y = bounds.top - _this.height - 20;
           } else {
             // Nah, just raise it a bit
@@ -5138,24 +5247,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }
         }
 
-        _this.element.classList.toggle("mv-point-down", pointDown);
+        _this.element.classList.toggle('mv-point-down', pointDown);
 
-        $.style(_this.element, { top: y + "px", left: x + "px" });
+        $.style(_this.element, { top: y + 'px', left: x + 'px' });
       };
 
-      this.element = $.create("div", {
-        className: "mv-popup",
+      this.element = $.create('div', {
+        className: 'mv-popup',
         hidden: true,
         contents: {
-          tag: "fieldset",
+          tag: 'fieldset',
           contents: [{
-            tag: "legend",
-            textContent: this.primitive.label + ":"
+            tag: 'legend',
+            textContent: this.primitive.label + ':'
           }, this.editor]
         },
         events: {
           keyup: function keyup(evt) {
-            if (evt.keyCode == 13 || evt.keyCode == 27) {
+            if (evt.keyCode === 13 || evt.keyCode === 27) {
               if (_this.element.contains(document.activeElement)) {
                 _this.primitive.element.focus();
               }
@@ -5169,15 +5278,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
 
       // No point in having a dropdown in a popup
-      if (this.editor.matches("select")) {
+      if (this.editor.matches('select')) {
         this.editor.size = Math.min(10, this.editor.children.length);
       }
     },
-
     show: function show() {
       var _this2 = this;
 
-      $.unbind([this.primitive.element, this.element], ".mavo:showpopup");
+      $.unbind([this.primitive.element, this.element], '.mavo:showpopup');
 
       this.shown = true;
 
@@ -5187,45 +5295,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       };
 
-      this.element.style.transition = "none";
-      this.element.removeAttribute("hidden");
+      this.element.style.transition = 'none';
+      this.element.removeAttribute('hidden');
 
       this.position();
 
-      this.element.setAttribute("hidden", "");
-      this.element.style.transition = "";
+      this.element.setAttribute('hidden', '');
+      this.element.style.transition = '';
 
       document.body.appendChild(this.element);
 
       setTimeout(function () {
-        _this2.element.removeAttribute("hidden");
-      }, 100); // trigger transition. rAF or timeouts < 100 don't seem to, oddly.
+        _this2.element.removeAttribute('hidden');
+      }, 100); // Trigger transition. rAF or timeouts < 100 don't seem to, oddly.
 
-      $.bind(document, "focus click", this.hideCallback, true);
-      window.addEventListener("scroll", this.position, { passive: true });
+      $.bind(document, 'focus click', this.hideCallback, true);
+      window.addEventListener('scroll', this.position, { passive: true });
     },
-
     hide: function hide() {
       var _this3 = this;
 
-      $.unbind(document, "focus click", this.hideCallback, true);
-      window.removeEventListener("scroll", this.position, { passive: true });
-      this.element.setAttribute("hidden", ""); // trigger transition
+      $.unbind(document, 'focus click', this.hideCallback, true);
+      window.removeEventListener('scroll', this.position, { passive: true });
+      this.element.setAttribute('hidden', ''); // Trigger transition
       this.shown = false;
 
       setTimeout(function () {
         $.remove(_this3.element);
       }, parseFloat(getComputedStyle(this.element).transitionDuration) * 1000 || 400); // TODO transition-duration could override this
     },
-
     prepare: function prepare() {
       var _this4 = this;
 
       $.bind(this.primitive.element, {
-        "click.mavo:edit": function clickMavoEdit(evt) {
+        'click.mavo:edit': function clickMavoEdit(evt) {
           _this4.show();
         },
-        "keyup.mavo:edit": function keyupMavoEdit(evt) {
+        'keyup.mavo:edit': function keyupMavoEdit(evt) {
           if ([13, 113].indexOf(evt.keyCode) > -1) {
             // Enter or F2
             _this4.show();
@@ -5234,20 +5340,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       });
     },
-
     close: function close() {
       this.hide();
-      $.unbind(this.primitive.element, ".mavo:edit .mavo:preedit .mavo:showpopup");
+      $.unbind(this.primitive.element, '.mavo:edit .mavo:preedit .mavo:showpopup');
     },
 
+
     proxy: {
-      "editor": "primitive"
+      editor: 'primitive'
     }
   });
-})(Bliss, Bliss.$);
-"use strict";
+})(Bliss);
+'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof2 = require('babel-runtime/helpers/typeof');
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
 
 /**
  * Configuration for different types of elements. Options:
@@ -5263,14 +5375,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * - default: If there is no attribute, can we use that rule to pick one?
  * @
  */
-(function ($, $$) {
-
+(function ($) {
   var _ = Mavo.Elements = {};
 
   Object.defineProperties(_, {
-    "register": {
+    register: {
       value: function value(id, config) {
-        if (_typeof(arguments[0]) === "object") {
+        if ((0, _typeof3.default)(arguments[0]) === 'object') {
           // Multiple definitions
           for (var s in arguments[0]) {
             _.register(s, arguments[0][s]);
@@ -5285,10 +5396,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           config = $.extend($.extend({}, base), config);
         }
 
-        if (id.indexOf("@") > -1) {
-          var parts = id.split("@");
+        if (id.indexOf('@') > -1) {
+          var parts = id.split('@');
 
-          config.selector = config.selector || parts[0] || "*";
+          config.selector = config.selector || parts[0] || '*';
 
           if (config.attribute === undefined) {
             config.attribute = parts[1];
@@ -5303,7 +5414,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             var o = $.extend({}, config);
             o.attribute = attribute;
 
-            _[id + "@" + attribute] = o;
+            _[id + '@' + attribute] = o;
           });
         } else {
           _[id] = config;
@@ -5312,7 +5423,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return _;
       }
     },
-    "search": {
+    search: {
       value: function value(element, attribute, datatype) {
         var matches = _.matches(element, attribute, datatype);
 
@@ -5322,17 +5433,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           return lastMatch;
         }
 
-        var config = $.extend({}, _.defaultConfig[datatype || "string"]);
+        var config = $.extend({}, _.defaultConfig[datatype || 'string']);
         config.attribute = attribute === undefined ? config.attribute : attribute;
 
         return config;
       }
     },
-    "matches": {
+    matches: {
       value: function value(element, attribute, datatype) {
         var matches = [];
 
-        selectorloop: for (var id in _) {
+        for (var id in _) {
           var o = _[id];
 
           // Passes attribute test?
@@ -5343,7 +5454,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           }
 
           // Passes datatype test?
-          if (datatype !== undefined && datatype !== "string" && datatype !== o.datatype) {
+          if (datatype !== undefined && datatype !== 'string' && datatype !== o.datatype) {
             continue;
           }
 
@@ -5369,66 +5480,66 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
     isSVG: {
       value: function value(e) {
-        return e.namespaceURI == "http://www.w3.org/2000/svg";
+        return e.namespaceURI === 'http://www.w3.org/2000/svg';
       }
     },
 
     defaultConfig: {
       value: {
-        "string": {
-          editor: { tag: "input" }
+        string: {
+          editor: { tag: 'input' }
         },
-        "number": {
-          editor: { tag: "input", type: "number" }
+        number: {
+          editor: { tag: 'input', type: 'number' }
         },
-        "boolean": {
-          attribute: "content",
-          editor: { tag: "input", type: "checkbox" }
+        boolean: {
+          attribute: 'content',
+          editor: { tag: 'input', type: 'checkbox' }
         }
       }
     }
   });
 
   _.register({
-    "@hidden": {
-      datatype: "boolean"
+    '@hidden': {
+      datatype: 'boolean'
     },
 
-    "@y": {
+    '@y': {
       test: _.isSVG,
-      datatype: "number"
+      datatype: 'number'
     },
 
-    "@x": {
+    '@x': {
       default: true,
       test: _.isSVG,
-      datatype: "number"
+      datatype: 'number'
     },
 
-    "media": {
+    media: {
       default: true,
-      selector: "img, video, audio",
-      attribute: "src",
+      selector: 'img, video, audio',
+      attribute: 'src',
       editor: function editor() {
         var _this = this;
 
-        var mainInput = $.create("input", {
-          "type": "url",
-          "placeholder": "http://example.com/image.png",
-          "className": "mv-output",
-          "aria-label": "URL to image"
+        var mainInput = $.create('input', {
+          type: 'url',
+          placeholder: 'http://example.com/image.png',
+          className: 'mv-output',
+          'aria-label': 'URL to image'
         });
 
         if (this.mavo.uploadBackend && self.FileReader) {
-          var popup;
+          var popup = void 0;
           var type = this.element.nodeName.toLowerCase();
-          type = type == "img" ? "image" : type;
-          var path = this.element.getAttribute("mv-uploads") || type + "s";
+          type = type === 'img' ? 'image' : type;
+          var path = this.element.getAttribute('mv-uploads') || type + 's';
 
           var upload = function upload(file) {
             var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : file.name;
 
-            if (!file || file.type.indexOf(type + "/") !== 0) {
+            if (!file || file.type.indexOf(type + '/') !== 0) {
               return;
             }
 
@@ -5438,7 +5549,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
               return _this.element.src = tempURL;
             });
 
-            _this.mavo.upload(file, path + "/" + name).then(function (url) {
+            _this.mavo.upload(file, path + '/' + name).then(function (url) {
               // Backend claims image is uploaded, we should load it from remote to make sure everything went well
               var attempts = 0;
               var load = Mavo.rr(function () {
@@ -5449,8 +5560,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
               });
               var cleanup = function cleanup() {
                 URL.revokeObjectURL(tempURL);
-                _this.element.removeEventListener("load", onload);
-                _this.element.removeEventListener("error", onload);
+                _this.element.removeEventListener('load', onload);
+                _this.element.removeEventListener('error', onload);
               };
               var onload = function onload(evt) {
                 if (_this.element.src != tempURL) {
@@ -5468,41 +5579,41 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                   load();
                 } else {
                   // 11 + 0.5*10*11/2 = 38.5 seconds later, giving up
-                  _this.mavo.error(_this.mavo._("cannot-load-uploaded-file") + " " + url);
+                  _this.mavo.error(_this.mavo._('cannot-load-uploaded-file') + ' ' + url);
                   cleanup();
                 }
               };
 
               mainInput.value = url;
-              _this.element.addEventListener("load", onload);
-              _this.element.addEventListener("error", onerror);
+              _this.element.addEventListener('load', onload);
+              _this.element.addEventListener('error', onerror);
             });
           };
 
           var uploadEvents = {
-            "paste": function paste(evt) {
+            paste: function paste(evt) {
               var item = evt.clipboardData.items[0];
 
-              if (item.kind == "file" && item.type.indexOf(type + "/") === 0) {
+              if (item.kind === 'file' && item.type.indexOf(type + '/') === 0) {
                 // Is a file of the correct type, upload!
-                var name = "pasted-" + type + "-" + Date.now() + "." + item.type.slice(6); // image, video, audio are all 5 chars
+                var name = 'pasted-' + type + '-' + Date.now() + '.' + item.type.slice(6); // Image, video, audio are all 5 chars
                 upload(item.getAsFile(), name);
                 evt.preventDefault();
               }
             },
-            "drag dragstart dragend dragover dragenter dragleave drop": function dragDragstartDragendDragoverDragenterDragleaveDrop(evt) {
+            'drag dragstart dragend dragover dragenter dragleave drop': function dragDragstartDragendDragoverDragenterDragleaveDrop(evt) {
               evt.preventDefault();
               evt.stopPropagation();
             },
-            "dragover dragenter": function dragoverDragenter(evt) {
-              popup.classList.add("mv-dragover");
-              _this.element.classList.add("mv-dragover");
+            'dragover dragenter': function dragoverDragenter(evt) {
+              popup.classList.add('mv-dragover');
+              _this.element.classList.add('mv-dragover');
             },
-            "dragleave dragend drop": function dragleaveDragendDrop(evt) {
-              popup.classList.remove("mv-dragover");
-              _this.element.classList.remove("mv-dragover");
+            'dragleave dragend drop': function dragleaveDragendDrop(evt) {
+              popup.classList.remove('mv-dragover');
+              _this.element.classList.remove('mv-dragover');
             },
-            "drop": function drop(evt) {
+            drop: function drop(evt) {
               upload(evt.dataTransfer.files[0]);
             }
           };
@@ -5510,12 +5621,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           $.bind(this.element, uploadEvents);
 
           return popup = $.create({
-            className: "mv-upload-popup",
+            className: 'mv-upload-popup',
             contents: [mainInput, {
-              tag: "input",
-              type: "file",
-              "aria-label": "Upload image",
-              accept: type + "/*",
+              tag: 'input',
+              type: 'file',
+              'aria-label': 'Upload image',
+              accept: type + '/*',
               events: {
                 change: function change(evt) {
                   var file = evt.target.files[0];
@@ -5528,43 +5639,43 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 }
               }
             }, {
-              className: "mv-tip",
-              innerHTML: "<strong>Tip:</strong> You can also drag & drop or paste!"
+              className: 'mv-tip',
+              innerHTML: '<strong>Tip:</strong> You can also drag & drop or paste!'
             }],
             events: uploadEvents
           });
-        } else {
-          return mainInput;
         }
+
+        return mainInput;
       }
     },
 
-    "video, audio": {
-      attribute: ["autoplay", "buffered", "loop"],
-      datatype: "boolean"
+    'video, audio': {
+      attribute: ['autoplay', 'buffered', 'loop'],
+      datatype: 'boolean'
     },
 
-    "details": {
-      attribute: "open",
-      datatype: "boolean"
+    details: {
+      attribute: 'open',
+      datatype: 'boolean'
     },
 
-    "a, link": {
+    'a, link': {
       default: true,
-      attribute: "href"
+      attribute: 'href'
     },
 
-    "input, select, button, textarea": {
-      attribute: "disabled",
-      datatype: "boolean"
+    'input, select, button, textarea': {
+      attribute: 'disabled',
+      datatype: 'boolean'
     },
 
-    "formControl": {
-      selector: "input",
+    formControl: {
+      selector: 'input',
       default: true,
-      attribute: "value",
-      modes: "edit",
-      changeEvents: "input change",
+      attribute: 'value',
+      modes: 'edit',
+      changeEvents: 'input change',
       edit: function edit() {},
       done: function done() {},
       init: function init() {
@@ -5572,15 +5683,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
     },
 
-    "select": {
-      extend: "formControl",
-      selector: "select",
+    select: {
+      extend: 'formControl',
+      selector: 'select',
       subtree: true
     },
 
-    "textarea": {
-      extend: "formControl",
-      selector: "textarea",
+    textarea: {
+      extend: 'formControl',
+      selector: 'textarea',
       attribute: null,
       getValue: function getValue(element) {
         return element.value;
@@ -5590,17 +5701,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
     },
 
-    "formNumber": {
-      extend: "formControl",
-      selector: "input[type=range], input[type=number]",
-      datatype: "number",
+    formNumber: {
+      extend: 'formControl',
+      selector: 'input[type=range], input[type=number]',
+      datatype: 'number',
       setValue: function setValue(element, value) {
         element.value = value;
-        element.setAttribute("value", value);
+        element.setAttribute('value', value);
 
-        var attribute = value > element.value ? "max" : "min";
+        var attribute = value > element.value ? 'max' : 'min';
 
-        if (!isNaN(value) && element.value != value && !Mavo.data(element, "boundObserver")) {
+        if (!isNaN(value) && element.value != value && !Mavo.data(element, 'boundObserver')) {
           // Value out of bounds, maybe race condition? See #295
           // Observe min/max attrs until user interaction or data change
           var observer = new Mavo.Observer(element, attribute, function (r) {
@@ -5608,38 +5719,38 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           });
 
           requestAnimationFrame(function () {
-            $.bind(element, "input mv-change", function handler() {
+            $.bind(element, 'input mv-change', function handler() {
               observer.destroy();
-              Mavo.data(element, "boundObserver", undefined);
-              $.unbind(element, "input mv-change", handler);
+              Mavo.data(element, 'boundObserver', undefined);
+              $.unbind(element, 'input mv-change', handler);
             });
           });
 
           // Prevent creating same observer twice
-          Mavo.data(element, "boundObserver", observer);
+          Mavo.data(element, 'boundObserver', observer);
         }
       }
     },
 
-    "checkbox": {
-      extend: "formControl",
-      selector: "input[type=checkbox]",
-      attribute: "checked",
-      datatype: "boolean",
-      changeEvents: "click"
+    checkbox: {
+      extend: 'formControl',
+      selector: 'input[type=checkbox]',
+      attribute: 'checked',
+      datatype: 'boolean',
+      changeEvents: 'click'
     },
 
-    "radio": {
-      extend: "formControl",
-      selector: "input[type=radio]",
-      attribute: "checked",
-      modes: "edit",
+    radio: {
+      extend: 'formControl',
+      selector: 'input[type=radio]',
+      attribute: 'checked',
+      modes: 'edit',
       getValue: function getValue(element) {
         if (element.form) {
           return element.form[element.name].value;
         }
 
-        var checked = $("input[type=radio][name=\"" + element.name + "\"]:checked");
+        var checked = $('input[type=radio][name="' + element.name + '"]:checked');
         return checked && checked.value;
       },
       setValue: function setValue(element, value) {
@@ -5648,52 +5759,52 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           return;
         }
 
-        var toCheck = $("input[type=radio][name=\"" + element.name + "\"][value=\"" + value + "\"]");
+        var toCheck = $('input[type=radio][name="' + element.name + '"][value="' + value + '"]');
         $.properties(toCheck, { checked: true });
       },
       init: function init(element) {
         var _this2 = this;
 
-        this.mavo.element.addEventListener("change", function (evt) {
-          if (evt.target.name == element.name) {
+        this.mavo.element.addEventListener('change', function (evt) {
+          if (evt.target.name === element.name) {
             _this2.value = _this2.getValue();
           }
         });
       }
     },
 
-    "counter": {
-      extend: "formControl",
-      selector: "button, .counter",
-      attribute: "mv-clicked",
-      datatype: "number",
+    counter: {
+      extend: 'formControl',
+      selector: 'button, .counter',
+      attribute: 'mv-clicked',
+      datatype: 'number',
       init: function init(element) {
         var _this3 = this;
 
-        if (this.attribute === "mv-clicked") {
-          element.setAttribute("mv-clicked", "0");
+        if (this.attribute === 'mv-clicked') {
+          element.setAttribute('mv-clicked', '0');
 
-          element.addEventListener("click", function (evt) {
-            var clicked = +element.getAttribute("mv-clicked") || 0;
+          element.addEventListener('click', function (evt) {
+            var clicked = Number(element.getAttribute('mv-clicked')) || 0;
             _this3.value = ++clicked;
           });
         }
       }
     },
 
-    "meter, progress": {
+    'meter, progress': {
       default: true,
-      attribute: "value",
-      datatype: "number",
+      attribute: 'value',
+      datatype: 'number',
       edit: function edit() {
         var _this4 = this;
 
-        var min = +this.element.getAttribute("min") || 0;
-        var max = +this.element.getAttribute("max") || 1;
+        var min = Number(this.element.getAttribute('min')) || 0;
+        var max = Number(this.element.getAttribute('max')) || 1;
         var range = max - min;
-        var step = +this.element.getAttribute("mv-edit-step") || (range > 1 ? 1 : range / 100);
+        var step = Number(this.element.getAttribute('mv-edit-step')) || (range > 1 ? 1 : range / 100);
 
-        $.bind(this.element, "mousemove.mavo:edit", function (evt) {
+        $.bind(this.element, 'mousemove.mavo:edit', function (evt) {
           // Change property as mouse moves
           var left = _this4.element.getBoundingClientRect().left;
           var offset = Math.max(0, (evt.clientX - left) / _this4.element.offsetWidth);
@@ -5704,55 +5815,55 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           newValue = Math.max(min, Math.min(newValue, max));
 
           _this4.sneak(function () {
-            return _this4.element.setAttribute("value", newValue);
+            return _this4.element.setAttribute('value', newValue);
           });
         });
 
-        $.bind(this.element, "mouseleave.mavo:edit", function (evt) {
+        $.bind(this.element, 'mouseleave.mavo:edit', function (evt) {
           // Return to actual value
           _this4.sneak(function () {
-            return _this4.element.setAttribute("value", _this4.value);
+            return _this4.element.setAttribute('value', _this4.value);
           });
         });
 
-        $.bind(this.element, "click.mavo:edit", function (evt) {
+        $.bind(this.element, 'click.mavo:edit', function (evt) {
           // Register change
           _this4.value = _this4.getValue();
         });
 
-        $.bind(this.element, "keydown.mavo:edit", function (evt) {
+        $.bind(this.element, 'keydown.mavo:edit', function (evt) {
           // Edit with arrow keys
-          if (evt.target == _this4.element && (evt.keyCode == 37 || evt.keyCode == 39)) {
-            var increment = step * (evt.keyCode == 39 ? 1 : -1) * (evt.shiftKey ? 10 : 1);
+          if (evt.target === _this4.element && (evt.keyCode === 37 || evt.keyCode === 39)) {
+            var increment = step * (evt.keyCode === 39 ? 1 : -1) * (evt.shiftKey ? 10 : 1);
             var newValue = _this4.value + increment;
             newValue = Math.max(min, Math.min(newValue, max));
 
-            _this4.element.setAttribute("value", newValue);
+            _this4.element.setAttribute('value', newValue);
 
             evt.preventDefault();
           }
         });
       },
       done: function done() {
-        $.unbind(this.element, ".mavo:edit");
+        $.unbind(this.element, '.mavo:edit');
       }
     },
 
-    "meta": {
+    meta: {
       default: true,
-      attribute: "content"
+      attribute: 'content'
     },
 
-    "block": {
+    block: {
       default: true,
-      selector: "p, div, dt, dd, h1, h2, h3, h4, h5, h6, article, section, address",
+      selector: 'p, div, dt, dd, h1, h2, h3, h4, h5, h6, article, section, address',
       editor: function editor() {
         var cs = getComputedStyle(this.element);
         var display = cs.display;
-        var tag = display.indexOf("inline") === 0 ? "input" : "textarea";
+        var tag = display.indexOf('inline') === 0 ? 'input' : 'textarea';
         var editor = $.create(tag);
 
-        if (tag == "textarea") {
+        if (tag === 'textarea') {
           // Actually multiline
           var width = this.element.offsetWidth;
 
@@ -5763,30 +5874,29 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           // We cannot collapse whitespace because then users
           // are adding characters they don’t see (#300).
           editor.style.whiteSpace = {
-            "normal": "pre-wrap",
-            "nowrap": "pre"
-          }[cs.whiteSpace] || "inherit";
+            normal: 'pre-wrap',
+            nowrap: 'pre'
+          }[cs.whiteSpace] || 'inherit';
         }
 
         return editor;
       },
-
       setEditorValue: function setEditorValue(value) {
-        if (this.datatype && this.datatype != "string") {
-          value = value + "";
+        if (this.datatype && this.datatype != 'string') {
+          value = String(value);
         }
 
         var cs = getComputedStyle(this.element);
-        value = value || "";
+        value = value || '';
 
-        if (["normal", "nowrap"].indexOf(cs.whiteSpace) > -1) {
+        if (['normal', 'nowrap'].indexOf(cs.whiteSpace) > -1) {
           // Collapse lines
-          value = value.replace(/\r?\n/g, " ");
+          value = value.replace(/\r?\n/g, ' ');
         }
 
-        if (["normal", "nowrap", "pre-line"].indexOf(cs.whiteSpace) > -1) {
+        if (['normal', 'nowrap', 'pre-line'].indexOf(cs.whiteSpace) > -1) {
           // Collapse whitespace
-          value = value.replace(/^[ \t]+|[ \t]+$/gm, "").replace(/[ \t]+/g, " ");
+          value = value.replace(/^[ \t]+|[ \t]+$/gm, '').replace(/[ \t]+/g, ' ');
         }
 
         this.editor.value = value;
@@ -5794,13 +5904,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
     },
 
-    "time": {
-      attribute: "datetime",
+    time: {
+      attribute: 'datetime',
       default: true,
       init: function init() {
-        if (!this.fromTemplate("dateType")) {
+        if (!this.fromTemplate('dateType')) {
           var dateFormat = Mavo.DOMExpression.search(this.element, null);
-          var datetime = this.element.getAttribute("datetime") || "YYYY-MM-DD";
+          var datetime = this.element.getAttribute('datetime') || 'YYYY-MM-DD';
 
           for (var type in this.config.dateTypes) {
             if (this.config.dateTypes[type].test(datetime)) {
@@ -5817,58 +5927,59 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           }
         }
       },
+
       dateTypes: {
-        "month": /^[Y\d]{4}-[M\d]{2}$/i,
-        "time": /^[H\d]{2}:[M\d]{2}/i,
-        "datetime-local": /^[Y\d]{4}-[M\d]{2}-[D\d]{2} [H\d]{2}:[Mi\d]{2}/i,
-        "date": /^[Y\d]{4}-[M\d]{2}-[D\d]{2}$/i
+        month: /^[Y\d]{4}-[M\d]{2}$/i,
+        time: /^[H\d]{2}:[M\d]{2}/i,
+        'datetime-local': /^[Y\d]{4}-[M\d]{2}-[D\d]{2} [H\d]{2}:[Mi\d]{2}/i,
+        date: /^[Y\d]{4}-[M\d]{2}-[D\d]{2}$/i
       },
       defaultFormats: {
-        "date": function date(name) {
-          return "[day(" + name + ")] [month(" + name + ").shortname] [year(" + name + ")]";
+        date: function date(name) {
+          return '[day(' + name + ')] [month(' + name + ').shortname] [year(' + name + ')]';
         },
-        "month": function month(name) {
-          return "[month(" + name + ").name] [year(" + name + ")]";
+        month: function month(name) {
+          return '[month(' + name + ').name] [year(' + name + ')]';
         },
-        "time": function time(name) {
-          return "[hour(" + name + ").twodigit]:[minute(" + name + ").twodigit]";
+        time: function time(name) {
+          return '[hour(' + name + ').twodigit]:[minute(' + name + ').twodigit]';
         },
-        "datetime-local": function datetimeLocal(name) {
-          return this.date(name) + " " + this.time(name);
+        'datetime-local': function datetimeLocal(name) {
+          return this.date(name) + ' ' + this.time(name);
         }
       },
       editor: function editor() {
-        return { tag: "input", type: this.dateType };
+        return { tag: 'input', type: this.dateType };
       }
     },
 
-    "circle@r": {
+    'circle@r': {
       default: true,
-      datatype: "number"
+      datatype: 'number'
     },
 
-    "circle": {
-      attribute: ["cx", "cy"],
-      datatype: "number"
+    circle: {
+      attribute: ['cx', 'cy'],
+      datatype: 'number'
     },
 
-    "text": {
+    text: {
       default: true,
       popup: true
     },
 
-    ".mv-toggle": {
+    '.mv-toggle': {
       default: true,
-      attribute: "aria-checked",
-      datatype: "boolean",
+      attribute: 'aria-checked',
+      datatype: 'boolean',
       edit: function edit() {
         var _this5 = this;
 
-        Mavo.revocably.setAttribute(this.element, "role", "checkbox");
+        Mavo.revocably.setAttribute(this.element, 'role', 'checkbox');
 
-        $.bind(this.element, "click.mavo:edit keyup.mavo:edit keydown.mavo:edit", function (evt) {
-          if (evt.type == "click" || evt.key == " " || evt.key == "Enter") {
-            if (evt.type != "keydown") {
+        $.bind(this.element, 'click.mavo:edit keyup.mavo:edit keydown.mavo:edit', function (evt) {
+          if (evt.type === 'click' || evt.key === ' ' || evt.key === 'Enter') {
+            if (evt.type != 'keydown') {
               _this5.value = !_this5.value;
             }
 
@@ -5878,50 +5989,84 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         });
       },
       done: function done() {
-        Mavo.revocably.restoreAttribute(this.element, "role");
+        Mavo.revocably.restoreAttribute(this.element, 'role');
 
-        $.unbind(this.element, ".mavo:edit");
+        $.unbind(this.element, '.mavo:edit');
       }
     }
   });
-})(Bliss, Bliss.$);
-"use strict";
+})(Bliss);
+'use strict';
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
 (function ($, $$) {
-
-  Mavo.attributes.push("mv-multiple", "mv-order", "mv-accepts");
+  Mavo.attributes.push('mv-multiple', 'mv-order', 'mv-accepts');
 
   var _ = Mavo.Collection = $.Class({
     extends: Mavo.Node,
-    nodeType: "Collection",
+    nodeType: 'Collection',
     constructor: function constructor(element, mavo, o) {
       /*
-    * Create the template, remove it from the DOM and store it
-    */
+       * Create the template, remove it from the DOM and store it
+       */
       this.templateElement = this.element;
 
       this.children = [];
 
       // ALL descendant property names as an array
-      if (!this.fromTemplate("mutable", "templateElement", "accepts")) {
+      if (!this.fromTemplate('mutable', 'templateElement', 'accepts', 'optional', 'like', 'likeNode')) {
         this.mutable = this.templateElement.matches(Mavo.selectors.multiple);
-        this.accepts = (this.templateElement.getAttribute("mv-accepts") || "").split(/\s+/);
+        this.accepts = (this.templateElement.getAttribute('mv-accepts') || '').split(/\s+/);
+        this.like = this.templateElement.getAttribute('mv-like');
+
+        if (this.like) {
+          this.likeNode = this.resolve(this.like, { exclude: this });
+          this.likeNode = this.likeNode || this.likeNode.template;
+
+          if (!this.likeNode) {
+            this.like = null;
+          }
+        }
+
+        this.optional = Boolean(this.like) || this.templateElement.hasAttribute('mv-optional');
 
         // Must clone because otherwise once expressions are parsed on the template element
         // we will not be able to pick them up from subsequent items
         this.templateElement = this.templateElement.cloneNode(true);
       }
 
-      var item = this.createItem(this.element);
-      this.add(item, undefined, { silent: true });
-      this.itemTemplate = item.template || item;
+      if (this.likeNode) {
+        this.itemTemplate = this.likeNode;
+        var templateElement = $.value(this.likeNode.collection, 'templateElement') || this.likeNode.element;
+        this.templateElement = templateElement.cloneNode(true);
+        this.templateElement.setAttribute('property', this.property);
+        this.properties = this.likeNode.properties;
+      } else if (!this.optional || !this.template) {
+        var item = this.createItem(this.element);
+        this.add(item, undefined, { silent: true });
+
+        if (this.optional) {
+          this.delete(item, true);
+        }
+      }
+
+      if (this.optional) {
+        this.element.remove();
+      }
 
       this.postInit();
 
-      Mavo.hooks.run("collection-init-end", this);
+      Mavo.hooks.run('collection-init-end', this);
     },
+
 
     get length() {
       return this.children.length;
@@ -5971,10 +6116,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         env.data = Mavo.subset(this.data, this.inPath, env.data);
       }
 
-      Mavo.hooks.run("node-getdata-end", env);
+      Mavo.hooks.run('node-getdata-end', env);
 
       return env.data;
     },
+
 
     // Create item but don't insert it anywhere
     // Mostly used internally
@@ -5983,22 +6129,29 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         element = this.templateElement.cloneNode(true);
       }
 
+      var template = this.itemTemplate || (this.template ? this.template.itemTemplate : null);
+
       var item = Mavo.Node.create(element, this.mavo, {
         collection: this,
-        template: this.itemTemplate || (this.template ? this.template.itemTemplate : null),
+        template: template,
         property: this.property,
         type: this.type
       });
 
+      if (!this.itemTemplate) {
+        this.itemTemplate = template || item;
+      }
+
       return item;
     },
 
+
     /**
-   * Add a new item to this collection
-   * @param item {Node|Mavo.Node} Optional. Element or Mavo object for the new item
-   * @param index {Number} Optional. Index of existing item, will be added opposite to list direction
-   * @param silent {Boolean} Optional. Throw a datachange event? Mainly used internally.
-   */
+     * Add a new item to this collection
+     * @param item {Node|Mavo.Node} Optional. Element or Mavo object for the new item
+     * @param index {Number} Optional. Index of existing item, will be added opposite to list direction
+     * @param silent {Boolean} Optional. Throw a datachange event? Mainly used internally.
+     */
     add: function add(item, index) {
       var _this = this;
 
@@ -6017,7 +6170,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       if (this.mutable) {
         // Add it to the DOM, or fix its place
         var rel = this.children[index] ? this.children[index].element : this.marker;
-        $[this.bottomUp ? "after" : "before"](item.element, rel);
+        $[this.bottomUp ? 'after' : 'before'](item.element, rel);
 
         if (index === undefined) {
           index = this.bottomUp ? 0 : this.length;
@@ -6045,7 +6198,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       if (this.mavo.expressions.active && !o.silent) {
         requestAnimationFrame(function () {
           env.changed.forEach(function (i) {
-            i.dataChanged(i == env.item && env.previousIndex === undefined ? "add" : "move");
+            i.dataChanged(i === env.item && env.previousIndex === undefined ? 'add' : 'move');
             i.unsavedChanges = true;
           });
 
@@ -6055,11 +6208,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         });
       }
 
-      Mavo.hooks.run("collection-add-end", env);
+      Mavo.hooks.run('collection-add-end', env);
 
       return env.item;
     },
-
     splice: function splice() {
       var _this2 = this;
 
@@ -6091,7 +6243,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           action.remove = action.remove || 0;
           action.add = Mavo.toArray(action.add);
 
-          (_children = _this2.children).splice.apply(_children, [action.index, +action.remove].concat(_toConsumableArray(action.add)));
+          (_children = _this2.children).splice.apply(_children, [action.index, Number(action.remove)].concat((0, _toConsumableArray3.default)(action.add)));
         }
       });
 
@@ -6108,14 +6260,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       return changed;
     },
-
     adopt: function adopt(item) {
       var _this3 = this;
 
       if (item.collection) {
         // It belongs to another collection, delete from there first
         item.collection.splice({ remove: item });
-        item.collection.dataChanged("delete");
+        item.collection.dataChanged('delete');
       }
 
       // Update collection & closestCollection properties
@@ -6139,7 +6290,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         item.template = this.itemTemplate;
       }
     },
-
     delete: function _delete(item, hard) {
       var _this4 = this;
 
@@ -6152,19 +6302,20 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
 
       return $.transition(item.element, { opacity: 0 }).then(function () {
-        item.deleted = true; // schedule for deletion
-        item.element.style.opacity = "";
+        item.deleted = true; // Schedule for deletion
+        item.element.style.opacity = '';
 
-        item.dataChanged("delete");
+        item.dataChanged('delete');
 
         _this4.unsavedChanges = item.unsavedChanges = _this4.mavo.unsavedChanges = true;
       });
     },
 
+
     /**
-   * Move existing item to a new position. Wraps around if position is out of bounds.
-   * @offset relative position
-   */
+     * Move existing item to a new position. Wraps around if position is out of bounds.
+     * @offset relative position
+     */
     move: function move(item, offset) {
       var index = item.index + offset + (offset > 0);
 
@@ -6176,7 +6327,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         item.itembar.reposition();
       }
     },
-
     editItem: function editItem(item) {
       var _this5 = this;
 
@@ -6196,7 +6346,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return item.edit(o);
       });
     },
-
     edit: function edit() {
       var _this6 = this;
 
@@ -6212,7 +6361,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           var tag = this.element.tagName.toLowerCase();
           var containerSelector = Mavo.selectors.container[tag];
           var rel = containerSelector ? this.marker.parentNode.closest(containerSelector) : this.marker;
-          $[this.bottomUp ? "before" : "after"](this.addButton, rel);
+          $[this.bottomUp ? 'before' : 'after'](this.addButton, rel);
         }
 
         // Set up drag & drop
@@ -6226,7 +6375,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return _this6.editItem(item, o);
       }));
     },
-
     done: function done() {
       if (this.super.done.call(this) === false) {
         return false;
@@ -6244,14 +6392,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         });
       }
     },
-
     dataChanged: function dataChanged(action) {
       var o = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
       o.element = o.element || this.marker;
       return this.super.dataChanged.call(this, action, o);
     },
-
     save: function save() {
       var _this7 = this;
 
@@ -6264,7 +6410,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       });
     },
 
-    propagated: ["save"],
+
+    propagated: ['save'],
 
     dataRender: function dataRender(data) {
       var _this8 = this;
@@ -6289,7 +6436,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           if (i < data.length) {
             item.render(data[i]);
           } else {
-            item.dataChanged("delete");
+            item.dataChanged('delete');
             this.delete(item, true);
             i--;
           }
@@ -6311,7 +6458,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             fragment.appendChild(item.element);
 
             var env = { context: this, item: item };
-            Mavo.hooks.run("collection-add-end", env);
+            Mavo.hooks.run('collection-add-end', env);
           }
 
           if (this.bottomUp) {
@@ -6321,7 +6468,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           }
 
           for (var j = i; j < this.children.length; j++) {
-            this.children[j].dataChanged("add");
+            this.children[j].dataChanged('add');
 
             if (this.mavo.expressions.active) {
               requestAnimationFrame(function () {
@@ -6332,15 +6479,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       }
     },
-
     find: function find(property) {
       var o = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
+      if (o.exclude === this) {
+        return;
+      }
+
       var items = this.children.filter(function (item) {
-        return !item.deleted;
+        return !item.deleted && !item.hidden;
       });
 
-      if (this.property == property) {
+      if (this.property === property) {
         return o.collections ? this : items;
       }
 
@@ -6352,10 +6502,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return Mavo.flatten(ret);
       }
     },
-
     isCompatible: function isCompatible(c) {
-      return c && this.itemTemplate.nodeType == c.itemTemplate.nodeType && (c === this || c.template == this || this.template == c || this.template && this.template == c.template || this.accepts.indexOf(c.property) > -1);
+      return c && this.itemTemplate.nodeType === c.itemTemplate.nodeType && (c === this || c.template === this || this.template === c || this.template && this.template === c.template || this.accepts.indexOf(c.property) > -1);
     },
+
 
     live: {
       mutable: function mutable(value) {
@@ -6366,8 +6516,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           this._mutable = value;
 
           // Keep position of the template in the DOM, since we might remove it
-          this.marker = document.createComment("mv-marker");
-          Mavo.data(this.marker, "collection", this);
+          this.marker = document.createComment('mv-marker');
+          Mavo.data(this.marker, 'collection', this);
 
           var ref = this.templateElement.parentNode ? this.templateElement : this.children[this.length - 1].element;
 
@@ -6406,7 +6556,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           return false;
         },
         moves: function moves(el, container, handle) {
-          return handle.classList.contains("mv-drag-handle") && handle.closest(Mavo.selectors.multiple) == el;
+          return handle.classList.contains('mv-drag-handle') && handle.closest(Mavo.selectors.multiple) === el;
         },
         accepts: function accepts(el, target, source, next) {
           if (el.contains(target)) {
@@ -6427,7 +6577,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       });
 
-      this.dragula.on("drop", function (el, target, source) {
+      this.dragula.on('drop', function (el, target, source) {
         var item = Mavo.Node.get(el);
         var oldIndex = item && item.index;
         var next = el.nextElementSibling;
@@ -6452,17 +6602,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return this.dragula;
     },
 
+
     lazy: {
       bottomUp: function bottomUp() {
         /*
-     * Add new items at the top or bottom?
-     */
+         * Add new items at the top or bottom?
+         */
 
         if (!this.mutable) {
           return false;
         }
 
-        var order = this.templateElement.getAttribute("mv-order");
+        var order = this.templateElement.getAttribute('mv-order');
 
         if (order !== null) {
           // Attribute has the highest priority and overrides any heuristics
@@ -6476,43 +6627,42 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
 
         // If add button is already in the DOM and *before* our template, then we default to prepending
-        return !!(this.addButton.compareDocumentPosition(this.marker) & Node.DOCUMENT_POSITION_FOLLOWING);
+        return Boolean(this.addButton.compareDocumentPosition(this.marker) & Node.DOCUMENT_POSITION_FOLLOWING);
       },
-
       closestCollection: function closestCollection() {
         var parent = this.marker ? this.marker.parentNode : this.templateElement.parentNode;
 
         return parent.closest(Mavo.selectors.multiple);
       },
-
       addButton: function addButton() {
         var _this10 = this;
 
         // Find add button if provided, or generate one
-        var selector = "button.mv-add-" + this.property;
+        var selector = 'button.mv-add-' + this.property;
         var group = this.closestCollection || this.marker.parentNode.closest(Mavo.selectors.group);
 
         if (group) {
           var button = $$(selector, group).filter(function (button) {
-            return !_this10.templateElement.contains(button);
+            return !_this10.templateElement.contains(button) && // Is outside the template element
+            !Mavo.data(button, 'collection'); // And does not belong to another collection
           })[0];
         }
 
         if (!button) {
-          button = $.create("button", {
-            className: "mv-add",
-            textContent: this.mavo._("add-item", this)
+          button = $.create('button', {
+            className: 'mv-add',
+            textContent: this.mavo._('add-item', this)
           });
-        };
-
-        button.classList.add("mv-ui", "mv-add");
-        Mavo.data(button, "collection", this);
-
-        if (this.property) {
-          button.classList.add("mv-add-" + this.property);
         }
 
-        button.addEventListener("click", function (evt) {
+        button.classList.add('mv-ui', 'mv-add');
+        Mavo.data(button, 'collection', this);
+
+        if (this.property) {
+          button.classList.add('mv-add-' + this.property);
+        }
+
+        button.addEventListener('click', function (evt) {
           evt.preventDefault();
 
           _this10.editItem(_this10.add());
@@ -6526,7 +6676,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       dragulas: [],
       get: function get(element) {
         // Is it an add button or a marker?
-        var collection = Mavo.data(element, "collection");
+        var collection = Mavo.data(element, 'collection');
 
         if (collection) {
           return collection;
@@ -6540,52 +6690,54 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       lazy: {
         dragula: function dragula() {
-          return $.include(self.dragula, "https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js");
+          return $.include(self.dragula, 'https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js');
         }
       }
     }
   });
 })(Bliss, Bliss.$);
-"use strict";
+'use strict';
+
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
 (function ($, $$) {
-
   var _ = Mavo.UI.Itembar = $.Class({
     constructor: function constructor(item) {
       var _this = this;
 
       this.item = item;
 
-      this.element = $$(".mv-item-bar:not([mv-rel]), .mv-item-bar[mv-rel=\"" + this.item.property + "\"]", this.item.element).filter(function (el) {
+      this.element = $$('.mv-item-bar:not([mv-rel]), .mv-item-bar[mv-rel="' + this.item.property + '"]', this.item.element).filter(function (el) {
         // Remove item controls meant for other collections
-        return el.closest(Mavo.selectors.multiple) == _this.item.element && !Mavo.data(el, "item");
+        return el.closest(Mavo.selectors.multiple) === _this.item.element && !Mavo.data(el, 'item');
       })[0];
 
       if (!this.element && this.item.template && this.item.template.itembar) {
         // We can clone the buttons from the template
         this.element = this.item.template.itembar.element.cloneNode(true);
-        this.dragHandle = $(".mv-drag-handle", this.element) || this.item.element;
+        this.dragHandle = $('.mv-drag-handle', this.element) || this.item.element;
       } else {
         // First item of this type
         this.element = this.element || $.create({
-          className: "mv-item-bar mv-ui"
+          className: 'mv-item-bar mv-ui'
         });
 
         var buttons = [{
-          tag: "button",
-          title: this.mavo._("delete-item", this.item),
-          className: "mv-delete"
+          tag: 'button',
+          title: this.mavo._('delete-item', this.item),
+          className: 'mv-delete'
         }, {
-          tag: "button",
-          title: this.mavo._("add-item-" + (this.collection.bottomUp ? "after" : "before"), this.item),
-          className: "mv-add"
+          tag: 'button',
+          title: this.mavo._('add-item-' + (this.collection.bottomUp ? 'after' : 'before'), this.item),
+          className: 'mv-add'
         }];
 
         if (this.item instanceof Mavo.Group) {
           this.dragHandle = $.create({
-            tag: "button",
-            title: this.mavo._("drag-to-reorder", this.item),
-            className: "mv-drag-handle"
+            tag: 'button',
+            title: this.mavo._('drag-to-reorder', this.item),
+            className: 'mv-drag-handle'
           });
 
           buttons.push(this.dragHandle);
@@ -6594,25 +6746,25 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
 
         $.set(this.element, {
-          "mv-rel": this.item.property,
+          'mv-rel': this.item.property,
           contents: buttons
         });
       }
 
-      this.element.setAttribute("hidden", "");
+      this.element.setAttribute('hidden', '');
 
-      $.bind([this.item.element, this.element], "focusin mouseover", this);
+      $.bind([this.item.element, this.element], 'focusin mouseover', this);
 
       $.bind(this.element, {
         mouseenter: function mouseenter(evt) {
-          _this.item.element.classList.add("mv-highlight");
+          _this.item.element.classList.add('mv-highlight');
         },
         mouseleave: function mouseleave(evt) {
-          _this.item.element.classList.remove("mv-highlight");
+          _this.item.element.classList.remove('mv-highlight');
         }
       });
 
-      this.dragHandle.addEventListener("keydown", function (evt) {
+      this.dragHandle.addEventListener('keydown', function (evt) {
         if (evt.target === _this.dragHandle && _this.item.editing && evt.keyCode >= 37 && evt.keyCode <= 40) {
           // Arrow keys
           _this.collection.move(_this.item, evt.keyCode <= 38 ? -1 : 1);
@@ -6624,12 +6776,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       });
 
       var selectors = {
-        add: this.buttonSelector("add"),
-        delete: this.buttonSelector("delete"),
-        drag: this.buttonSelector("drag")
+        add: this.buttonSelector('add'),
+        delete: this.buttonSelector('delete'),
+        drag: this.buttonSelector('drag')
       };
 
-      this.element.addEventListener("click", function (evt) {
+      this.element.addEventListener('click', function (evt) {
         if (_this.item.collection.editing) {
           if (evt.target.matches(selectors.add)) {
             var newItem = _this.collection.add(null, _this.item.index);
@@ -6643,7 +6795,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             return _this.collection.editItem(newItem);
           } else if (evt.target.matches(selectors.delete)) {
             _this.item.collection.delete(item);
-          } else if (evt.target.matches(selectors["drag-handle"])) {
+          } else if (evt.target.matches(selectors['drag-handle'])) {
             (function (evt) {
               return evt.target.focus();
             });
@@ -6651,13 +6803,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       });
 
-      Mavo.data(this.element, "item", this.item);
+      Mavo.data(this.element, 'item', this.item);
     },
-
     destroy: function destroy() {
       this.hide();
     },
-
     show: function show(sticky) {
       var _this2 = this;
 
@@ -6670,23 +6820,22 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       _.visible.add(this);
 
-      if (this.element.hasAttribute("hidden") || sticky && !this.sticky) {
-        this.element.removeAttribute("hidden");
+      if (this.element.hasAttribute('hidden') || sticky && !this.sticky) {
+        this.element.removeAttribute('hidden');
         this.sticky = this.sticky || sticky;
-        $.bind([this.item.element, this.element], "focusout mouseleave", this);
+        $.bind([this.item.element, this.element], 'focusout mouseleave', this);
 
         if (this.adjacent) {
           // Position
           $.style(this.element, {
-            "--mv-item-width": this.item.element.offsetWidth + "px",
-            "--mv-item-height": this.item.element.offsetHeight + "px",
-            "--mv-item-left": this.item.element.offsetLeft + "px",
-            "--mv-item-top": this.item.element.offsetTop + "px"
+            '--mv-item-width': this.item.element.offsetWidth + 'px',
+            '--mv-item-height': this.item.element.offsetHeight + 'px',
+            '--mv-item-left': this.item.element.offsetLeft + 'px',
+            '--mv-item-top': this.item.element.offsetTop + 'px'
           });
         }
       }
     },
-
     hide: function hide(sticky) {
       var _this3 = this;
 
@@ -6698,21 +6847,20 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             return _this3.hide(sticky);
           }, timeout);
         } else {
-          this.element.setAttribute("hidden", "");
-          $.unbind([this.item.element, this.element], "focusout mouseleave", this);
+          this.element.setAttribute('hidden', '');
+          $.unbind([this.item.element, this.element], 'focusout mouseleave', this);
           this.sticky = false;
           _.visible.delete(this);
         }
       }
     },
-
     handleEvent: function handleEvent(evt) {
-      var sticky = evt.type.indexOf("mouse") === -1;
+      var sticky = evt.type.indexOf('mouse') === -1;
 
       if (this.isWithinItem(evt.target)) {
         clearTimeout(this.hideTimeout);
 
-        if (["mouseleave", "focusout", "blur"].indexOf(evt.type) > -1) {
+        if (['mouseleave', 'focusout', 'blur'].indexOf(evt.type) > -1) {
           if (!this.isWithinItem(evt.relatedTarget)) {
             this.hide(sticky, _.DELAY);
           }
@@ -6722,16 +6870,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       }
     },
-
     isWithinItem: function isWithinItem(element) {
       if (!element) {
         return false;
       }
 
-      var itemBar = element.closest(".mv-item-bar");
+      var itemBar = element.closest('.mv-item-bar');
       return itemBar ? itemBar === this.element : element.closest(Mavo.selectors.item) === this.item.element;
     },
-
     add: function add() {
       if (!this.element.parentNode) {
         if (!Mavo.revocably.add(this.element)) {
@@ -6744,19 +6890,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       }
 
-      if (this.dragHandle == this.item.element) {
-        this.item.element.classList.add("mv-drag-handle");
+      if (this.dragHandle === this.item.element) {
+        this.item.element.classList.add('mv-drag-handle');
       }
     },
-
     remove: function remove() {
       Mavo.revocably.remove(this.element);
 
-      if (this.dragHandle == this.item.element) {
-        this.item.element.classList.remove("mv-drag-handle");
+      if (this.dragHandle === this.item.element) {
+        this.item.element.classList.remove('mv-drag-handle');
       }
     },
-
     reposition: function reposition() {
       if (this.item instanceof Mavo.Primitive) {
         // This is only needed for lists of primitives, because the item element
@@ -6766,24 +6910,23 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         this.add();
       }
     },
-
     buttonSelector: function buttonSelector(type) {
-      return ".mv-" + type + "[mv-rel=\"" + this.item.property + "\"], [mv-rel=\"" + this.item.property + "\"] > .mv-" + type;
+      return '.mv-' + type + '[mv-rel="' + this.item.property + '"], [mv-rel="' + this.item.property + '"] > .mv-' + type;
     },
+
 
     live: {
       sticky: function sticky(v) {
-        this.element.classList.toggle("mv-sticky", v);
+        this.element.classList.toggle('mv-sticky', v);
       },
-
       adjacent: function adjacent(v) {
-        this.element.classList.toggle("mv-adjacent", v);
+        this.element.classList.toggle('mv-adjacent', v);
       }
     },
 
     proxy: {
-      collection: "item",
-      mavo: "item"
+      collection: 'item',
+      mavo: 'item'
     },
 
     static: {
@@ -6792,21 +6935,26 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
   });
 })(Bliss, Bliss.$);
-"use strict";
+'use strict';
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
 
-(function ($, $$) {
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-  Mavo.attributes.push("mv-expressions");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
+
+(function ($) {
+  Mavo.attributes.push('mv-expressions');
 
   var _ = Mavo.Expression = $.Class({
     constructor: function constructor(expression) {
       this.expression = expression;
     },
-
     eval: function _eval(data) {
-      Mavo.hooks.run("expression-eval-beforeeval", this);
+      Mavo.hooks.run('expression-eval-beforeeval', this);
 
       try {
         if (!this.function) {
@@ -6815,22 +6963,20 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
         return this.function(data);
       } catch (exception) {
-        console.info("%cExpression error!", "color: red; font-weight: bold", exception.message + " in expression " + this.expression, "\nNot an expression? Use mv-expressions=\"none\" to disable expressions on an element and its descendants.");
+        console.info('%cExpression error!', 'color: red; font-weight: bold', exception.message + ' in expression ' + this.expression, '\nNot an expression? Use mv-expressions="none" to disable expressions on an element and its descendants.');
 
-        Mavo.hooks.run("expression-eval-error", { context: this, exception: exception });
+        Mavo.hooks.run('expression-eval-error', { context: this, exception: exception });
 
         return exception;
       }
     },
-
     toString: function toString() {
       return this.expression;
     },
-
-
     changedBy: function changedBy(evt) {
       return _.changedBy(this.identifiers, evt);
     },
+
 
     live: {
       expression: function expression(value) {
@@ -6857,18 +7003,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           return true;
         }
 
-        if (evt.action == "propertychange") {
+        if (evt.action === 'propertychange') {
           return Mavo.Functions.intersects(identifiers, evt.node.path);
-        } else {
-          if (Mavo.Functions.intersects(["$index", "$previous", "$next"], identifiers)) {
-            return true;
-          }
+        }
 
-          var collection = evt.node.collection || evt.node;
+        if (Mavo.Functions.intersects(['$index', '$previous', '$next'], identifiers)) {
+          return true;
+        }
 
-          if (Mavo.Functions.intersects(collection.properties, identifiers)) {
-            return true;
-          }
+        var collection = evt.node.collection || evt.node;
+
+        if (Mavo.Functions.intersects(collection.properties, identifiers)) {
+          return true;
         }
 
         return false;
@@ -6880,17 +7026,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     constructor: function constructor(start, end) {
       this.start = start;
       this.end = end;
-      this.regex = RegExp(Mavo.escapeRegExp(start) + "([\\S\\s]+?)" + Mavo.escapeRegExp(end), "gi");
+      this.regex = RegExp(Mavo.escapeRegExp(start) + '([\\S\\s]+?)' + Mavo.escapeRegExp(end), 'gi');
     },
-
     test: function test(str) {
       this.regex.lastIndex = 0;
 
       return this.regex.test(str);
     },
-
     tokenize: function tokenize(str) {
-      var match,
+      var match = void 0,
           ret = [],
           lastIndex = 0;
 
@@ -6915,31 +7059,39 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return ret;
     },
 
+
     static: {
       create: function create(element) {
         if (element) {
-          var syntax = element.getAttribute("mv-expressions");
+          var syntax = element.getAttribute('mv-expressions');
 
           if (syntax) {
             syntax = syntax.trim();
-            return (/\s/.test(syntax) ? new (Function.prototype.bind.apply(_.Syntax, [null].concat(_toConsumableArray(syntax.split(/\s+/)))))() : _.Syntax.ESCAPE
+            return (/\s/.test(syntax) ? new (Function.prototype.bind.apply(_.Syntax, [null].concat((0, _toConsumableArray3.default)(syntax.split(/\s+/)))))() : _.Syntax.ESCAPE
             );
           }
         }
       },
 
+
       ESCAPE: -1
     }
   });
 
-  _.Syntax.default = new _.Syntax("[", "]");
-})(Bliss, Bliss.$);
-"use strict";
+  _.Syntax.default = new _.Syntax('[', ']');
+})(Bliss);
+'use strict';
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
 
-(function ($, $$) {
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
+
+(function ($) {
   var _ = Mavo.DOMExpression = $.Class({
     constructor: function constructor() {
       var _this = this;
@@ -6949,7 +7101,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this.mavo = o.mavo;
       this.template = o.template && o.template.template || o.template;
 
-      var _arr = ["item", "path", "syntax", "fallback", "attribute", "originalAttribute", "expression", "parsed"];
+      var _arr = ['item', 'path', 'syntax', 'fallback', 'attribute', 'originalAttribute', 'expression', 'parsed'];
       for (var _i = 0; _i < _arr.length; _i++) {
         var prop = _arr[_i];
         this[prop] = o[prop] === undefined && this.template ? this.template[prop] : o[prop];
@@ -6965,14 +7117,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this.element = this.node;
       this.attribute = this.attribute || null;
 
-      Mavo.hooks.run("domexpression-init-start", this);
+      Mavo.hooks.run('domexpression-init-start', this);
 
-      if (this.attribute == "mv-value") {
-        this.originalAttribute = "mv-value";
+      if (this.attribute === 'mv-value') {
+        this.originalAttribute = 'mv-value';
         this.attribute = Mavo.Primitive.getValueAttribute(this.element);
         this.fallback = this.fallback || Mavo.Primitive.getValue(this.element, { attribute: this.attribute });
-        var expression = this.element.getAttribute("mv-value");
-        this.element.removeAttribute("mv-value");
+        var expression = this.element.getAttribute('mv-value');
+        this.element.removeAttribute('mv-value');
         this.parsed = [new Mavo.Expression(expression)];
         this.expression = this.syntax.start + expression + this.syntax.end;
       }
@@ -6994,7 +7146,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           // Some web components (e.g. AFrame) hijack getAttribute()
           var value = Element.prototype.getAttribute.call(this.node, this.attribute);
 
-          this.expression = (value || "").trim();
+          this.expression = (value || '').trim();
         } else {
           // Move whitespace outside to prevent it from messing with types
           this.node.normalize();
@@ -7031,24 +7183,22 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           _this.item = Mavo.Node.get(_this.element.closest(Mavo.selectors.item));
         }
 
-        if (_this.originalAttribute == "mv-value" && _this.mavoNode && _this.mavoNode == _this.item.collection) {
+        if (_this.originalAttribute === 'mv-value' && _this.mavoNode && _this.mavoNode === _this.item.collection) {
           Mavo.delete(_this.item.expressions, _this);
         }
 
-        Mavo.hooks.run("domexpression-init-treebuilt", _this);
+        Mavo.hooks.run('domexpression-init-treebuilt', _this);
       });
 
-      Mavo.hooks.run("domexpression-init-end", this);
+      Mavo.hooks.run('domexpression-init-end', this);
 
-      _.elements.set(this.element, [].concat(_toConsumableArray(_.elements.get(this.element) || []), [this]));
+      _.elements.set(this.element, [].concat((0, _toConsumableArray3.default)(_.elements.get(this.element) || []), [this]));
     },
-
     destroy: function destroy() {
       _.special.delete(this);
     },
-
     changedBy: function changedBy(evt) {
-      if (this.originalAttribute == "mv-value" && this.mavoNode && !(this.mavoNode instanceof Mavo.Primitive)) {
+      if (this.originalAttribute === 'mv-value' && this.mavoNode && !(this.mavoNode instanceof Mavo.Primitive)) {
         // Just prevent the same node from triggering changes, everything else is game
         return !evt || !this.mavoNode.contains(evt.node);
       }
@@ -7064,7 +7214,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       return Mavo.Expression.changedBy(this.identifiers, evt);
     },
-
     update: function update() {
       var _this2 = this;
 
@@ -7076,7 +7225,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       this.data = data;
 
-      Mavo.hooks.run("domexpression-update-start", env);
+      Mavo.hooks.run('domexpression-update-start', env);
 
       this.oldValue = this.value;
       var changed = false;
@@ -7084,29 +7233,29 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       env.value = this.value = this.parsed.map(function (expr, i) {
         if (expr instanceof Mavo.Expression) {
           if (expr.changedBy(parentEnv.event)) {
-            var env = { context: _this2, expr: expr, parentEnv: parentEnv };
+            var _env = { context: _this2, expr: expr, parentEnv: parentEnv };
 
-            Mavo.hooks.run("domexpression-update-beforeeval", env);
+            Mavo.hooks.run('domexpression-update-beforeeval', _env);
 
-            env.value = Mavo.value(env.expr.eval(data));
+            _env.value = Mavo.value(_env.expr.eval(data));
 
-            Mavo.hooks.run("domexpression-update-aftereval", env);
+            Mavo.hooks.run('domexpression-update-aftereval', _env);
 
             changed = true;
 
-            if (env.value instanceof Error) {
-              return _this2.fallback !== undefined ? _this2.fallback : _this2.syntax.start + env.expr.expression + _this2.syntax.end;
+            if (_env.value instanceof Error) {
+              return _this2.fallback !== undefined ? _this2.fallback : _this2.syntax.start + _env.expr.expression + _this2.syntax.end;
             }
 
-            if (env.value === undefined || env.value === null) {
+            if (_env.value === undefined || _env.value === null) {
               // Don’t print things like "undefined" or "null"
-              return "";
+              return '';
             }
 
-            return env.value;
-          } else {
-            return _this2.oldValue[i];
+            return _env.value;
           }
+
+          return _this2.oldValue[i];
         }
 
         return expr;
@@ -7125,14 +7274,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             attribute: _this2.attribute,
             element: _this2.element
           });
-        }).join("");
+        }).join('');
       }
 
       this.output(env.value);
 
-      Mavo.hooks.run("domexpression-update-end", env);
+      Mavo.hooks.run('domexpression-update-end', env);
     },
-
     output: function output(value) {
       if (this.primitive) {
         this.primitive.value = value;
@@ -7142,6 +7290,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         Mavo.Primitive.setValue(this.node, value, { attribute: this.attribute });
       }
     },
+
 
     live: {
       item: function item(_item) {
@@ -7161,12 +7310,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       elements: new WeakMap(),
 
       /**
-    * Search for Mavo.DOMExpression object(s) associated with a given element
-    * and optionally an attribute.
-    *
-    * @return If one argument, array of matching DOMExpression objects.
-    *         If two arguments, the matching DOMExpression object or null
-    */
+       * Search for Mavo.DOMExpression object(s) associated with a given element
+       * and optionally an attribute.
+       *
+       * @return If one argument, array of matching DOMExpression objects.
+       *         If two arguments, the matching DOMExpression object or null
+       */
       search: function search(element, attribute) {
         if (element === null) {
           return element;
@@ -7186,6 +7335,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
         return all;
       },
+
 
       special: {
         add: function add(domexpression, name) {
@@ -7209,7 +7359,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             }
           }
         },
-
         delete: function _delete(domexpression, name) {
           if (name) {
             var o = this.vars[name];
@@ -7227,7 +7376,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             }
           }
         },
-
         update: function update() {
           if (this.update) {
             this.update.apply(this, arguments);
@@ -7237,7 +7385,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             return domexpression.update();
           });
         },
-
         event: function event(name) {
           var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
               type = _ref.type,
@@ -7262,8 +7409,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           }
         },
 
+
         vars: {
-          "$now": {
+          $now: {
             observe: function observe() {
               var _this3 = this;
 
@@ -7283,24 +7431,30 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
   });
 
-  _.special.event("$mouse", {
-    type: "mousemove",
+  _.special.event('$mouse', {
+    type: 'mousemove',
     update: function update(evt) {
       return { x: evt.clientX, y: evt.clientY };
     }
   });
 
-  _.special.event("$hash", {
-    type: "hashchange",
+  _.special.event('$hash', {
+    type: 'hashchange',
     target: window
   });
-})(Bliss, Bliss.$);
-"use strict";
+})(Bliss);
+'use strict';
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
 (function ($, $$) {
-
   var _ = Mavo.Expressions = $.Class({
     constructor: function constructor(mavo) {
       var _this = this;
@@ -7310,7 +7464,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       this.expressions = [];
 
-      var syntax = Mavo.Expression.Syntax.create(this.mavo.element.closest("[mv-expressions]")) || Mavo.Expression.Syntax.default;
+      var syntax = Mavo.Expression.Syntax.create(this.mavo.element.closest('[mv-expressions]')) || Mavo.Expression.Syntax.default;
       this.traverse(this.mavo.element, undefined, syntax);
 
       this.scheduled = {};
@@ -7319,7 +7473,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         _this.expressions = [];
 
         // Watch changes and update value
-        document.documentElement.addEventListener("mv-change", function (evt) {
+        document.documentElement.addEventListener('mv-change', function (evt) {
           if (!_this.active) {
             return;
           }
@@ -7346,13 +7500,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         _this.update();
       });
     },
-
     update: function update(evt) {
       if (!this.active) {
         return;
       }
 
-      var root, rootObject;
+      var root = void 0,
+          rootObject = void 0;
 
       if (evt instanceof Mavo.Node) {
         rootObject = evt;
@@ -7369,7 +7523,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       rootObject.walk(function (obj, path) {
         if (obj.expressions && obj.expressions.length && !obj.isDeleted()) {
-          var data = $.value.apply($, [allData].concat(_toConsumableArray(path)));
+          var data = $.value.apply($, [allData].concat((0, _toConsumableArray3.default)(path)));
 
           obj.expressions.forEach(function (et) {
             if (et.changedBy(evt)) {
@@ -7379,11 +7533,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
       });
     },
-
     extract: function extract(node, attribute, path) {
       var syntax = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : Mavo.Expression.Syntax.default;
 
-      if (attribute && attribute.name == "mv-expressions") {
+      if (attribute && attribute.name === 'mv-expressions') {
         return;
       }
 
@@ -7399,6 +7552,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }));
       }
     },
+
 
     // Traverse an element, including attribute nodes, text nodes and all descendants
     traverse: function traverse(node) {
@@ -7422,7 +7576,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
         syntax = Mavo.Expression.Syntax.create(node) || syntax;
 
-        if (Mavo.is("item", node)) {
+        if (Mavo.is('item', node)) {
           path = [];
         }
 
@@ -7433,26 +7587,27 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         var index = -1,
             offset = 0;
 
-        if (!node.matches("script:not([mv-expressions])")) {
+        if (!node.matches('script:not([mv-expressions])')) {
           $$(node.childNodes).forEach(function (child) {
-            if (child.nodeType == 1) {
+            if (child.nodeType === 1) {
               offset = 0;
               index++;
             } else {
               offset++;
             }
 
-            if (child.nodeType == 1 || child.nodeType == 3) {
-              var segment = offset > 0 ? index + "." + offset : index;
-              _this2.traverse(child, [].concat(_toConsumableArray(path || []), [segment]), syntax);
+            if (child.nodeType === 1 || child.nodeType === 3) {
+              var segment = offset > 0 ? index + '.' + offset : index;
+              _this2.traverse(child, [].concat((0, _toConsumableArray3.default)(path || []), [segment]), syntax);
             }
           });
         }
       }
     },
 
+
     static: {
-      directives: ["mv-value"],
+      directives: ['mv-value'],
 
       THROTTLE: 50,
 
@@ -7464,16 +7619,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
   });
 })(Bliss, Bliss.$);
-"use strict";
+'use strict';
 
-// mv-if plugin
+/* global Mavo, Bliss */
+
+// Mv-if plugin
 (function ($, $$) {
-
-  Mavo.Expressions.directive("mv-if", {
+  Mavo.Expressions.directive('mv-if', {
     extend: {
-      "Primitive": {
+      Primitive: {
         live: {
-          "hidden": function hidden(value) {
+          hidden: function hidden(value) {
             if (this._hidden !== value) {
               this._hidden = value;
               this.dataChanged();
@@ -7481,13 +7637,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           }
         }
       },
-      "DOMExpression": {
+      DOMExpression: {
         lazy: {
-          "childProperties": function childProperties() {
+          childProperties: function childProperties() {
             var _this = this;
 
             var properties = $$(Mavo.selectors.property, this.element).filter(function (el) {
-              return el.closest("[mv-if]") == _this.element;
+              return el.closest('[mv-if]') === _this.element;
             }).map(function (el) {
               return Mavo.Node.get(el);
             });
@@ -7495,11 +7651,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             // When the element is detached, datachange events from properties
             // do not propagate up to the group so expressions do not recalculate.
             // We must do this manually.
-            this.element.addEventListener("mv-change", function (evt) {
+            this.element.addEventListener('mv-change', function (evt) {
               // Cannot redispatch synchronously [why??]
               requestAnimationFrame(function () {
                 if (!_this.element.parentNode) {
-                  // out of the DOM?
+                  // Out of the DOM?
                   _this.item.element.dispatchEvent(evt);
                 }
               });
@@ -7511,25 +7667,25 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
     },
     hooks: {
-      "domexpression-init-start": function domexpressionInitStart() {
-        if (this.attribute != "mv-if") {
+      'domexpression-init-start': function domexpressionInitStart() {
+        if (this.attribute !== 'mv-if') {
           return;
         }
 
-        this.expression = this.element.getAttribute("mv-if");
+        this.expression = this.element.getAttribute('mv-if');
         this.parsed = [new Mavo.Expression(this.expression)];
         this.expression = this.syntax.start + this.expression + this.syntax.end;
 
-        this.parentIf = this.element.parentNode && Mavo.DOMExpression.search(this.element.parentNode.closest("[mv-if]"), "mv-if");
+        this.parentIf = this.element.parentNode && Mavo.DOMExpression.search(this.element.parentNode.closest('[mv-if]'), 'mv-if');
 
         if (this.parentIf) {
           this.parentIf.childIfs = (this.parentIf.childIfs || new Set()).add(this);
         }
       },
-      "domexpression-update-end": function domexpressionUpdateEnd() {
+      'domexpression-update-end': function domexpressionUpdateEnd() {
         var _this2 = this;
 
-        if (this.attribute != "mv-if") {
+        if (this.attribute !== 'mv-if') {
           return;
         }
 
@@ -7550,7 +7706,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
               Mavo.revocably.add(_this2.element);
             } else if (_this2.element.parentNode) {
               // Is in the DOM and needs to be removed
-              Mavo.revocably.remove(_this2.element, "mv-if");
+              Mavo.revocably.remove(_this2.element, 'mv-if');
             }
           }
 
@@ -7570,32 +7726,39 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           }
         });
       },
-      "unit-isdatanull": function unitIsdatanull(env) {
+      'unit-isdatanull': function unitIsdatanull(env) {
         env.result = env.result || this.hidden && env.options.live;
       }
     }
   });
 })(Bliss, Bliss.$);
-"use strict";
+'use strict';
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
 
 /**
  * Functions available inside Mavo expressions
  */
 
 (function ($, val) {
-
   var _ = Mavo.Functions = {
     operators: {
-      "=": "eq"
+      '=': 'eq'
     },
 
     /**
-   * Get a property of an object. Used by the . operator to prevent TypeErrors
-   */
+     * Get a property of an object. Used by the . operator to prevent TypeErrors
+     */
     get: function get(obj, property) {
       var meta = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
@@ -7606,7 +7769,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         meta.property = canonicalProperty;
         var ret = obj[canonicalProperty];
 
-        if (typeof ret === "function" && ret.name.indexOf("bound") !== 0) {
+        if (typeof ret === 'function' && ret.name.indexOf('bound') !== 0) {
           return ret.bind(obj);
         }
 
@@ -7615,7 +7778,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       if (Array.isArray(obj) && property && isNaN(property)) {
         // Array and non-numerical property
-        var eqIndex = property.indexOf("=");
+        var eqIndex = property.indexOf('=');
 
         if (eqIndex > -1) {
           // Property query
@@ -7627,7 +7790,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           meta.property = [];
 
           ret = obj.filter(function (e, i) {
-            var passes = _.get(e, meta.query.property) == meta.query.value;
+            var passes = _.get(e, meta.query.property) === meta.query.value;
 
             if (passes) {
               meta.property.push(i);
@@ -7636,7 +7799,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             return passes;
           });
 
-          if (meta.query.property == "id") {
+          if (meta.query.property === 'id') {
             meta.property = meta.property[0];
             ret = ret[0];
           }
@@ -7648,18 +7811,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           }
 
           return ret;
-        } else {
-          // Not a property query, get from objects inside
-          // TODO meta.property = ??
-          return obj.map(function (e) {
-            return _.get(e, property);
-          });
         }
+
+        // Not a property query, get from objects inside
+        // TODO meta.property = ??
+        return obj.map(function (e) {
+          return _.get(e, property);
+        });
       }
 
       // Not found :(
       return null;
     },
+
 
     url: function url(id) {
       var _url = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : location;
@@ -7671,18 +7835,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       if (id) {
         id = str(id).replace(/[^\w-:]/g);
 
-        var ret = _url.search.match(RegExp("[?&]" + id + "(?:=(.+?))?(?=$|&)")) || _url.pathname.match(RegExp("(?:^|\\/)" + id + "\\/([^\\/]*)"));
+        var ret = _url.search.match(RegExp('[?&]' + id + '(?:=(.+?))?(?=$|&)')) || _url.pathname.match(RegExp('(?:^|\\/)' + id + '\\/([^\\/]*)'));
       }
 
-      return ret === null || !id ? null : decodeURIComponent(ret[1]) || "";
+      return ret === null || !id ? null : decodeURIComponent(ret[1]) || '';
     },
 
     // TODO return first/last non-null?
     first: function first(arr) {
-      return arr && arr[0] || "";
+      return arr && arr[0] || '';
     },
     last: function last(arr) {
-      return arr && arr[arr.length - 1] || "";
+      return arr && arr[arr.length - 1] || '';
     },
 
     unique: function unique(arr) {
@@ -7690,17 +7854,18 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return arr;
       }
 
-      return [].concat(_toConsumableArray(new Set(arr.map(val))));
+      return [].concat((0, _toConsumableArray3.default)(new Set(arr.map(val))));
     },
 
+
     /**
-   * Do two arrays or sets have a non-empty intersection?
-   * @return {Boolean}
-   */
+     * Do two arrays or sets have a non-empty intersection?
+     * @return {Boolean}
+     */
     intersects: function intersects(arr1, arr2) {
       if (arr1 && arr2) {
         var set2 = new Set(arr2.map ? arr2.map(val) : arr2);
-        arr1 = arr1.map ? arr1.map(val) : [].concat(_toConsumableArray(arr1));
+        arr1 = arr1.map ? arr1.map(val) : [].concat((0, _toConsumableArray3.default)(arr1));
 
         return !arr1.every(function (el) {
           return !set2.has(el);
@@ -7708,80 +7873,79 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
     },
 
-    /*********************
-   * Number functions
-   *********************/
+
+    /** *******************
+     * Number functions
+     ******************** */
 
     /**
-   * Aggregate sum
-   */
+     * Aggregate sum
+     */
     sum: function sum(array) {
       return $u.numbers(array, arguments).reduce(function (prev, current) {
-        return +prev + (+current || 0);
+        return Number(prev) + (Number(current) || 0);
       }, 0);
     },
 
+
     /**
-   * Average of an array of numbers
-   */
+     * Average of an array of numbers
+     */
     average: function average(array) {
       array = $u.numbers(array, arguments);
 
       return array.length && _.sum(array) / array.length;
     },
 
+
     /**
-   * Min of an array of numbers
-   */
+     * Min of an array of numbers
+     */
     min: function min(array) {
-      return Math.min.apply(Math, _toConsumableArray($u.numbers(array, arguments)));
+      return Math.min.apply(Math, (0, _toConsumableArray3.default)($u.numbers(array, arguments)));
     },
+
 
     /**
-   * Max of an array of numbers
-   */
+     * Max of an array of numbers
+     */
     max: function max(array) {
-      return Math.max.apply(Math, _toConsumableArray($u.numbers(array, arguments)));
+      return Math.max.apply(Math, (0, _toConsumableArray3.default)($u.numbers(array, arguments)));
     },
-
     count: function count(array) {
       return Mavo.toArray(array).filter(function (a) {
         return !empty(a);
       }).length;
     },
-
     reverse: function reverse(array) {
       return Mavo.toArray(array).slice().reverse();
     },
-
     round: function round(num, decimals) {
       if (not(num) || not(decimals) || !isFinite(num)) {
         return Math.round(num);
       }
 
-      return +num.toLocaleString("en-US", {
+      return Number(num.toLocaleString('en-US', {
         useGrouping: false,
         maximumFractionDigits: decimals
-      });
+      }));
     },
-
     th: function th(num) {
       if (empty(num)) {
-        return "";
+        return '';
       }
 
       if (ord < 10 || ord > 20) {
-        var ord = ["th", "st", "nd", "th"][num % 10];
+        var ord = ['th', 'st', 'nd', 'th'][num % 10];
       }
 
-      ord = ord || "th";
+      ord = ord || 'th';
 
       return num + ord;
     },
-
     iff: function iff(condition) {
       var iftrue = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : condition;
-      var iffalse = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
+      var iffalse = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
 
       if (Array.isArray(condition)) {
         return condition.map(function (c, i) {
@@ -7794,15 +7958,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return val(condition) ? iftrue : iffalse;
     },
 
-    /*********************
-   * String functions
-   *********************/
+
+    /** *******************
+     * String functions
+     ******************** */
 
     /**
-   * Replace all occurences of a string with another string
-   */
+     * Replace all occurences of a string with another string
+     */
     replace: function replace(haystack, needle) {
-      var replacement = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
+      var replacement = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
       var iterations = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
 
       if (Array.isArray(haystack)) {
@@ -7812,9 +7977,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
 
       // Simple string replacement
-      var needleRegex = RegExp(Mavo.escapeRegExp(needle), "g");
+      var needleRegex = RegExp(Mavo.escapeRegExp(needle), 'g');
       var ret = haystack,
-          prev;
+          prev = void 0;
       var counter = 0;
 
       while (ret != prev && counter++ < iterations) {
@@ -7825,15 +7990,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return ret;
     },
 
+
     len: function len(text) {
       return str(text).length;
     },
 
     /**
-   * Case insensitive search
-   */
+     * Case insensitive search
+     */
     search: function search(haystack, needle) {
-      return haystack && needle ? str(haystack).toLowerCase().indexOf((needle + "").toLowerCase()) : -1;
+      return haystack && needle ? str(haystack).toLowerCase().indexOf(String(needle).toLowerCase()) : -1;
     },
 
     starts: function starts(haystack, needle) {
@@ -7848,29 +8014,29 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var i = _.search(haystack, needle);
       return i > -1 && i === haystack.length - needle.length;
     },
-
     join: function join(array, glue) {
       return Mavo.toArray(array).join(str(glue));
     },
-
     idify: function idify(readable) {
-      return str(readable).trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Convert accented letters to ASCII
-      .replace(/[^\w\s-]/g, "") // Remove remaining non-ASCII characters
-      .replace(/\s+/g, "-") // Convert whitespace to hyphens
+      return str(readable).normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Convert accented letters to ASCII
+      .replace(/[^\w\s-]/g, '') // Remove remaining non-ASCII characters
+      .trim().replace(/\s+/g, '-') // Convert whitespace to hyphens
       .toLowerCase();
     },
+
 
     // Convert an identifier to readable text that can be used as a label
     readable: function readable(identifier) {
       // Is it camelCase?
       return str(identifier).replace(/([a-z])([A-Z])(?=[a-z])/g, function ($0, $1, $2) {
-        return $1 + " " + $2.toLowerCase();
-      }) // camelCase?
-      .replace(/([a-z0-9])[_\/-](?=[a-z0-9])/g, "$1 ") // Hyphen-separated / Underscore_separated?
+        return $1 + ' ' + $2.toLowerCase();
+      }) // CamelCase?
+      .replace(/([a-z0-9])[_\/-](?=[a-z0-9])/g, '$1 ') // Hyphen-separated / Underscore_separated?
       .replace(/^[a-z]/, function ($0) {
         return $0.toUpperCase();
       }); // Capitalize
     },
+
 
     uppercase: function uppercase(text) {
       return str(text).toUpperCase();
@@ -7883,13 +8049,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return _.between(haystack, needle);
     },
     fromlast: function fromlast(haystack, needle) {
-      return _.between(haystack, needle, "", true);
+      return _.between(haystack, needle, '', true);
     },
     to: function to(haystack, needle) {
-      return _.between(haystack, "", needle);
+      return _.between(haystack, '', needle);
     },
     tofirst: function tofirst(haystack, needle) {
-      return _.between(haystack, "", needle, true);
+      return _.between(haystack, '', needle, true);
     },
 
     between: function between(haystack, from, to, tight) {
@@ -7899,8 +8065,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       to = _ref2[2];
 
 
-      var i1 = from ? haystack[tight ? "lastIndexOf" : "indexOf"](from) : -1;
-      var i2 = haystack[tight ? "indexOf" : "lastIndexOf"](to);
+      var i1 = from ? haystack[tight ? 'lastIndexOf' : 'indexOf'](from) : -1;
+      var i2 = haystack[tight ? 'indexOf' : 'lastIndexOf'](to);
+
+      if (from && i1 === -1 || i2 === -1) {
+        return '';
+      }
 
       return haystack.slice(i1 + 1, i2 === -1 || !to ? haystack.length : i2);
     },
@@ -7913,9 +8083,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return Mavo.safeToJSON(data);
     },
 
-    /*********************
-   * Date functions
-   *********************/
+    /** *******************
+     * Date functions
+     ******************** */
 
     get $now() {
       return new Date();
@@ -7927,24 +8097,24 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return _.date(new Date());
     },
 
-    year: getDateComponent("year"),
-    month: getDateComponent("month"),
-    day: getDateComponent("day"),
-    weekday: getDateComponent("weekday"),
-    hour: getDateComponent("hour"),
-    minute: getDateComponent("minute"),
-    second: getDateComponent("second"),
-    ms: getDateComponent("ms"),
+    year: getDateComponent('year'),
+    month: getDateComponent('month'),
+    day: getDateComponent('day'),
+    weekday: getDateComponent('weekday'),
+    hour: getDateComponent('hour'),
+    minute: getDateComponent('minute'),
+    second: getDateComponent('second'),
+    ms: getDateComponent('ms'),
 
     date: function date(_date) {
       _date = $u.date(_date);
 
-      return _date ? _.year(_date) + "-" + _.month(_date).twodigit + "-" + _.day(_date).twodigit : "";
+      return _date ? _.year(_date) + '-' + _.month(_date).twodigit + '-' + _.day(_date).twodigit : '';
     },
     time: function time(date) {
       date = $u.date(date);
 
-      return date ? _.hour(date).twodigit + ":" + _.minute(date).twodigit + ":" + _.second(date).twodigit : "";
+      return date ? _.hour(date).twodigit + ':' + _.minute(date).twodigit + ':' + _.second(date).twodigit : '';
     },
 
     minutes: function minutes(seconds) {
@@ -7976,7 +8146,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         args[_key] = arguments[_key];
       }
 
-      (_console = console).log.apply(_console, _toConsumableArray(args.map(val)));
+      (_console = console).log.apply(_console, (0, _toConsumableArray3.default)(args.map(val)));
       return args[0];
     },
 
@@ -7993,17 +8163,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         array = Array.isArray(array) ? array : args ? $$(args) : [array];
 
         return array.filter(function (number) {
-          return !isNaN(number) && val(number) !== "";
+          return !isNaN(number) && val(number) !== '';
         }).map(function (n) {
-          return +n;
+          return Number(n);
         });
       },
-
       fixDateString: function fixDateString(date) {
         date = date.trim();
 
         var hasDate = /^\d{4}-\d{2}(-\d{2})?/.test(date);
-        var hasTime = date.indexOf(":") > -1;
+        var hasTime = date.indexOf(':') > -1;
 
         if (!hasDate && !hasTime) {
           return null;
@@ -8012,26 +8181,25 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         // Fix up time format
         if (!hasDate) {
           // No date, add today’s
-          date = _.$today + " " + date;
+          date = _.$today + ' ' + date;
         } else {
           // Only year-month, add day
-          date = date.replace(/^(\d{4}-\d{2})(?!-\d{2})/, "$1-01");
+          date = date.replace(/^(\d{4}-\d{2})(?!-\d{2})/, '$1-01');
         }
 
         if (!hasTime) {
           // Add a time if one doesn't exist
-          date += "T00:00:00";
+          date += 'T00:00:00';
         } else {
           // Make sure time starts with T, due to Safari bug
-          date = date.replace(/\-(\d{2})\s+(?=\d{2}:)/, "-$1T");
+          date = date.replace(/\-(\d{2})\s+(?=\d{2}:)/, '-$1T');
         }
 
         // Remove all whitespace
-        date = date.replace(/\s+/g, "");
+        date = date.replace(/\s+/g, '');
 
         return date;
       },
-
       date: function date(_date2) {
         _date2 = val(_date2);
 
@@ -8039,7 +8207,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           return null;
         }
 
-        if ($.type(_date2) === "string") {
+        if ($.type(_date2) === 'string') {
           _date2 = $u.fixDateString(_date2);
 
           if (_date2 === null) {
@@ -8049,15 +8217,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           var timezone = Mavo.match(_date2, /[+-]\d{2}:?\d{2}|Z$/);
 
           if (timezone) {
-            // parse as ISO format
+            // Parse as ISO format
             _date2 = new Date(_date2);
           } else {
-            // construct date in local timezone
+            // Construct date in local timezone
             var fields = _date2.match(/\d+/g);
             _date2 = new Date(
-            // year, month, date,
+            // Year, month, date,
             fields[0], (fields[1] || 1) - 1, fields[2] || 1,
-            // hours, minutes, seconds, milliseconds,
+            // Hours, minutes, seconds, milliseconds,
             fields[3] || 0, fields[4] || 0, fields[5] || 0, fields[6] || 0);
           }
         } else {
@@ -8078,7 +8246,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   // Make function names case insensitive
   _._Trap = self.Proxy ? new Proxy(_, {
     get: function get(functions, property) {
-      var ret;
+      var ret = void 0;
 
       var canonicalProperty = Mavo.getCanonicalProperty(functions, property) || Mavo.getCanonicalProperty(Math, property);
 
@@ -8091,7 +8259,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
 
       if (ret !== undefined) {
-        if (typeof ret === "function") {
+        if (typeof ret === 'function') {
           // For when function names are used as unquoted strings, see #160
           ret.toString = function () {
             return property;
@@ -8114,25 +8282,25 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     // the local variable it should be, but the string "data"
     // so all property lookups fail.
     has: function has(functions, property) {
-      return property != "data";
+      return property != 'data';
     }
   }) : _;
 
   /**
-  * Private helper methods
-  */
+   * Private helper methods
+   */
 
   // Convert argument to string
   function str() {
-    var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+    var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
     str = val(str);
-    return !str && str !== 0 ? "" : str + "";
+    return !str && str !== 0 ? '' : String(str);
   }
 
   function empty(v) {
     v = Mavo.value(v);
-    return v === null || v === false || v === "";
+    return v === null || v === false || v === '';
   }
 
   function not(v) {
@@ -8142,7 +8310,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   function toLocaleString(date, options) {
     var ret = date.toLocaleString(Mavo.locale, options);
 
-    ret = ret.replace(/\u200e/g, ""); // Stupid Edge bug
+    ret = ret.replace(/\u200e/g, ''); // Stupid Edge bug
 
     return ret;
   }
@@ -8179,35 +8347,42 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       date = $u.date(date);
 
       if (!date) {
-        return "";
+        return '';
       }
 
       var ret = numeric[component](date);
 
       // We don't want years to be formatted like 2,017!
-      ret = new self[component == "year" ? "String" : "Number"](ret);
+      ret = new self[component === 'year' ? 'String' : 'Number'](ret);
 
-      if (component == "month" || component == "weekday") {
-        ret.name = toLocaleString(date, _defineProperty({}, component, "long"));
-        ret.shortname = toLocaleString(date, _defineProperty({}, component, "short"));
+      if (component === 'month' || component === 'weekday') {
+        ret.name = toLocaleString(date, (0, _defineProperty3.default)({}, component, 'long'));
+        ret.shortname = toLocaleString(date, (0, _defineProperty3.default)({}, component, 'short'));
       }
 
-      if (component != "weekday") {
-        ret.twodigit = (ret % 100 < 10 ? "0" : "") + ret % 100;
+      if (component != 'weekday') {
+        ret.twodigit = (ret % 100 < 10 ? '0' : '') + ret % 100;
       }
 
       return ret;
     };
   }
 })(Bliss, Mavo.value);
-"use strict";
+'use strict';
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* global Mavo, Bliss */
 
 (function ($, val, $u) {
-
   var _ = Mavo.Script = {
     addUnaryOperator: function addUnaryOperator(name, o) {
       if (o.symbol) {
@@ -8223,12 +8398,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       };
     },
 
+
     /**
-   * Extend a scalar operator to arrays, or arrays and scalars
-   * The operation between arrays is applied element-wise.
-   * The operation operation between a scalar and an array will result in
-   * the operation being applied between the scalar and every array element.
-   */
+     * Extend a scalar operator to arrays, or arrays and scalars
+     * The operation between arrays is applied element-wise.
+     * The operation operation between a scalar and an array will result in
+     * the operation being applied between the scalar and every array element.
+     */
     addBinaryOperator: function addBinaryOperator(name, o) {
       if (o.symbol) {
         // Build map of symbols to function names for easy rewriting
@@ -8251,7 +8427,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         if (operands.length === 1) {
           if (Array.isArray(operands[0])) {
             // Operand is an array of operands, expand it out
-            operands = [].concat(_toConsumableArray(operands[0]));
+            operands = [].concat((0, _toConsumableArray3.default)(operands[0]));
           }
         }
 
@@ -8260,21 +8436,21 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
 
         var prev = o.logical ? o.identity : operands[0],
-            result;
+            result = void 0;
 
         var _loop = function _loop(i) {
           var a = o.logical ? operands[i - 1] : prev;
           var b = operands[i];
 
           if (Array.isArray(b)) {
-            if (typeof o.identity == "number") {
+            if (typeof o.identity === 'number') {
               b = $u.numbers(b);
             }
 
             if (Array.isArray(a)) {
-              result = [].concat(_toConsumableArray(b.map(function (n, i) {
+              result = [].concat((0, _toConsumableArray3.default)(b.map(function (n, i) {
                 return o.scalar(a[i] === undefined ? o.identity : a[i], n);
-              })), _toConsumableArray(a.slice(b.length)));
+              })), (0, _toConsumableArray3.default)(a.slice(b.length)));
             } else {
               result = b.map(function (n) {
                 return o.scalar(a, n);
@@ -8305,59 +8481,60 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       };
     },
 
+
     /**
-   * Mapping of operator symbols to function name.
-   * Populated via addOperator() and addLogicalOperator()
-   */
+     * Mapping of operator symbols to function name.
+     * Populated via addOperator() and addLogicalOperator()
+     */
     symbols: {},
     unarySymbols: {},
 
     getOperatorName: function getOperatorName(op, unary) {
-      return Mavo.Script[unary ? "unarySymbols" : "symbols"][op] || op;
+      return Mavo.Script[unary ? 'unarySymbols' : 'symbols'][op] || op;
     },
 
     /**
-   * Operations for elements and scalars.
-   * Operations between arrays happen element-wise.
-   * Operations between a scalar and an array will result in the operation being performed between the scalar and every array element.
-   * Ordered by precedence (higher to lower)
-   * @param scalar {Function} The operation between two scalars
-   * @param identity The operation’s identity element. Defaults to 0.
-   */
+     * Operations for elements and scalars.
+     * Operations between arrays happen element-wise.
+     * Operations between a scalar and an array will result in the operation being performed between the scalar and every array element.
+     * Ordered by precedence (higher to lower)
+     * @param scalar {Function} The operation between two scalars
+     * @param identity The operation’s identity element. Defaults to 0.
+     */
     operators: {
-      "not": {
-        symbol: "!",
+      not: {
+        symbol: '!',
         scalar: function scalar(a) {
           return !a;
         }
       },
-      "multiply": {
+      multiply: {
         scalar: function scalar(a, b) {
           return a * b;
         },
         identity: 1,
-        symbol: "*"
+        symbol: '*'
       },
-      "divide": {
+      divide: {
         scalar: function scalar(a, b) {
           return a / b;
         },
         identity: 1,
-        symbol: "/"
+        symbol: '/'
       },
-      "add": {
+      add: {
         scalar: function scalar(a, b) {
-          return +a + +b;
+          return Number(a) + Number(b);
         },
-        symbol: "+"
+        symbol: '+'
       },
-      "plus": {
+      plus: {
         scalar: function scalar(a) {
-          return +a;
+          return Number(a);
         },
-        symbol: "+"
+        symbol: '+'
       },
-      "subtract": {
+      subtract: {
         scalar: function scalar(a, b) {
           if (isNaN(a) || isNaN(b)) {
             // Handle dates
@@ -8371,29 +8548,29 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
           return a - b;
         },
-        symbol: "-"
+        symbol: '-'
       },
-      "minus": {
+      minus: {
         scalar: function scalar(a) {
           return -a;
         },
-        symbol: "-"
+        symbol: '-'
       },
-      "mod": {
+      mod: {
         scalar: function scalar(a, b) {
           var ret = a % b;
           ret += ret < 0 ? b : 0;
           return ret;
         },
-        symbol: "mod",
+        symbol: 'mod',
         precedence: 6
       },
-      "lte": {
+      lte: {
         logical: true,
         scalar: function scalar(a, b) {
           var _Mavo$Script$getNumer = Mavo.Script.getNumericalOperands(a, b);
 
-          var _Mavo$Script$getNumer2 = _slicedToArray(_Mavo$Script$getNumer, 2);
+          var _Mavo$Script$getNumer2 = (0, _slicedToArray3.default)(_Mavo$Script$getNumer, 2);
 
           a = _Mavo$Script$getNumer2[0];
           b = _Mavo$Script$getNumer2[1];
@@ -8401,14 +8578,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           return a <= b;
         },
         identity: true,
-        symbol: "<="
+        symbol: '<='
       },
-      "lt": {
+      lt: {
         logical: true,
         scalar: function scalar(a, b) {
           var _Mavo$Script$getNumer3 = Mavo.Script.getNumericalOperands(a, b);
 
-          var _Mavo$Script$getNumer4 = _slicedToArray(_Mavo$Script$getNumer3, 2);
+          var _Mavo$Script$getNumer4 = (0, _slicedToArray3.default)(_Mavo$Script$getNumer3, 2);
 
           a = _Mavo$Script$getNumer4[0];
           b = _Mavo$Script$getNumer4[1];
@@ -8416,14 +8593,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           return a < b;
         },
         identity: true,
-        symbol: "<"
+        symbol: '<'
       },
-      "gte": {
+      gte: {
         logical: true,
         scalar: function scalar(a, b) {
           var _Mavo$Script$getNumer5 = Mavo.Script.getNumericalOperands(a, b);
 
-          var _Mavo$Script$getNumer6 = _slicedToArray(_Mavo$Script$getNumer5, 2);
+          var _Mavo$Script$getNumer6 = (0, _slicedToArray3.default)(_Mavo$Script$getNumer5, 2);
 
           a = _Mavo$Script$getNumer6[0];
           b = _Mavo$Script$getNumer6[1];
@@ -8431,14 +8608,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           return a >= b;
         },
         identity: true,
-        symbol: ">="
+        symbol: '>='
       },
-      "gt": {
+      gt: {
         logical: true,
         scalar: function scalar(a, b) {
           var _Mavo$Script$getNumer7 = Mavo.Script.getNumericalOperands(a, b);
 
-          var _Mavo$Script$getNumer8 = _slicedToArray(_Mavo$Script$getNumer7, 2);
+          var _Mavo$Script$getNumer8 = (0, _slicedToArray3.default)(_Mavo$Script$getNumer7, 2);
 
           a = _Mavo$Script$getNumer8[0];
           b = _Mavo$Script$getNumer8[1];
@@ -8446,35 +8623,35 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           return a > b;
         },
         identity: true,
-        symbol: ">"
+        symbol: '>'
       },
-      "eq": {
+      eq: {
         logical: true,
         scalar: function scalar(a, b) {
-          return a == b;
+          return a === b;
         },
-        symbol: ["=", "=="],
+        symbol: ['=', '=='],
         identity: true,
         precedence: 6
       },
-      "neq": {
+      neq: {
         logical: true,
         scalar: function scalar(a, b) {
           return a != b;
         },
-        symbol: ["!="],
+        symbol: ['!='],
         identity: true
       },
-      "and": {
+      and: {
         logical: true,
         scalar: function scalar(a, b) {
-          return !!a && !!b;
+          return Boolean(a) && Boolean(b);
         },
         identity: true,
-        symbol: ["&&", "and"],
+        symbol: ['&&', 'and'],
         precedence: 2
       },
-      "or": {
+      or: {
         logical: true,
         scalar: function scalar(a, b) {
           return a || b;
@@ -8483,20 +8660,20 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           return p || r;
         },
         identity: false,
-        symbol: ["||", "or"],
+        symbol: ['||', 'or'],
         precedence: 2
       },
-      "concatenate": {
-        symbol: "&",
-        identity: "",
+      concatenate: {
+        symbol: '&',
+        identity: '',
         scalar: function scalar(a, b) {
-          return "" + (a || "") + (b || "");
+          return String(a || '') + (b || '');
         },
         precedence: 10
       },
       // Filter is listed here because it's an easy way to handle multiple
       // array filters without having to code it
-      "filter": {
+      filter: {
         scalar: function scalar(a, b) {
           return val(b) ? a : null;
         },
@@ -8519,48 +8696,49 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return [a, b];
     },
 
+
     /**
-   * These serializers transform the AST into JS
-   */
+     * These serializers transform the AST into JS
+     */
     serializers: {
-      "BinaryExpression": function BinaryExpression(node) {
-        return _.serialize(node.left) + " " + node.operator + " " + _.serialize(node.right);
+      BinaryExpression: function BinaryExpression(node) {
+        return _.serialize(node.left) + ' ' + node.operator + ' ' + _.serialize(node.right);
       },
-      "UnaryExpression": function UnaryExpression(node) {
-        return "" + node.operator + _.serialize(node.argument);
+      UnaryExpression: function UnaryExpression(node) {
+        return '' + node.operator + _.serialize(node.argument);
       },
-      "CallExpression": function CallExpression(node) {
-        return _.serialize(node.callee) + "(" + node.arguments.map(_.serialize).join(", ") + ")";
+      CallExpression: function CallExpression(node) {
+        return _.serialize(node.callee) + '(' + node.arguments.map(_.serialize).join(', ') + ')';
       },
-      "ConditionalExpression": function ConditionalExpression(node) {
-        return _.serialize(node.test) + "? " + _.serialize(node.consequent) + " : " + _.serialize(node.alternate);
+      ConditionalExpression: function ConditionalExpression(node) {
+        return _.serialize(node.test) + '? ' + _.serialize(node.consequent) + ' : ' + _.serialize(node.alternate);
       },
-      "MemberExpression": function MemberExpression(node) {
-        var property = node.computed ? _.serialize(node.property) : "\"" + node.property.name + "\"";
-        return "get(" + _.serialize(node.object) + ", " + property + ")";
+      MemberExpression: function MemberExpression(node) {
+        var property = node.computed ? _.serialize(node.property) : '"' + node.property.name + '"';
+        return 'get(' + _.serialize(node.object) + ', ' + property + ')';
       },
-      "ArrayExpression": function ArrayExpression(node) {
-        return "[" + node.elements.map(_.serialize).join(", ") + "]";
+      ArrayExpression: function ArrayExpression(node) {
+        return '[' + node.elements.map(_.serialize).join(', ') + ']';
       },
-      "Literal": function Literal(node) {
+      Literal: function Literal(node) {
         return node.raw;
       },
-      "Identifier": function Identifier(node) {
+      Identifier: function Identifier(node) {
         return node.name;
       },
-      "ThisExpression": function ThisExpression(node) {
-        return "this";
+      ThisExpression: function ThisExpression(node) {
+        return 'this';
       },
-      "Compound": function Compound(node) {
-        return node.body.map(_.serialize).join(" ");
+      Compound: function Compound(node) {
+        return node.body.map(_.serialize).join(' ');
       }
     },
 
     /**
-   * These are run before the serializers and transform the expression to support MavoScript
-   */
+     * These are run before the serializers and transform the expression to support MavoScript
+     */
     transformations: {
-      "BinaryExpression": function BinaryExpression(node) {
+      BinaryExpression: function BinaryExpression(node) {
         var name = Mavo.Script.getOperatorName(node.operator);
 
         // Flatten same operator calls
@@ -8575,23 +8753,23 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         args.unshift(nodeLeft);
 
         if (args.length > 1) {
-          return name + "(" + args.map(_.serialize).join(", ") + ")";
+          return name + '(' + args.map(_.serialize).join(', ') + ')';
         }
       },
-      "UnaryExpression": function UnaryExpression(node) {
+      UnaryExpression: function UnaryExpression(node) {
         var name = Mavo.Script.getOperatorName(node.operator, true);
 
         if (name) {
-          return name + "(" + _.serialize(node.argument) + ")";
+          return name + '(' + _.serialize(node.argument) + ')';
         }
       },
-      "CallExpression": function CallExpression(node) {
-        if (node.callee.type == "Identifier") {
-          if (node.callee.name == "if") {
-            node.callee.name = "iff";
+      CallExpression: function CallExpression(node) {
+        if (node.callee.type === 'Identifier') {
+          if (node.callee.name === 'if') {
+            node.callee.name = 'iff';
           }
 
-          node.callee.name = "Mavo.Functions._Trap." + node.callee.name;
+          node.callee.name = 'Mavo.Functions._Trap.' + node.callee.name;
         }
       }
     },
@@ -8614,12 +8792,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return code;
       }
     },
-
     compile: function compile(code) {
       code = _.rewrite(code);
 
-      return new Function("data", "with(Mavo.Functions._Trap)\n\t\t\t\twith (data || {}) {\n\t\t\t\t\treturn (" + code + ");\n\t\t\t\t}");
+      return new Function('data', 'with(Mavo.Functions._Trap)\n        with (data || {}) {\n          return (' + code + ');\n        }');
     },
+
 
     parse: self.jsep
   };
@@ -8638,14 +8816,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   }
 
   var aliases = {
-    average: "avg",
-    iff: "iff IF",
-    multiply: "mult product",
-    divide: "div",
-    lt: "smaller",
-    gt: "larger bigger",
-    eq: "equal equality",
-    th: "ordinal"
+    average: 'avg',
+    iff: 'iff IF',
+    multiply: 'mult product',
+    divide: 'div',
+    lt: 'smaller',
+    gt: 'larger bigger',
+    eq: 'equal equality',
+    th: 'ordinal'
   };
 
   var _loop2 = function _loop2(_name) {
@@ -8658,62 +8836,64 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     _loop2(_name);
   }
 })(Bliss, Mavo.value, Mavo.Functions.util);
-"use strict";
+'use strict';
 
-(function ($, $$) {
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
+(function ($) {
   var _ = Mavo.Backend.register($.Class({
     extends: Mavo.Backend,
-    id: "Dropbox",
+    id: 'Dropbox',
     constructor: function constructor() {
-      this.permissions.on(["login", "read"]);
+      this.permissions.on(['login', 'read']);
 
-      this.key = this.mavo.element.getAttribute("mv-dropbox-key") || "2mx6061p054bpbp";
+      this.key = this.mavo.element.getAttribute('mv-dropbox-key') || '2mx6061p054bpbp';
 
       // Transform the dropbox shared URL into something raw and CORS-enabled
       this.url = _.fixShareURL(this.url);
 
       this.login(true);
     },
-
     upload: function upload(file, path) {
       var _this = this;
 
-      path = this.path.replace(/[^/]+$/, "") + path;
+      path = this.path.replace(/[^/]+$/, '') + path;
 
       return this.put(file, path).then(function (fileInfo) {
         return _this.getURL(path);
       });
     },
-
     getURL: function getURL(path) {
-      return this.request("sharing/create_shared_link_with_settings", { path: path }, "POST").then(function (shareInfo) {
+      return this.request('sharing/create_shared_link_with_settings', { path: path }, 'POST').then(function (shareInfo) {
         return _.fixShareURL(shareInfo.url);
       });
     },
 
+
     /**
-   * Saves a file to the backend.
-   * @param {Object} file - An object with name & data keys
-   * @return {Promise} A promise that resolves when the file is saved.
-   */
+     * Saves a file to the backend.
+     * @param {Object} file - An object with name & data keys
+     * @return {Promise} A promise that resolves when the file is saved.
+     */
     put: function put(serialized) {
       var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.path;
       var o = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-      return this.request("https://content.dropboxapi.com/2/files/upload", serialized, "POST", {
+      return this.request('https://content.dropboxapi.com/2/files/upload', serialized, 'POST', {
         headers: {
-          "Dropbox-API-Arg": JSON.stringify({
+          'Dropbox-API-Arg': JSON.stringify({
             path: path,
-            mode: "overwrite"
+            mode: 'overwrite'
           }),
-          "Content-Type": "application/octet-stream"
+          'Content-Type': 'application/octet-stream'
         }
       });
     },
 
+
     oAuthParams: function oAuthParams() {
-      return "&redirect_uri=" + encodeURIComponent("https://auth.mavo.io") + "&response_type=code";
+      return '&redirect_uri=' + encodeURIComponent('https://auth.mavo.io') + '&response_type=code';
     },
 
     getUser: function getUser() {
@@ -8723,7 +8903,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return Promise.resolve(this.user);
       }
 
-      return this.request("users/get_current_account", "null", "POST").then(function (info) {
+      return this.request('users/get_current_account', 'null', 'POST').then(function (info) {
         _this2.user = {
           username: info.email,
           name: info.name.display_name,
@@ -8732,7 +8912,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         };
       });
     },
-
     login: function login(passive) {
       var _this3 = this;
 
@@ -8743,23 +8922,23 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           _this3.permissions.logout = true;
 
           // Check if can actually edit the file
-          _this3.request("sharing/get_shared_link_metadata", {
-            "url": _this3.source
-          }, "POST").then(function (info) {
+          _this3.request('sharing/get_shared_link_metadata', {
+            url: _this3.source
+          }, 'POST').then(function (info) {
             _this3.path = info.path_lower;
-            _this3.permissions.on(["edit", "save"]);
+            _this3.permissions.on(['edit', 'save']);
           });
         }
       });
     },
-
     logout: function logout() {
       return this.oAuthLogout();
     },
 
+
     static: {
-      apiDomain: "https://api.dropboxapi.com/2/",
-      oAuth: "https://www.dropbox.com/oauth2/authorize",
+      apiDomain: 'https://api.dropboxapi.com/2/',
+      oAuth: 'https://www.dropbox.com/oauth2/authorize',
 
       test: function test(url) {
         url = new URL(url, Mavo.base);
@@ -8767,91 +8946,110 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         );
       },
 
+
       fixShareURL: function fixShareURL(url) {
         url = new URL(url, Mavo.base);
-        url.hostname = "dl.dropboxusercontent.com";
-        url.search = url.search.replace(/\bdl=0|^$/, "raw=1");
+        url.hostname = 'dl.dropboxusercontent.com';
+        url.search = url.search.replace(/\bdl=0|^$/, 'raw=1');
         return url;
       }
     }
   }));
-})(Bliss, Bliss.$);
-"use strict";
+})(Bliss);
+'use strict';
 
-(function ($, $$) {
+/* global Mavo, Bliss */
+/* eslint new-cap: "off" */
 
+(function ($) {
   var _ = Mavo.Backend.register($.Class({
     extends: Mavo.Backend,
-    id: "Github",
+    id: 'Github',
     constructor: function constructor() {
-      this.permissions.on(["login", "read"]);
+      this.permissions.on(['login', 'read']);
 
-      this.key = this.mavo.element.getAttribute("mv-github-key") || "7e08e016048000bc594e";
+      this.key = this.mavo.element.getAttribute('mv-github-key') || '7e08e016048000bc594e';
 
       // Extract info for username, repo, branch, filepath from URL
-      var parsedURL = _.parseURL(this.url);
+      var extension = this.format.constructor.extensions[0] || '.json';
 
-      if (parsedURL.username) {
-        $.extend(this, parsedURL);
-        this.repo = this.repo || "mv-data";
-        this.path = this.path || "";
+      this.defaults = {
+        repo: 'mv-data',
+        filename: '' + this.mavo.id + extension
+      };
 
-        if (!/\.\w+$/.test(this.path)) {
-          var extension = this.format.constructor.extensions[0] || ".json";
-          this.path += "/" + this.mavo.id + extension;
-        }
-
-        this.path = this.path.replace(/\/\/|^\/|\/$/g, "");
-
-        this.apiCall = "repos/" + this.username + "/" + this.repo + "/contents/" + this.path;
-      } else {
-        this.apiCall = this.url.pathname.slice(1);
-      }
+      this.info = _.parseURL(this.source, this.defaults);
+      $.extend(this, this.info);
 
       this.login(true);
     },
-
-    get: function get() {
-      var _this = this;
-
-      if (this.isAuthenticated() || !this.path) {
+    get: function get(url) {
+      if (this.isAuthenticated() || !this.path || url) {
         // Authenticated or raw API call
-        return this.request(this.apiCall).then(function (response) {
-          return Promise.resolve(_this.repo ? _.atob(response.content) : response);
+        var info = url ? _.parseURL(url) : this.info;
+
+        if (info.apiData) {
+          // GraphQL
+          return this.request(info.apiCall, info.apiData, 'POST').then(function (response) {
+            if (response.errors && response.errors.length) {
+              return Promise.reject(response.errors.map(function (x) {
+                return x.message;
+              }).join('\n'));
+            }
+
+            return response.data;
+          });
+        }
+
+        return this.request(info.apiCall, null, 'GET', {
+          headers: {
+            Accept: 'application/vnd.github.squirrel-girl-preview'
+          }
+        }).then(function (response) {
+          return Promise.resolve(info.repo ? _.atob(response.content) : response);
         });
-      } else {
-        // Unauthenticated, use simple GET request to avoid rate limit
-        var url = new URL("https://raw.githubusercontent.com/" + this.username + "/" + this.repo + "/" + (this.branch || "master") + "/" + this.path);
-
-        return this.super.get.call(this, url);
       }
-    },
 
+      // Unauthenticated, use simple GET request to avoid rate limit
+      url = new URL('https://raw.githubusercontent.com/' + this.username + '/' + this.repo + '/' + (this.branch || 'master') + '/' + this.path);
+      url.searchParams.set('timestamp', Date.now()); // Ensure fresh copy
+
+      return $.fetch(url.href, {
+        headers: {
+          Accept: 'application/vnd.github.squirrel-girl-preview'
+        }
+      }).then(function (xhr) {
+        return Promise.resolve(xhr.responseText);
+      }, function () {
+        return Promise.resolve(null);
+      });
+    },
     upload: function upload(file) {
-      var _this2 = this;
+      var _this = this;
 
       var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.path;
 
       return Mavo.readFile(file).then(function (dataURL) {
-        var base64 = dataURL.slice(5); // remove data:
+        var base64 = dataURL.slice(5); // Remove data:
         var media = base64.match(/^\w+\/[\w+]+/)[0];
-        base64 = base64.replace(RegExp("^" + media + "(;base64)?,"), "");
-        path = _this2.path.replace(/[^/]+$/, "") + path; // make upload path relative to existing path
+        base64 = base64.replace(RegExp('^' + media + '(;base64)?,'), '');
+        path = _this.path.replace(/[^/]+$/, '') + path; // Make upload path relative to existing path
 
-        return _this2.put(base64, path, { isEncoded: true });
+        return _this.put(base64, path, { isEncoded: true });
       }).then(function (fileInfo) {
-        return _this2.getURL(path, fileInfo.commit.sha);
+        return _this.getURL(path, fileInfo.commit.sha);
       });
     },
 
+
     /**
-   * Saves a file to the backend.
-   * @param {String} serialized - Serialized data
-   * @param {String} path - Optional file path
-   * @return {Promise} A promise that resolves when the file is saved.
-   */
+     * Saves a file to the backend.
+     * @param {String} serialized - Serialized data
+     * @param {String} path - Optional file path
+     * @return {Promise} A promise that resolves when the file is saved.
+     */
     put: function put(serialized) {
-      var _this3 = this;
+      var _this2 = this;
 
       var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.path;
       var o = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -8861,29 +9059,29 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         return;
       }
 
-      var repoCall = "repos/" + this.username + "/" + this.repo;
-      var fileCall = repoCall + "/contents/" + path;
-      var commitPrefix = this.mavo.element.getAttribute("mv-github-commit-prefix") || "";
+      var repoCall = 'repos/' + this.username + '/' + this.repo;
+      var fileCall = repoCall + '/contents/' + path;
+      var commitPrefix = this.mavo.element.getAttribute('mv-github-commit-prefix') || '';
 
       // Create repo if it doesn’t exist
-      var repoInfo = this.repoInfo || this.request("user/repos", { name: this.repo }, "POST").then(function (repoInfo) {
-        return _this3.repoInfo = repoInfo;
+      var repoInfo = this.repoInfo || this.request('user/repos', { name: this.repo }, 'POST').then(function (repoInfo) {
+        return _this2.repoInfo = repoInfo;
       });
 
       serialized = o.isEncoded ? serialized : _.btoa(serialized);
 
       return Promise.resolve(repoInfo).then(function (repoInfo) {
-        if (!_this3.canPush()) {
+        if (!_this2.canPush()) {
           // Does not have permission to commit, create a fork
-          return _this3.request(repoCall + "/forks", { name: _this3.repo }, "POST").then(function (forkInfo) {
-            fileCall = "repos/" + forkInfo.full_name + "/contents/" + path;
-            return _this3.forkInfo = forkInfo;
+          return _this2.request(repoCall + '/forks', { name: _this2.repo }, 'POST').then(function (forkInfo) {
+            fileCall = 'repos/' + forkInfo.full_name + '/contents/' + path;
+            return _this2.forkInfo = forkInfo;
           }).then(function (forkInfo) {
             // Ensure that fork is created (they take a while)
-            var timeout;
+            var timeout = void 0;
             var test = function test(resolve, reject) {
               clearTimeout(timeout);
-              _this3.request("repos/" + forkInfo.full_name + "/commits", { until: "1970-01-01T00:00:00Z" }, "HEAD").then(function (x) {
+              _this2.request('repos/' + forkInfo.full_name + '/commits', { until: '1970-01-01T00:00:00Z' }, 'HEAD').then(function (x) {
                 resolve(forkInfo);
               }).catch(function (x) {
                 // Try again after 1 second
@@ -8897,48 +9095,47 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
         return repoInfo;
       }).then(function (repoInfo) {
-        return _this3.request(fileCall, {
-          ref: _this3.branch
+        return _this2.request(fileCall, {
+          ref: _this2.branch
         }).then(function (fileInfo) {
-          return _this3.request(fileCall, {
-            message: commitPrefix + _this3.mavo._("gh-updated-file", { name: fileInfo.name || "file" }),
+          return _this2.request(fileCall, {
+            message: commitPrefix + _this2.mavo._('gh-updated-file', { name: fileInfo.name || 'file' }),
             content: serialized,
-            branch: _this3.branch,
+            branch: _this2.branch,
             sha: fileInfo.sha
-          }, "PUT");
+          }, 'PUT');
         }, function (xhr) {
-          if (xhr.status == 404) {
+          if (xhr.status === 404) {
             // File does not exist, create it
-            return _this3.request(fileCall, {
-              message: commitPrefix + "Created file",
+            return _this2.request(fileCall, {
+              message: commitPrefix + 'Created file',
               content: serialized,
-              branch: _this3.branch
-            }, "PUT");
+              branch: _this2.branch
+            }, 'PUT');
           }
 
           return xhr;
         });
       }).then(function (fileInfo) {
-        if (_this3.forkInfo) {
+        if (_this2.forkInfo) {
           // We saved in a fork, do we have a pull request?
-          _this3.request("repos/" + _this3.username + "/" + _this3.repo + "/pulls", {
-            head: _this3.user.username + ":" + _this3.branch,
-            base: _this3.branch
+          _this2.request('repos/' + _this2.username + '/' + _this2.repo + '/pulls', {
+            head: _this2.user.username + ':' + _this2.branch,
+            base: _this2.branch
           }).then(function (prs) {
-            _this3.pullRequest(prs[0]);
+            _this2.pullRequest(prs[0]);
           });
         }
 
         return fileInfo;
       });
     },
-
     pullRequest: function pullRequest(existing) {
-      var _this4 = this;
+      var _this3 = this;
 
       var previewURL = new URL(location);
-      previewURL.searchParams.set(this.mavo.id + "-storage", "https://github.com/" + this.forkInfo.full_name + "/" + this.path);
-      var message = this.mavo._("gh-edit-suggestion-saved-in-profile", { previewURL: previewURL });
+      previewURL.searchParams.set(this.mavo.id + '-storage', 'https://github.com/' + this.forkInfo.full_name + '/' + this.path);
+      var message = this.mavo._('gh-edit-suggestion-saved-in-profile', { previewURL: previewURL });
 
       if (this.notice) {
         this.notice.close();
@@ -8946,9 +9143,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       if (existing) {
         // We already have a pull request, ask about closing it
-        this.notice = this.mavo.message(message + "\n\t\t\t\t" + this.mavo._("gh-edit-suggestion-notreviewed") + "\n\t\t\t\t<form onsubmit=\"return false\">\n\t\t\t\t\t<button class=\"mv-danger\">" + this.mavo._("gh-edit-suggestion-revoke") + "</button>\n\t\t\t\t</form>", {
-          classes: "mv-inline",
-          dismiss: ["button", "submit"]
+        this.notice = this.mavo.message(message + '\n        ' + this.mavo._('gh-edit-suggestion-notreviewed') + '\n        <form onsubmit="return false">\n          <button class="mv-danger">' + this.mavo._('gh-edit-suggestion-revoke') + '</button>\n        </form>', {
+          classes: 'mv-inline',
+          dismiss: ['button', 'submit']
         });
 
         this.notice.closed.then(function (form) {
@@ -8957,21 +9154,21 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           }
 
           // Close PR
-          _this4.request("repos/" + _this4.username + "/" + _this4.repo + "/pulls/" + existing.number, {
-            state: "closed"
-          }, "POST").then(function (prInfo) {
-            new Mavo.UI.Message(_this4.mavo, "<a href=\"" + prInfo.html_url + "\">" + _this4.mavo._("gh-edit-suggestion-cancelled") + "</a>", {
-              dismiss: ["button", "timeout"]
+          _this3.request('repos/' + _this3.username + '/' + _this3.repo + '/pulls/' + existing.number, {
+            state: 'closed'
+          }, 'POST').then(function (prInfo) {
+            new Mavo.UI.Message(_this3.mavo, '<a href="' + prInfo.html_url + '">' + _this3.mavo._('gh-edit-suggestion-cancelled') + '</a>', {
+              dismiss: ['button', 'timeout']
             });
 
-            _this4.pullRequest();
+            _this3.pullRequest();
           });
         });
       } else {
         // Ask about creating a PR
-        this.notice = this.mavo.message(message + "\n\t\t\t\t" + this.mavo._("gh-edit-suggestion-instructions") + "\n\t\t\t\t<form onsubmit=\"return false\">\n\t\t\t\t\t<textarea name=\"edits\" class=\"mv-autosize\" placeholder=\"" + this.mavo._("gh-edit-suggestion-reason-placeholder") + "\"></textarea>\n\t\t\t\t\t<button>" + this.mavo._("gh-edit-suggestion-send") + "</button>\n\t\t\t\t</form>", {
-          classes: "mv-inline",
-          dismiss: ["button", "submit"]
+        this.notice = this.mavo.message(message + '\n        ' + this.mavo._('gh-edit-suggestion-instructions') + '\n        <form onsubmit="return false">\n          <textarea name="edits" class="mv-autosize" placeholder="' + this.mavo._('gh-edit-suggestion-reason-placeholder') + '"></textarea>\n          <button>' + this.mavo._('gh-edit-suggestion-send') + '</button>\n        </form>', {
+          classes: 'mv-inline',
+          dismiss: ['button', 'submit']
         });
 
         this.notice.closed.then(function (form) {
@@ -8980,52 +9177,50 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           }
 
           // We want to send a pull request
-          _this4.request("repos/" + _this4.username + "/" + _this4.repo + "/pulls", {
-            title: _this4.mavo._("gh-edit-suggestion-title"),
-            body: _this4.mavo._("gh-edit-suggestion-body", {
+          _this3.request('repos/' + _this3.username + '/' + _this3.repo + '/pulls', {
+            title: _this3.mavo._('gh-edit-suggestion-title'),
+            body: _this3.mavo._('gh-edit-suggestion-body', {
               description: form.elements.edits.value,
               previewURL: previewURL
             }),
-            head: _this4.user.username + ":" + _this4.branch,
-            base: _this4.branch
-          }, "POST").then(function (prInfo) {
-            new Mavo.UI.Message(_this4.mavo, "<a href=\"" + prInfo.html_url + "\">" + _this4.mavo._("gh-edit-suggestion-sent") + "</a>", {
-              dismiss: ["button", "timeout"]
+            head: _this3.user.username + ':' + _this3.branch,
+            base: _this3.branch
+          }, 'POST').then(function (prInfo) {
+            new Mavo.UI.Message(_this3.mavo, '<a href="' + prInfo.html_url + '">' + _this3.mavo._('gh-edit-suggestion-sent') + '</a>', {
+              dismiss: ['button', 'timeout']
             });
 
-            _this4.pullRequest(prInfo);
+            _this3.pullRequest(prInfo);
           });
         });
       }
     },
-
     login: function login(passive) {
-      var _this5 = this;
+      var _this4 = this;
 
       return this.oAuthenticate(passive).then(function () {
-        return _this5.getUser();
+        return _this4.getUser();
       }).catch(function (xhr) {
-        if (xhr.status == 401) {
+        if (xhr.status === 401) {
           // Unauthorized. Access token we have is invalid, discard it
-          _this5.logout();
+          _this4.logout();
         }
       }).then(function (u) {
-        if (_this5.user) {
-          _this5.permissions.on(["edit", "save", "logout"]);
+        if (_this4.user) {
+          _this4.permissions.on(['edit', 'save', 'logout']);
 
-          if (_this5.repo) {
-            return _this5.request("repos/" + _this5.username + "/" + _this5.repo).then(function (repoInfo) {
-              if (_this5.branch === undefined) {
-                _this5.branch = repoInfo.default_branch;
+          if (_this4.repo) {
+            return _this4.request('repos/' + _this4.username + '/' + _this4.repo).then(function (repoInfo) {
+              if (_this4.branch === undefined) {
+                _this4.branch = repoInfo.default_branch;
               }
 
-              return _this5.repoInfo = repoInfo;
+              return _this4.repoInfo = repoInfo;
             });
           }
         }
       });
     },
-
     canPush: function canPush() {
       if (this.repoInfo) {
         return this.repoInfo.permissions.push;
@@ -9033,54 +9228,53 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       // Repo does not exist so we can't check permissions
       // Just check if authenticated user is the same as our URL username
-      return this.user && this.user.username.toLowerCase() == this.username.toLowerCase();
+      return this.user && this.user.username.toLowerCase() === this.username.toLowerCase();
     },
 
+
     oAuthParams: function oAuthParams() {
-      return "&scope=repo,gist";
+      return '&scope=repo,gist';
     },
 
     logout: function logout() {
-      var _this6 = this;
+      var _this5 = this;
 
       return this.oAuthLogout().then(function () {
-        _this6.user = null;
+        _this5.user = null;
       });
     },
-
     getUser: function getUser() {
-      var _this7 = this;
+      var _this6 = this;
 
       if (this.user) {
         return Promise.resolve(this.user);
       }
 
-      return this.request("user").then(function (info) {
-        _this7.user = {
+      return this.request('user').then(function (info) {
+        _this6.user = {
           username: info.login,
           name: info.name || info.login,
           avatar: info.avatar_url,
-          url: "https://github.com/" + info.login,
+          url: 'https://github.com/' + info.login,
           info: info
         };
 
-        $.fire(_this7.mavo.element, "mv-login", { backend: _this7 });
+        $.fire(_this6.mavo.element, 'mv-login', { backend: _this6 });
       });
     },
-
     getURL: function getURL() {
-      var _this8 = this;
+      var _this7 = this;
 
       var path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.path;
       var sha = arguments[1];
 
       var repoInfo = this.forkInfo || this.repoInfo;
       var repo = repoInfo.full_name;
-      path = path.replace(/ /g, "%20");
+      path = path.replace(/ /g, '%20');
 
-      repoInfo.pagesInfo = repoInfo.pagesInfo || this.request("repos/" + repo + "/pages", {}, "GET", {
+      repoInfo.pagesInfo = repoInfo.pagesInfo || this.request('repos/' + repo + '/pages', {}, 'GET', {
         headers: {
-          "Accept": "application/vnd.github.mister-fantastic-preview+json"
+          Accept: 'application/vnd.github.mister-fantastic-preview+json'
         }
       });
 
@@ -9089,16 +9283,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }).catch(function (xhr) {
         // No Github Pages, return rawgit URL
         if (sha) {
-          return "https://cdn.rawgit.com/" + repo + "/" + sha + "/" + path;
-        } else {
-          return "https://rawgit.com/" + repo + "/" + _this8.branch + "/" + path;
+          return 'https://cdn.rawgit.com/' + repo + '/' + sha + '/' + path;
         }
+
+        return 'https://rawgit.com/' + repo + '/' + _this7.branch + '/' + path;
       });
     },
 
+
     static: {
-      apiDomain: "https://api.github.com/",
-      oAuth: "https://github.com/login/oauth/authorize",
+      apiDomain: 'https://api.github.com/',
+      oAuth: 'https://github.com/login/oauth/authorize',
 
       test: function test(url) {
         url = new URL(url, Mavo.base);
@@ -9106,37 +9301,57 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         );
       },
 
+
       /**
-    * Parse Github URLs, return username, repo, branch, path
-    */
-      parseURL: function parseURL(url) {
+       * Parse Github URLs, return username, repo, branch, path
+       */
+      parseURL: function parseURL(source) {
+        var defaults = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
         var ret = {};
-
-        url = new URL(url, Mavo.base);
-
-        var path = url.pathname.slice(1).split("/");
+        var url = new URL(source, Mavo.base);
+        var path = url.pathname.slice(1).split('/');
 
         ret.username = path.shift();
-        ret.repo = path.shift();
+        ret.repo = path.shift() || defaults.repo;
 
         if (/raw.githubusercontent.com$/.test(url.host)) {
           ret.branch = path.shift();
         } else if (/api.github.com$/.test(url.host)) {
-          // raw API call, stop parsing and just return
-          return {};
-        } else if (path[0] == "blob") {
+          // Raw API call
+          var apiCall = url.pathname.slice(1) + url.search;
+          var data = Mavo.Functions.from(source, '#'); // Url.* drops line breaks
+
+          return {
+            apiCall: apiCall,
+            apiData: apiCall === 'graphql' ? { query: data } : data
+          };
+        } else if (path[0] === 'blob') {
           path.shift();
           ret.branch = path.shift();
         }
 
-        ret.path = path.join("/");
+        var lastSegment = path[path.length - 1];
+
+        if (/\.\w+$/.test(lastSegment)) {
+          ret.filename = lastSegment;
+          path.splice(path.length - 1, 1);
+        } else {
+          ret.filename = defaults.filename;
+        }
+
+        ret.filepath = path.join('/') || defaults.filepath || '';
+        ret.path = (ret.filepath ? ret.filepath + '/' : '') + ret.filename;
+
+        ret.apiCall = 'repos/' + ret.username + '/' + ret.repo + '/contents/' + ret.path;
 
         return ret;
       },
 
+
       // Fix atob() and btoa() so they can handle Unicode
       btoa: function (_btoa) {
-        function btoa(_x5) {
+        function btoa(_x6) {
           return _btoa.apply(this, arguments);
         }
 
@@ -9153,5 +9368,5 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       }
     }
   }));
-})(Bliss, Bliss.$);
+})(Bliss);
 //# sourceMappingURL=maps/mavo.es5.js.map
