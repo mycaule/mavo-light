@@ -32,5 +32,18 @@
 * [30 seconds of code](https://30secondsofcode.org)
 * [Modern JS cheatsheet](https://github.com/mbeaudru/modern-js-cheatsheet)
 
-## Contributing
-Please visit https://mavo.io for info on using Mavo, and read [CONTRIBUTING.md](https://github.com/mavoweb/mavo/blob/master/CONTRIBUTING.md) for info on contributing to Mavo.
+## Contributions
+
+Changes and improvements are welcome! Feel free to fork and open a pull request into `master`.
+
+Please visit https://mavo.io for info on using Mavo.
+
+Useful commands
+
+```
+npm test
+# Running old build method
+gulp watch
+# Running new build method
+parcel build src/index.js
+```
