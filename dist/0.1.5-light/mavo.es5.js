@@ -1693,7 +1693,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
     get fallback() {
-      // TODO should we fallback to other dialects? I.e. should en-US fallback to en-GB if en didn't exist?
+      // -TODO should we fallback to other dialects? I.e. should en-US fallback to en-GB if en didn't exist?
       if (_.all[this.baseLang]) {
         return _.all[this.baseLang];
       }
@@ -3315,7 +3315,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
       if (this instanceof Mavo.Group || this.collection) {
         // Handle mv-value
-        // TODO integrate with the code in Primitive that decides whether this is a computed property
+        // -TODO integrate with the code in Primitive that decides whether this is a computed property
         var et = Mavo.DOMExpression.search(this.element).filter(function (et) {
           return et.originalAttribute === 'mv-value';
         })[0];
@@ -5315,7 +5315,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
       setTimeout(function () {
         $.remove(_this3.element);
-      }, parseFloat(getComputedStyle(this.element).transitionDuration) * 1000 || 400); // TODO transition-duration could override this
+      }, parseFloat(getComputedStyle(this.element).transitionDuration) * 1000 || 400);
+      // -TODO transition-duration could override this
     },
     prepare: function prepare() {
       var _this4 = this;
@@ -5914,7 +5915,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           this.dateType = type;
 
           if (!dateFormat) {
-            // TODO what about mv-expressions?
+            // -TODO what about mv-expressions?
             this.element.textContent = this.config.defaultFormats[this.dateType](this.property);
             this.mavo.expressions.extract(this.element, null);
           }
@@ -7807,7 +7808,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         }
 
         // Not a property query, get from objects inside
-        // TODO meta.property = ??
+        // -TODO meta.property = ??
         return obj.map(function (e) {
           return _.get(e, property);
         });
@@ -7834,7 +7835,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       return ret === null || !id ? null : decodeURIComponent(ret[1]) || '';
     },
 
-    // TODO return first/last non-null?
+    // -TODO return first/last non-null?
     first: function first(arr) {
       return arr && arr[0] || '';
     },

@@ -1552,7 +1552,7 @@
     },
 
     get fallback() {
-    // TODO should we fallback to other dialects? I.e. should en-US fallback to en-GB if en didn't exist?
+    // -TODO should we fallback to other dialects? I.e. should en-US fallback to en-GB if en didn't exist?
       if (_.all[this.baseLang]) {
         return _.all[this.baseLang];
       }
@@ -2987,7 +2987,7 @@ Preview my changes here: {previewURL}`,
 
       if (this instanceof Mavo.Group || this.collection) {
       // Handle mv-value
-      // TODO integrate with the code in Primitive that decides whether this is a computed property
+      // -TODO integrate with the code in Primitive that decides whether this is a computed property
         const et = Mavo.DOMExpression.search(this.element).filter(et => et.originalAttribute === 'mv-value')[0];
 
         if (et) {
@@ -4844,7 +4844,8 @@ Preview my changes here: {previewURL}`,
 
       setTimeout(() => {
         $.remove(this.element);
-      }, parseFloat(getComputedStyle(this.element).transitionDuration) * 1000 || 400); // TODO transition-duration could override this
+      }, parseFloat(getComputedStyle(this.element).transitionDuration) * 1000 || 400);
+      // -TODO transition-duration could override this
     },
 
     prepare() {
@@ -5411,7 +5412,7 @@ Preview my changes here: {previewURL}`,
           this.dateType = type;
 
           if (!dateFormat) {
-          // TODO what about mv-expressions?
+          // -TODO what about mv-expressions?
             this.element.textContent = this.config.defaultFormats[this.dateType](this.property);
             this.mavo.expressions.extract(this.element, null);
           }
@@ -7151,7 +7152,7 @@ Not an expression? Use mv-expressions="none" to disable expressions on an elemen
         }
 
         // Not a property query, get from objects inside
-        // TODO meta.property = ??
+        // -TODO meta.property = ??
         return obj.map(e => _.get(e, property));
       }
 
@@ -7174,7 +7175,7 @@ Not an expression? Use mv-expressions="none" to disable expressions on an elemen
       return ret === null || !id ? null : decodeURIComponent(ret[1]) || '';
     },
 
-  // TODO return first/last non-null?
+  // -TODO return first/last non-null?
     first: arr => arr && arr[0] || '',
     last: arr => arr && arr[arr.length - 1] || '',
 
