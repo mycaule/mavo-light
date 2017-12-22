@@ -1,11 +1,12 @@
 import jsep from 'jsep';
 import fns from './functions';
 
+import Mocks from './mocks/objects';
+
 const Bliss = {};
-const value = {};
 
 const Mavo = {jsep, Bliss};
 
-Mavo.Functions = fns(Bliss, value);
+Mavo.Functions = fns(Mavo, Bliss, Mocks.location);
 
 export default Mavo;

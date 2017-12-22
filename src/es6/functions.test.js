@@ -4,6 +4,7 @@
 import test from 'ava';
 import {struct} from 'superstruct';
 import fns from './functions';
+import Mocks from './mocks/objects';
 
 const MvFunctions = struct({
   $hash: 'string | array',
@@ -96,27 +97,6 @@ const MvFunctions2 = struct({
   smaller: 'function',
   subtract: 'function'
 });
-
-const Mocks = {
-  Mavo: {
-    value: () => true,
-    locale: 'cn',
-    getCanonicalProperty: () => true,
-    toArray: () => [],
-    match: () => true,
-    base: '',
-    safeToJSON: () => {}
-  },
-  Bliss: {
-    p: str => {
-      console.log(str);
-      return [];
-    }
-  },
-  location: {
-    hash: []
-  }
-};
 
 test('Functions', t => {
   const result = fns(Mocks.Mavo, Mocks.Bliss, Mocks.location);
