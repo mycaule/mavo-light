@@ -66,7 +66,7 @@
         }
 
         // Not a property query, get from objects inside
-        // TODO meta.property = ??
+        // -TODO meta.property = ??
         return obj.map(e => _.get(e, property));
       }
 
@@ -89,7 +89,7 @@
       return ret === null || !id ? null : decodeURIComponent(ret[1]) || '';
     },
 
-  // TODO return first/last non-null?
+  // -TODO return first/last non-null?
     first: arr => arr && arr[0] || '',
     last: arr => arr && arr[arr.length - 1] || '',
 

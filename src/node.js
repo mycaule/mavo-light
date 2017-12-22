@@ -68,7 +68,7 @@
 
       if (this instanceof Mavo.Group || this.collection) {
       // Handle mv-value
-      // TODO integrate with the code in Primitive that decides whether this is a computed property
+      // -TODO integrate with the code in Primitive that decides whether this is a computed property
         const et = Mavo.DOMExpression.search(this.element).filter(et => et.originalAttribute === 'mv-value')[0];
 
         if (et) {

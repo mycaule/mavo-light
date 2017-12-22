@@ -107,7 +107,8 @@
 
       setTimeout(() => {
         $.remove(this.element);
-      }, parseFloat(getComputedStyle(this.element).transitionDuration) * 1000 || 400); // TODO transition-duration could override this
+      }, parseFloat(getComputedStyle(this.element).transitionDuration) * 1000 || 400);
+      // -TODO transition-duration could override this
     },
 
     prepare() {

@@ -10,7 +10,7 @@
     },
 
     get fallback() {
-    // TODO should we fallback to other dialects? I.e. should en-US fallback to en-GB if en didn't exist?
+    // -TODO should we fallback to other dialects? I.e. should en-US fallback to en-GB if en didn't exist?
       if (_.all[this.baseLang]) {
         return _.all[this.baseLang];
       }

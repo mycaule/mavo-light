@@ -11,7 +11,7 @@ const sourcemaps = require('gulp-sourcemaps');
 const merge = require('merge2');
 const injectVersion = require('gulp-inject-version');
 
-const dependencies = ['../bliss/bliss.shy.min.js', '../stretchy/stretchy.min.js', '../jsep/build/jsep.min.js'];
+const dependencies = ['../bliss/bliss.shy.min.js', '../jsep/build/jsep.min.js'];
 const mavo = `mavo util locale locale.en plugins ui.bar ui.message permissions backend formats node group primitive ui.popup elements collection ui.itembar
 expression domexpression expressions mv-if mv-value functions mavoscript
 backend.dropbox backend.github`

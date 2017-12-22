@@ -1,5 +1,10 @@
-const bliss = require('blissfuljs');
-const jsep = require('jsep');
-const stretchy = require('stretchy');
+// Const self = {};
+import jsep from 'jsep';
+import Bliss from 'blissfuljs';
 
-console.log(bliss, jsep, stretchy);
+console.dir(jsep);
+console.dir(Bliss);
+window.jsep = jsep;
+self.jsep = jsep;
+console.log(jsep.addUnaryOp);
+console.log(jsep.addBinaryOp);

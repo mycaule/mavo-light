@@ -1,5 +1,8 @@
+/deps
 /node_modules
 *.map
 /dist/maps/
 dist/*.js
 dist/*.css
+.cache
+deps/dist

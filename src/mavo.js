@@ -1,4 +1,4 @@
-/* global Mavo, Bliss, Stretchy */
+/* global Mavo, Bliss */
 /* eslint new-cap: "off" */
 
 /**
@@ -238,7 +238,7 @@
           }
         }
 
-        requestAnimationFrame(() => Stretchy.resizeAll());
+        requestAnimationFrame(() => 1);
       });
 
       if (this.autoSave) {
@@ -761,8 +761,6 @@
 
     _.ready = _.thenAll(_.dependencies);
   });
-
-  Stretchy.selectors.filter = '.mv-editor:not([property]), .mv-autosize';
 
 // Define $ and $$ if they are not already defined
 // Primarily for backwards compat since we used to use Bliss Full.

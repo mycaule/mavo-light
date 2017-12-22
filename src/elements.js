@@ -537,7 +537,7 @@
           this.dateType = type;
 
           if (!dateFormat) {
-          // TODO what about mv-expressions?
+          // -TODO what about mv-expressions?
             this.element.textContent = this.config.defaultFormats[this.dateType](this.property);
             this.mavo.expressions.extract(this.element, null);
           }

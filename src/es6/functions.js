@@ -1,33 +1,27 @@
-/* global window */
+/* eslint no-unused-vars: "off" */
 
-// import v from 'voca';
+import v from 'voca';
+import {getMilliseconds, getSeconds, getMinutes, getHours, getDay, getDaysInMonth, getMonth, getYear, format} from 'date-fns';
 
 // // Functions available inside Mavo expressions
 
-const numeric = {
-  year: d => d.getFullYear(),
-  month: d => d.getMonth() + 1,
-  day: d => d.getDate(),
-  weekday: d => d.getDay() || 7,
-  hour: d => d.getHours(),
-  minute: d => d.getMinutes(),
-  second: d => d.getSeconds(),
-  ms: d => d.getMilliseconds()
-};
+export default (Mavo, $, location) => {
+  const val = Mavo.value;
+  const locale = Mavo.locale;
+  const getCanonicalProperty = Mavo.getCanonicalProperty;
+  const toArray = Mavo.toArray;
+  const match = Mavo.match;
+  const base = Mavo.base;
+  const safeToJSON = Mavo.safeToJSON;
 
-export default (Mavo, $, val, location) => {
-  /**
-   * Private helper methods
-   */
-
-    // Convert argument to string
+  // Convert argument to string
   const str = (str = '') => {
     str = val(str);
     return !str && str !== 0 ? '' : String(str);
   };
 
   const empty = v => {
-    v = Mavo.value(v);
+    v = val(v);
     return v === null || v === false || v === '';
   };
 
@@ -36,37 +30,11 @@ export default (Mavo, $, val, location) => {
   };
 
   const toLocaleString = (date, options) => {
-    let ret = date.toLocaleString(Mavo.locale, options);
+    let ret = date.toLocaleString(locale, options);
 
     ret = ret.replace(/\u200e/g, ''); // Stupid Edge bug
 
     return ret;
-  };
-
-  const getDateComponent = (component, u) => {
-    return date => {
-      date = u.date(date);
-
-      if (!date) {
-        return '';
-      }
-
-      let ret = numeric[component](date);
-
-      // We don't want years to be formatted like 2,017!
-      ret = new self[component === 'year' ? 'String' : 'Number'](ret);
-
-      if (component === 'month' || component === 'weekday') {
-        ret.name = toLocaleString(date, {[component]: 'long'});
-        ret.shortname = toLocaleString(date, {[component]: 'short'});
-      }
-
-      if (component !== 'weekday') {
-        ret.twodigit = (ret % 100 < 10 ? '0' : '') + (ret % 100);
-      }
-
-      return ret;
-    };
   };
 
   const $u = {
@@ -74,79 +42,6 @@ export default (Mavo, $, val, location) => {
       array = Array.isArray(array) ? array : (args ? $(args) : [array]);
 
       return array.filter(number => !isNaN(number) && val(number) !== '').map(n => Number(n));
-    },
-
-    fixDateString(date) {
-      date = date.trim();
-
-      const hasDate = /^\d{4}-\d{2}(-\d{2})?/.test(date);
-      const hasTime = date.indexOf(':') > -1;
-
-      if (!hasDate && !hasTime) {
-        return null;
-      }
-
-    // Fix up time format
-      if (hasDate) {
-      // Only year-month, add day
-        date = date.replace(/^(\d{4}-\d{2})(?!-\d{2})/, '$1-01');
-      } else {
-      // No date, add today’s
-        date = this.$today + ' ' + date;
-      }
-
-      if (hasTime) {
-      // Make sure time starts with T, due to Safari bug
-        date = date.replace(/-(\d{2})\s+(?=\d{2}:)/, '-$1T');
-      } else {
-      // Add a time if one doesn't exist
-        date += 'T00:00:00';
-      }
-
-    // Remove all whitespace
-      date = date.replace(/\s+/g, '');
-
-      return date;
-    },
-
-    date(date) {
-      date = val(date);
-
-      if (!date) {
-        return null;
-      }
-
-      if ($.type(date) === 'string') {
-        date = this.fixDateString(date);
-
-        if (date === null) {
-          return null;
-        }
-
-        const timezone = Mavo.match(date, /[+-]\d{2}:?\d{2}|Z$/);
-
-        if (timezone) {
-        // Parse as ISO format
-          date = new Date(date);
-        } else {
-        // Construct date in local timezone
-          const fields = date.match(/\d+/g);
-          date = new Date(
-          // Year, month, date,
-          fields[0], (fields[1] || 1) - 1, fields[2] || 1,
-          // Hours, minutes, seconds, milliseconds,
-          fields[3] || 0, fields[4] || 0, fields[5] || 0, fields[6] || 0
-        );
-        }
-      } else {
-        date = new Date(date);
-      }
-
-      if (isNaN(date)) {
-        return null;
-      }
-
-      return date;
     }
   };
 
@@ -161,7 +56,7 @@ export default (Mavo, $, val, location) => {
     get(obj, property, meta = {}) {
       meta.property = val(property);
       property = meta.property;
-      const canonicalProperty = Mavo.getCanonicalProperty(obj, property);
+      const canonicalProperty = getCanonicalProperty(obj, property);
 
       if (canonicalProperty !== undefined) {
         meta.property = canonicalProperty;
@@ -286,11 +181,11 @@ export default (Mavo, $, val, location) => {
     },
 
     count(array) {
-      return Mavo.toArray(array).filter(a => !empty(a)).length;
+      return toArray(array).filter(a => !empty(a)).length;
     },
 
     reverse(array) {
-      return Mavo.toArray(array).slice().reverse();
+      return toArray(array).slice().reverse();
     },
 
     round(num, decimals) {
@@ -340,7 +235,7 @@ export default (Mavo, $, val, location) => {
       }
 
       // Simple string replacement
-      const needleRegex = RegExp(Mavo.escapeRegExp(needle), 'g');
+      const needleRegex = RegExp(v.escapeRegExp(needle), 'g');
       let ret = haystack;
       let prev;
       let counter = 0;
@@ -353,47 +248,41 @@ export default (Mavo, $, val, location) => {
       return ret;
     },
 
-    len: text => str(text).length,
+    len: text => text.length,
 
     // Case insensitive search
-    search: (haystack, needle) => haystack && needle ? str(haystack).toLowerCase().indexOf((String(needle)).toLowerCase()) : -1,
+    search: (haystack, needle) => v.indexOf(haystack, needle),
+    starts: (haystack, needle) => v.startsWith(haystack, needle),
+    ends: (haystack, needle) => v.endsWith(haystack, needle),
+    join: (array, glue) => array.join(glue),
 
-    starts: (haystack, needle) => this.search(str(haystack), str(needle)) === 0,
-    ends(haystack, needle) {
-      [haystack, needle] = [str(haystack), str(needle)];
-
-      const i = this.search(haystack, needle);
-      return i > -1 && i === haystack.length - needle.length;
-    },
-
-    join(array, glue) {
-      return Mavo.toArray(array).join(str(glue));
-    },
-
-    idify(readable) {
-      return str(readable)
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Convert accented letters to ASCII
-      .replace(/[^\w\s-]/g, '') // Remove remaining non-ASCII characters
-      .trim().replace(/\s+/g, '-') // Convert whitespace to hyphens
-      .toLowerCase();
-    },
+    idify: str => v.slugify(str),
 
     // Convert an identifier to readable text that can be used as a label
-    readable(identifier) {
-      // Is it camelCase?
-      return str(identifier)
-        .replace(/([a-z])([A-Z])(?=[a-z])/g, ($0, $1, $2) => $1 + ' ' + $2.toLowerCase()) // CamelCase?
-        .replace(/([a-z0-9])[_/-](?=[a-z0-9])/g, '$1 ') // Hyphen-separated / Underscore_separated?
-        .replace(/^[a-z]/, $0 => $0.toUpperCase()); // Capitalize
+    readable: str => v(str).snakeCase().replaceAll('_', ' ').capitalize().value(),
+
+    uppercase: v.upperCase,
+    lowercase: v.lowerCase,
+
+    from: (haystack, needle) => {
+      const i = v.indexOf(haystack, needle);
+      return v.slice(haystack, i + 1);
     },
 
-    uppercase: text => str(text).toUpperCase(),
-    lowercase: text => str(text).toLowerCase(),
+    fromlast: (haystack, needle) => {
+      const i = v.lastIndexOf(haystack, needle);
+      return v.slice(haystack, i + 1);
+    },
 
-    from: (haystack, needle) => this.between(haystack, needle),
-    fromlast: (haystack, needle) => this.between(haystack, needle, '', true),
-    to: (haystack, needle) => this.between(haystack, '', needle),
-    tofirst: (haystack, needle) => this.between(haystack, '', needle, true),
+    to: (haystack, needle) => {
+      const i = v.lastIndexOf(haystack, needle);
+      return v.slice(haystack, 0, i);
+    },
+
+    tofirst: (haystack, needle) => {
+      const i = v.indexOf(haystack, needle);
+      return v.slice(haystack, 0, i);
+    },
 
     between: (haystack, from, to, tight) => {
       [haystack, from, to] = [str(haystack), str(from), str(to)];
@@ -408,9 +297,9 @@ export default (Mavo, $, val, location) => {
       return haystack.slice(i1 + 1, i2 === -1 || !to ? haystack.length : i2);
     },
 
-    filename: url => Mavo.match(new URL(str(url), Mavo.base).pathname, /[^/]+?$/),
+    filename: url => match(new URL(str(url), base).pathname, /[^/]+?$/),
 
-    json: data => Mavo.safeToJSON(data),
+    json: data => safeToJSON(data),
 
     // // Date functions
     get $now() {
@@ -419,30 +308,20 @@ export default (Mavo, $, val, location) => {
 
     $startup: new Date(), // Like $now, but doesn't update
 
-    get $today() {
-      return this.date(new Date());
-    },
+    year: getYear,
+    month: d => getMonth(d) + 1,
+    day: d => format(d, 'DD'),
+    weekday: getDay,
+    hour: getHours,
+    minute: getMinutes,
+    second: getSeconds,
+    ms: getMilliseconds,
 
-    year: getDateComponent('year', this),
-    month: getDateComponent('month', this),
-    day: getDateComponent('day', this),
-    weekday: getDateComponent('weekday', this),
-    hour: getDateComponent('hour', this),
-    minute: getDateComponent('minute', this),
-    second: getDateComponent('second', this),
-    ms: getDateComponent('ms', this),
+    time: date => format(date, 'HH:mm:ss'),
+    date: date => format(date, 'YYYY-MM-DD')
+  });
 
-    date: date => {
-      date = $u.date(date);
-
-      return date ? `${this.year(date)}-${this.month(date).twodigit}-${this.day(date).twodigit}` : '';
-    },
-    time: date => {
-      date = $u.date(date);
-
-      return date ? `${this.hour(date).twodigit}:${this.minute(date).twodigit}:${this.second(date).twodigit}` : '';
-    },
-
+  Object.assign(_, {
     minutes: seconds => Math.floor(Math.abs(seconds) / 60) || 0,
     hours: seconds => Math.floor(Math.abs(seconds) / 3600) || 0,
     days: seconds => Math.floor(Math.abs(seconds) / 86400) || 0,
@@ -465,8 +344,9 @@ export default (Mavo, $, val, location) => {
       return location.hash.slice(1);
     },
 
-    // "Private" helpers
-    util: $u
+    get $today() {
+      return _.date(new Date());
+    }
   });
 
   /*
@@ -476,8 +356,8 @@ export default (Mavo, $, val, location) => {
       let ret;
 
       const canonicalProperty =
-          Mavo.getCanonicalProperty(functions, property) ||
-          Mavo.getCanonicalProperty(Math, property);
+          getCanonicalProperty(functions, property) ||
+          getCanonicalProperty(Math, property);
 
       if (canonicalProperty) {
         ret = functions[canonicalProperty];
