@@ -594,7 +594,7 @@
         if (!button) {
           button = $.create('button', {
             className: 'mv-add',
-            textContent: this.mavo._('add-item', this)
+            textContent: 'add-item'
           });
         }
 

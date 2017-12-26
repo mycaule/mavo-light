@@ -53,152 +53,12 @@
     logout: () => Promise.resolve(),
     put: () => Promise.reject(),
 
-    isAuthenticated() {
-      return Boolean(this.accessToken);
-    },
-
-  // Any extra params to be passed to the oAuth URL.
-    oAuthParams: () => '',
-
     toString() {
       return `${this.id} (${this.url})`;
     },
 
     equals(backend) {
       return backend === this || (backend && this.id === backend.id && this.source === backend.source);
-    },
-
-  /**
-   * Helper for making OAuth requests with JSON-based APIs.
-   */
-    request(call, data, method = 'GET', req = {}) {
-      req.method = req.method || method;
-      req.responseType = req.responseType || 'json';
-
-      req.headers = $.extend({
-        'Content-Type': 'application/json; charset=utf-8'
-      }, req.headers || {});
-
-      req.data = data;
-
-      if (this.isAuthenticated()) {
-        req.headers.Authorization = req.headers.Authorization || `Bearer ${this.accessToken}`;
-      }
-
-      if ($.type(req.data) === 'object') {
-        if (req.method === 'GET') {
-          req.data = Object.keys(req.data).map(p => p + '=' + encodeURIComponent(req.data[p])).join('&');
-        } else {
-          req.data = JSON.stringify(req.data);
-        }
-      }
-
-      call = new URL(call, this.constructor.apiDomain);
-
-    // Prevent getting a cached response. Cache-control is often not allowed via CORS
-      if (req.method === 'GET') {
-        call.searchParams.set('timestamp', Date.now());
-      }
-
-      return $.fetch(call, req)
-      .catch(err => {
-        if (err && err.xhr) {
-          return Promise.reject(err.xhr);
-        }
-
-        this.mavo.error('Something went wrong while connecting to ' + this.id, err);
-      })
-      .then(xhr => req.method === 'HEAD' ? xhr : xhr.response);
-    },
-
-  /**
-   * Helper method for authenticating in OAuth APIs
-   */
-    oAuthenticate(passive) {
-      return this.ready.then(() => {
-        if (this.isAuthenticated()) {
-          return Promise.resolve();
-        }
-
-        return new Promise((resolve, reject) => {
-          const id = this.id.toLowerCase();
-
-          if (passive) {
-            this.accessToken = localStorage[`mavo:${id}token`];
-
-            if (this.accessToken) {
-              resolve(this.accessToken);
-            }
-          } else {
-          // Show window
-            const popup = {
-              width: Math.min(1000, innerWidth - 100),
-              height: Math.min(800, innerHeight - 100)
-            };
-
-            popup.top = (screen.height - popup.height) / 2;
-            popup.left = (screen.width - popup.width) / 2;
-
-            const state = {
-              url: location.href,
-              backend: this.id
-            };
-
-            this.authPopup = open(`${this.constructor.oAuth}?client_id=${this.key}&state=${encodeURIComponent(JSON.stringify(state))}` + this.oAuthParams(),
-            'popup', `width=${popup.width},height=${popup.height},left=${popup.left},top=${popup.top}`);
-
-            if (!this.authPopup) {
-              const message = 'Login popup was blocked! Please check your popup blocker settings.';
-              this.mavo.error(message);
-              reject(Error(message));
-            }
-
-            addEventListener('message', evt => {
-              if (evt.source === this.authPopup) {
-                if (evt.data.backend === this.id) {
-                  this.accessToken = localStorage[`mavo:${id}token`] = evt.data.token;
-                }
-
-                if (!this.accessToken) {
-                  reject(Error('Authentication error'));
-                }
-
-                resolve(this.accessToken);
-
-              // Log in to other similar backends that are logged out
-                for (const appid in Mavo.all) {
-                  const storage = Mavo.all[appid].primaryBackend;
-
-                  if (storage &&
-                  storage.id === this.id &&
-                  storage !== this &&
-                  !storage.isAuthenticated()) {
-                    storage.login(true);
-                  }
-                }
-              }
-            });
-          }
-        });
-      });
-    },
-
-  /**
-   * OAuth logout helper
-   */
-    oAuthLogout() {
-      if (this.isAuthenticated()) {
-        const id = this.id.toLowerCase();
-
-        localStorage.removeItem(`mavo:${id}token`);
-        delete this.accessToken;
-
-        this.permissions.off(['edit', 'add', 'delete', 'save']).on('login');
-
-        $.fire(this.mavo.element, 'mv-logout', {backend: this});
-      }
-
-      return Promise.resolve();
     },
 
     static: {
@@ -265,7 +125,7 @@
     },
 
     static: {
-      test: url => false
+      test: () => false
     }
   }));
 

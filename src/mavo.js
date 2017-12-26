@@ -2,9 +2,7 @@
 /* eslint new-cap: "off" */
 
 /**
- * Mavo: Create web applications by writing HTML and CSS!
- * @author Lea Verou and contributors
- * @version %%VERSION%%
+ * Mavo v%%VERSION%%
  */
 (function ($, $$) {
   const _ = self.Mavo = $.Class({
@@ -45,8 +43,8 @@
       _.all[this.id] = this;
       this.element.setAttribute('mv-app', this.id);
 
-      const lang = $.value(this.element.closest('[lang]'), 'lang') || Mavo.locale;
-      this.locale = Mavo.Locale.get(lang);
+      const lang = $.value(this.element.closest('[lang]'), 'lang');
+      this.locale = 'en-US';
 
     // Should we start in edit mode?
       this.autoEdit = this.element.classList.contains('mv-autoedit');
@@ -315,17 +313,7 @@
       return _.toJSON(this.getData());
     },
 
-    message(message, options) {
-      return new _.UI.Message(this, message, options);
-    },
-
     error(message, ...log) {
-      this.message(message, {
-        type: 'error',
-        dismiss: ['button', 'timeout']
-      });
-
-    // Log more info for programmers
       if (log.length > 0) {
         console.log(`%c${this.id}: ${message}`, 'color: red; font-weight: bold', ...log);
       }
@@ -488,10 +476,10 @@
         if (xhr && xhr.status === 404) {
           this.render(null);
         } else {
-          let message = this._('problem-loading');
+          let message = 'problem-loading';
 
           if (xhr) {
-            message += xhr.status ? this._('http-error', err) : ': ' + this._('cant-connect');
+            message += xhr.status ? 'http-error' : ': cant-connect';
           }
 
           this.error(message, err);
@@ -519,10 +507,10 @@
       return this.storage.store(this.getData())
       .catch(err => {
         if (err) {
-          let message = this._('problem-saving');
+          let message = 'problem-saving';
 
           if (err instanceof XMLHttpRequest) {
-            message += ': ' + (err.status ? this._('http-error', err) : this._('cant-connect'));
+            message += ': ' + (err.status ? 'http-error' : 'cant-connect');
           }
 
           this.error(message, err);
@@ -533,25 +521,6 @@
       .then(saved => {
         this.inProgress = false;
         return saved;
-      });
-    },
-
-    upload(file, path = 'images/' + file.name) {
-      if (!this.uploadBackend) {
-        return Promise.reject();
-      }
-
-      this.inProgress = this._('uploading');
-
-      return this.uploadBackend.upload(file, path)
-      .then(url => {
-        this.inProgress = false;
-        return url;
-      })
-      .catch(err => {
-        this.error(this._('error-uploading'), err);
-        this.inProgress = false;
-        return null;
       });
     },
 
@@ -593,7 +562,7 @@
       inProgress(value) {
         $.toggleAttribute(this.element, 'mv-progress', value, value);
         $.toggleAttribute(this.element, 'aria-busy', Boolean(value), Boolean(value));
-        this.element.style.setProperty('--mv-progress-text', value ? `"${this._(value)}"` : '');
+        this.element.style.setProperty('--mv-progress-text', value ? `"${value}"` : '');
       },
 
       unsavedChanges(value) {
@@ -676,7 +645,7 @@
       ],
 
       lazy: {
-        locale: () => document.documentElement.lang || 'en-GB',
+        locale: () => document.documentElement.lang || 'en-US',
         toNode: () => Symbol('toNode')
       }
     }

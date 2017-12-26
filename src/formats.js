@@ -55,52 +55,6 @@
     }
   });
 
-  var csv = _.CSV = $.Class({
-    extends: _.Base,
-    constructor(backend) {
-      this.property = this.mavo.root.getNames('Collection')[0];
-      this.options = $.extend({}, _.CSV.defaultOptions);
-    },
-
-    static: {
-      extensions: ['.csv', '.tsv'],
-      defaultOptions: {
-        header: true,
-        dynamicTyping: true,
-        skipEmptyLines: true
-      },
-      dependencies: [{
-        test: () => self.Papa,
-        url: 'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.4/papaparse.min.js'
-      }],
-      ready: base.ready,
-      parse: (serialized, me) => csv.ready().then(() => {
-        const data = Papa.parse(serialized, csv.defaultOptions);
-        const property = me ? me.property : 'content';
-
-        if (me) {
-        // Get delimiter & linebreak for serialization
-          me.options.delimiter = data.meta.delimiter;
-          me.options.linebreak = data.meta.linebreak;
-        }
-
-        if (data.meta.aborted) {
-          throw data.meta.errors.pop();
-        }
-
-        return {
-          [property]: data.data
-        };
-      }),
-
-      stringify: (data, me) => csv.ready().then(() => {
-        const property = me ? me.property : 'content';
-        const options = me ? me.options : csv.defaultOptions;
-        return Papa.unparse(data[property], options);
-      })
-    }
-  });
-
   Object.defineProperty(_, 'create', {
     value(format, backend) {
       if (format && typeof format === 'object') {

@@ -7,7 +7,7 @@ import {getMilliseconds, getSeconds, getMinutes, getHours, getDay, getDaysInMont
 
 export default (Mavo, $, location) => {
   const val = Mavo.value;
-  const locale = Mavo.locale;
+  const locale = 'en-US';
   const getCanonicalProperty = Mavo.getCanonicalProperty;
   const toArray = Mavo.toArray;
   const match = Mavo.match;

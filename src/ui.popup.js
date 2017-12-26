@@ -7,7 +7,7 @@
       this.primitive = primitive;
 
     // Need to be defined here so that this is what expected
-      this.position = evt => {
+      this.position = () => {
         const bounds = this.primitive.element.getBoundingClientRect();
         const x = bounds.left;
         let y = bounds.bottom;
@@ -113,7 +113,7 @@
 
     prepare() {
       $.bind(this.primitive.element, {
-        'click.mavo:edit': evt => {
+        'click.mavo:edit': () => {
           this.show();
         },
         'keyup.mavo:edit': evt => {

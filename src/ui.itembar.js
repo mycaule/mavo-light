@@ -24,19 +24,15 @@
         const buttons = [
           {
             tag: 'button',
-            title: this.mavo._('delete-item', this.item),
+            title: 'delete-item',
             className: 'mv-delete'
-          }, {
-            tag: 'button',
-            title: this.mavo._(`add-item-${this.collection.bottomUp ? 'after' : 'before'}`, this.item),
-            className: 'mv-add'
           }
         ];
 
         if (this.item instanceof Mavo.Group) {
           this.dragHandle = $.create({
             tag: 'button',
-            title: this.mavo._('drag-to-reorder', this.item),
+            title: 'drag-to-reorder',
             className: 'mv-drag-handle'
           });
 
@@ -56,10 +52,10 @@
       $.bind([this.item.element, this.element], 'focusin mouseover', this);
 
       $.bind(this.element, {
-        mouseenter: evt => {
+        mouseenter: () => {
           this.item.element.classList.add('mv-highlight');
         },
-        mouseleave: evt => {
+        mouseleave: () => {
           this.item.element.classList.remove('mv-highlight');
         }
       });

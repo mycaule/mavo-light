@@ -814,7 +814,7 @@
 
       lazy: {
         formatNumber: () => {
-          const numberFormat = new Intl.NumberFormat(Mavo.locale, {maximumFractionDigits: 2});
+          const numberFormat = new Intl.NumberFormat('en-US', {maximumFractionDigits: 2});
 
           return function (value) {
             if (value === Infinity || value === -Infinity) {

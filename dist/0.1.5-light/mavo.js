@@ -6,9 +6,7 @@
 /* eslint new-cap: "off" */
 
 /**
- * Mavo: Create web applications by writing HTML and CSS!
- * @author Lea Verou and contributors
- * @version v0.1.5
+ * Mavo vv0.1.5
  */
 (function ($, $$) {
   const _ = self.Mavo = $.Class({
@@ -49,8 +47,8 @@
       _.all[this.id] = this;
       this.element.setAttribute('mv-app', this.id);
 
-      const lang = $.value(this.element.closest('[lang]'), 'lang') || Mavo.locale;
-      this.locale = Mavo.Locale.get(lang);
+      const lang = $.value(this.element.closest('[lang]'), 'lang');
+      this.locale = 'en-US';
 
     // Should we start in edit mode?
       this.autoEdit = this.element.classList.contains('mv-autoedit');
@@ -319,17 +317,7 @@
       return _.toJSON(this.getData());
     },
 
-    message(message, options) {
-      return new _.UI.Message(this, message, options);
-    },
-
     error(message, ...log) {
-      this.message(message, {
-        type: 'error',
-        dismiss: ['button', 'timeout']
-      });
-
-    // Log more info for programmers
       if (log.length > 0) {
         console.log(`%c${this.id}: ${message}`, 'color: red; font-weight: bold', ...log);
       }
@@ -492,10 +480,10 @@
         if (xhr && xhr.status === 404) {
           this.render(null);
         } else {
-          let message = this._('problem-loading');
+          let message = 'problem-loading';
 
           if (xhr) {
-            message += xhr.status ? this._('http-error', err) : ': ' + this._('cant-connect');
+            message += xhr.status ? 'http-error' : ': cant-connect';
           }
 
           this.error(message, err);
@@ -523,10 +511,10 @@
       return this.storage.store(this.getData())
       .catch(err => {
         if (err) {
-          let message = this._('problem-saving');
+          let message = 'problem-saving';
 
           if (err instanceof XMLHttpRequest) {
-            message += ': ' + (err.status ? this._('http-error', err) : this._('cant-connect'));
+            message += ': ' + (err.status ? 'http-error' : 'cant-connect');
           }
 
           this.error(message, err);
@@ -537,25 +525,6 @@
       .then(saved => {
         this.inProgress = false;
         return saved;
-      });
-    },
-
-    upload(file, path = 'images/' + file.name) {
-      if (!this.uploadBackend) {
-        return Promise.reject();
-      }
-
-      this.inProgress = this._('uploading');
-
-      return this.uploadBackend.upload(file, path)
-      .then(url => {
-        this.inProgress = false;
-        return url;
-      })
-      .catch(err => {
-        this.error(this._('error-uploading'), err);
-        this.inProgress = false;
-        return null;
       });
     },
 
@@ -597,7 +566,7 @@
       inProgress(value) {
         $.toggleAttribute(this.element, 'mv-progress', value, value);
         $.toggleAttribute(this.element, 'aria-busy', Boolean(value), Boolean(value));
-        this.element.style.setProperty('--mv-progress-text', value ? `"${this._(value)}"` : '');
+        this.element.style.setProperty('--mv-progress-text', value ? `"${value}"` : '');
       },
 
       unsavedChanges(value) {
@@ -680,7 +649,7 @@
       ],
 
       lazy: {
-        locale: () => document.documentElement.lang || 'en-GB',
+        locale: () => document.documentElement.lang || 'en-US',
         toNode: () => Symbol('toNode')
       }
     }
@@ -751,10 +720,8 @@
     const polyfillURL = 'https://cdn.polyfill.io/v2/polyfill.min.js?unknown=polyfill&features=' + polyfills.map(a => a + '|gated').join(',');
 
     _.dependencies.push(
-    // Plugins.load() must be run after DOM load to pick up all mv-plugins attributes
-    $.ready().then(() => _.Plugins.load()),
-    $.include(!polyfills.length, polyfillURL)
-  );
+      $.include(!polyfills.length, polyfillURL)
+    );
 
     _.inited = $.ready().then(() => {
       $.attributes($$(_.selectors.init), {'mv-progress': 'Loading'});
@@ -881,14 +848,15 @@
       return arr === undefined ? [] : Array.isArray(arr) ? arr : [arr];
     },
 
-    delete: (arr, element, all) => {
-      do {
-        const index = arr && arr.indexOf(element);
+    delete: (arr, element) => {
+      let index;
 
+      do {
+        index = arr && arr.indexOf(element);
         if (index > -1) {
           arr.splice(index, 1);
         }
-      } while (index > -1 && all);
+      } while (index > -1);
     },
 
   // Recursively flatten a multi-dimensional array
@@ -1543,257 +1511,6 @@
 /* global Mavo, Bliss */
 /* eslint new-cap: "off" */
 
-(function ($, $$) {
-  const _ = Mavo.Locale = $.Class({
-    constructor(lang, phrases) {
-      this.lang = lang;
-      this.phrases = {};
-      this.extend(phrases);
-    },
-
-    get fallback() {
-    // -TODO should we fallback to other dialects? I.e. should en-US fallback to en-GB if en didn't exist?
-      if (_.all[this.baseLang]) {
-        return _.all[this.baseLang];
-      }
-
-      if (this !== _.default) {
-        return _.default;
-      }
-    },
-
-    extend(phrases) {
-      $.extend(this.phrases, phrases);
-    },
-
-    phrase(id, vars) {
-      const key = id.toLowerCase();
-      let phrase = this.phrases[key];
-
-      if (phrase === undefined && this.fallback) {
-        phrase = this.fallback.phrase(key);
-      }
-
-      if (phrase === undefined) {
-      // Everything failed, use id
-        phrase = Mavo.Functions.readable(key);
-      } else if (vars) {
-        const keys = Mavo.matches(phrase, /\{\w+(?=\})/g).map(v => v.slice(1));
-        Mavo.Functions.unique(keys).forEach(name => {
-          if (name in vars) {
-            phrase = phrase.replace(RegExp(`{${name}}`, 'gi'), vars[name]);
-          }
-        });
-      }
-
-      return phrase;
-    },
-
-    live: {
-      lang(lang) {
-        this.baseLang = _.getBaseLang(lang);
-
-        if (lang === this.baseLang) {
-          this.baseLang = null;
-        }
-      }
-    },
-
-    static: {
-      all: {},
-
-    /**
-     * Register new locale or extend existing locale
-     */
-      register(lang, phrases) {
-        if (_.all[lang]) {
-          _.all[lang].extend(phrases);
-        } else {
-          _.all[lang] = new _(lang, phrases);
-        }
-      },
-
-      match(lang = '') {
-        return _.all[lang] || _.all[_.getBaseLang(lang)];
-      },
-
-      get(lang) {
-        return _.match(lang) || _.default;
-      },
-
-      getBaseLang(lang) {
-        return lang.split('-')[0];
-      },
-
-      lazy: {
-        default: () => {
-          return _.match(Mavo.locale) || _.all.en;
-        }
-      }
-    }
-  });
-
-/**
- * Use phrase
- */
-  Mavo.prototype._ = function (id, vars) {
-    return this.locale && id ? this.locale.phrase(id, vars) : id;
-  };
-
-  $.ready().then(() => {
-    $$('datalist.mv-phrases[lang]').forEach(datalist => {
-      const phrases = $$('option', datalist).reduce((o, option) => {
-        o[option.value] = option.textContent.trim();
-        return o;
-      }, {});
-
-      Mavo.Locale.register(datalist.lang, phrases);
-    });
-  });
-})(Bliss, Bliss.$);
-
-/* global Mavo */
-
-Mavo.Locale.register('en', {
-  edit: 'Edit',
-  save: 'Save',
-  import: 'Import',
-  export: 'Export',
-  logout: 'Logout',
-  login: 'Login',
-  loading: 'Loading',
-  uploading: 'Uploading',
-  saving: 'Saving',
-  'logged-in-as': 'Logged in to {id} as ',
-  'login-to': 'Login to {id}',
-  'error-uploading': 'Error uploading file',
-  'cannot-load-uploaded-file': 'Cannot load uploaded file',
-  'problem-saving': 'Problem saving data',
-  'problem-loading': 'Problem loading data',
-  'cannot-parse': 'Can’t understand this file',
-  'http-error': 'HTTP error {status}: {statusText}',
-  'cant-connect': 'Can’t connect to the Internet',
-  'add-item': 'Add {name}',
-  'add-item-before': 'Add new {name} before',
-  'add-item-after': 'Add new {name} after',
-  'drag-to-reorder': 'Drag to reorder {name}',
-  'delete-item': 'Delete this {name}',
-  'gh-updated-file': 'Updated {name}',
-  'gh-edit-suggestion-saved-in-profile': 'Your edits are saved to <a href="{previewURL}" target="_blank">your own profile</a>, because you are not allowed to edit this page.',
-  'gh-edit-suggestion-instructions': 'Write a short description of your edits below to suggest them to the page admins:',
-  'gh-edit-suggestion-notreviewed': 'You have selected to suggest your edits to the page admins. Your suggestions have not been reviewed yet.',
-  'gh-edit-suggestion-send': 'Send edit suggestion',
-  'gh-edit-suggestion-revoke': 'Revoke edit suggestion',
-  'gh-edit-suggestion-reason-placeholder': 'I added / corrected / deleted ...',
-  'gh-edit-suggestion-cancelled': 'Edit suggestion cancelled successfully!',
-  'gh-edit-suggestion-title': 'Suggested edits to data',
-  'gh-edit-suggestion-body': `Hello there! I used Mavo to suggest the following edits:
-{description}
-Preview my changes here: {previewURL}`,
-  'gh-edit-suggestion-sent': 'Edit suggestion sent successfully!'
-});
-
-/* global Mavo, Bliss */
-/* eslint new-cap: "off" */
-
-(function ($, $$) {
-  Mavo.attributes.push('mv-plugins');
-
-  const _ = Mavo.Plugins = {
-    loaded: {},
-
-    load() {
-      _.plugins = new Set();
-
-      $$('[mv-plugins]').forEach(element => {
-        element
-        .getAttribute('mv-plugins').trim().split(/\s+/)
-        .forEach(plugin => _.plugins.add(plugin));
-      });
-
-      if (!_.plugins.size) {
-        return Promise.resolve();
-      }
-
-    // Fetch plugin index
-      return $.fetch(_.url + '/plugins.json', {
-        responseType: 'json'
-      }).then(xhr => {
-      // Fetch plugins
-        return Mavo.thenAll(xhr.response.plugin
-        .filter(plugin => _.plugins.has(plugin.id))
-        .map(plugin => {
-          // Load plugin
-          const filename = `mavo-${plugin.id}.js`;
-
-          if (plugin.repo) {
-            // Plugin hosted in a separate repo
-            var url = `https://raw.githubusercontent.com/${plugin.repo}/master/${filename}`;
-
-            return _.loaded[plugin.id] ? Promise.resolve() : $.fetch(url).then(xhr => {
-              $.create('script', {
-                textContent: xhr.responseText,
-                inside: document.head
-              });
-            });
-          }
-
-            // Plugin hosted in the mavo-plugins repo
-          var url = `${_.url}/${plugin.id}/${filename}`;
-
-          return $.include(_.loaded[plugin.id], url);
-        }));
-      });
-    },
-
-    register(name, o = {}) {
-      if (_.loaded[name]) {
-      // Do not register same plugin twice
-        return;
-      }
-
-      Mavo.hooks.add(o.hooks);
-
-      for (const Class in o.extend) {
-        const existing = Class === 'Mavo' ? Mavo : Mavo[Class];
-
-        if ($.type(existing) === 'function') {
-          $.Class(existing, o.extend[Class]);
-        } else {
-          $.extend(existing, o.extend[Class]);
-        }
-      }
-
-      const ready = [];
-
-      if (o.ready) {
-        ready.push(o.ready);
-      }
-
-      if (o.dependencies) {
-        const base = document.currentScript ? document.currentScript.src : location;
-        const dependencies = o.dependencies.map(url => Mavo.load(url, base));
-        ready.push(...dependencies);
-      }
-
-      if (ready.length) {
-        Mavo.dependencies.push(...ready);
-      }
-
-      _.loaded[name] = o;
-
-      if (o.init) {
-        Promise.all(ready).then(() => o.init());
-      }
-    },
-
-    url: 'https://plugins.mavo.io'
-  };
-})(Bliss, Bliss.$);
-
-/* global Mavo, Bliss */
-/* eslint new-cap: "off" */
-
 (function ($) {
   Mavo.attributes.push('mv-bar');
 
@@ -1858,7 +1575,7 @@ Preview my changes here: {previewURL}`,
         } else if (!this[id]) {
           this[id] = $.create('button', {
             className: `mv-${id}`,
-            textContent: this.mavo._(id)
+            textContent: id
           });
         }
 
@@ -1898,7 +1615,7 @@ Preview my changes here: {previewURL}`,
         this.resize();
 
         if (self.ResizeObserver) {
-          this.resizeObserver = Mavo.observeResize(this.element, entries => {
+          this.resizeObserver = Mavo.observeResize(this.element, () => {
             this.resize();
           });
         }
@@ -2020,8 +1737,6 @@ Preview my changes here: {previewURL}`,
               if (user.url) {
                 html = `<a href="${user.url}" target="_blank">${html}</a>`;
               }
-
-              this.bar.status.innerHTML = `<span>${this._('logged-in-as', backend)}</span> ` + html;
             }
           },
           permission: 'logout'
@@ -2076,7 +1791,7 @@ Preview my changes here: {previewURL}`,
             } else {
               a = $.create('a', {
                 className: 'mv-export mv-button',
-                textContent: this._('export')
+                textContent: 'export'
               });
             }
 
@@ -2099,9 +1814,9 @@ Preview my changes here: {previewURL}`,
               role: 'button',
               tabIndex: '0',
               className: 'mv-import mv-button',
-              textContent: this._('import'),
+              textContent: 'import',
               events: {
-                focus: evt => {
+                focus: () => {
                   input.focus();
                 }
               }
@@ -2122,16 +1837,16 @@ Preview my changes here: {previewURL}`,
                         try {
                           const json = JSON.parse(reader.result);
                           this.render(json);
-                        } catch (e) {
-                          this.error(this._('cannot-parse'));
+                        } catch (err) {
+                          this.error('cannot-parse');
                         }
                       },
-                      onerror: evt => {
-                        this.error(this._('problem-loading'));
+                      onerror: () => {
+                        this.error('problem-loading');
                       }
                     });
 
-                    this.inProgress = this._('uploading');
+                    this.inProgress = 'uploading';
                     reader.readAsText(file);
                   }
                 }
@@ -2157,85 +1872,6 @@ Preview my changes here: {previewURL}`,
           permission: 'logout'
         }
       }
-    }
-  });
-})(Bliss);
-
-/* global Mavo, Bliss */
-/* eslint new-cap: "off" */
-
-(function ($) {
-  const _ = Mavo.UI.Message = $.Class({
-    constructor(mavo, message, o) {
-      this.mavo = mavo;
-      this.message = message;
-      this.closed = Mavo.defer();
-
-      this.element = $.create({
-        className: 'mv-ui mv-message' + (o.type ? ' mv-' + o.type : ''),
-        innerHTML: this.message,
-        events: {
-          click: e => Mavo.scrollIntoViewIfNeeded(this.mavo.element)
-        },
-        [this.mavo.bar ? 'after' : 'start']: (this.mavo.bar || this.mavo).element
-      });
-
-      if (o.classes) {
-        this.element.classList.add(o.classes);
-      }
-
-      if (o.type === 'error') {
-        this.element.setAttribute('role', 'alert');
-      } else {
-        this.element.setAttribute('aria-live', 'polite');
-      }
-
-      o.dismiss = o.dismiss || {};
-
-      if (typeof o.dismiss === 'string' || Array.isArray(o.dismiss)) {
-        const dismiss = {};
-
-        Mavo.toArray(o.dismiss).forEach(prop => {
-          dismiss[prop] = true;
-        });
-
-        o.dismiss = dismiss;
-      }
-
-      if (o.dismiss.button) {
-        $.create('button', {
-          className: 'mv-close mv-ui',
-          textContent: '×',
-          events: {
-            click: evt => this.close()
-          },
-          start: this.element
-        });
-      }
-
-      if (o.dismiss.timeout) {
-        const timeout = typeof o.dismiss.timeout === 'number' ? o.dismiss.timeout : 5000;
-        let closeTimeout;
-
-        $.bind(this.element, {
-          mouseenter: e => clearTimeout(closeTimeout),
-          mouseleave: Mavo.rr(e => closeTimeout = setTimeout(() => this.close(), timeout))
-        });
-      }
-
-      if (o.dismiss.submit) {
-        this.element.addEventListener('submit', evt => {
-          evt.preventDefault();
-          this.close(evt.target);
-        });
-      }
-    },
-
-    close(resolve) {
-      $.transition(this.element, {opacity: 0}).then(() => {
-        $.remove(this.element);
-        this.closed.resolve(resolve);
-      });
     }
   });
 })(Bliss);
@@ -2531,152 +2167,12 @@ Preview my changes here: {previewURL}`,
     logout: () => Promise.resolve(),
     put: () => Promise.reject(),
 
-    isAuthenticated() {
-      return Boolean(this.accessToken);
-    },
-
-  // Any extra params to be passed to the oAuth URL.
-    oAuthParams: () => '',
-
     toString() {
       return `${this.id} (${this.url})`;
     },
 
     equals(backend) {
       return backend === this || (backend && this.id === backend.id && this.source === backend.source);
-    },
-
-  /**
-   * Helper for making OAuth requests with JSON-based APIs.
-   */
-    request(call, data, method = 'GET', req = {}) {
-      req.method = req.method || method;
-      req.responseType = req.responseType || 'json';
-
-      req.headers = $.extend({
-        'Content-Type': 'application/json; charset=utf-8'
-      }, req.headers || {});
-
-      req.data = data;
-
-      if (this.isAuthenticated()) {
-        req.headers.Authorization = req.headers.Authorization || `Bearer ${this.accessToken}`;
-      }
-
-      if ($.type(req.data) === 'object') {
-        if (req.method === 'GET') {
-          req.data = Object.keys(req.data).map(p => p + '=' + encodeURIComponent(req.data[p])).join('&');
-        } else {
-          req.data = JSON.stringify(req.data);
-        }
-      }
-
-      call = new URL(call, this.constructor.apiDomain);
-
-    // Prevent getting a cached response. Cache-control is often not allowed via CORS
-      if (req.method === 'GET') {
-        call.searchParams.set('timestamp', Date.now());
-      }
-
-      return $.fetch(call, req)
-      .catch(err => {
-        if (err && err.xhr) {
-          return Promise.reject(err.xhr);
-        }
-
-        this.mavo.error('Something went wrong while connecting to ' + this.id, err);
-      })
-      .then(xhr => req.method === 'HEAD' ? xhr : xhr.response);
-    },
-
-  /**
-   * Helper method for authenticating in OAuth APIs
-   */
-    oAuthenticate(passive) {
-      return this.ready.then(() => {
-        if (this.isAuthenticated()) {
-          return Promise.resolve();
-        }
-
-        return new Promise((resolve, reject) => {
-          const id = this.id.toLowerCase();
-
-          if (passive) {
-            this.accessToken = localStorage[`mavo:${id}token`];
-
-            if (this.accessToken) {
-              resolve(this.accessToken);
-            }
-          } else {
-          // Show window
-            const popup = {
-              width: Math.min(1000, innerWidth - 100),
-              height: Math.min(800, innerHeight - 100)
-            };
-
-            popup.top = (screen.height - popup.height) / 2;
-            popup.left = (screen.width - popup.width) / 2;
-
-            const state = {
-              url: location.href,
-              backend: this.id
-            };
-
-            this.authPopup = open(`${this.constructor.oAuth}?client_id=${this.key}&state=${encodeURIComponent(JSON.stringify(state))}` + this.oAuthParams(),
-            'popup', `width=${popup.width},height=${popup.height},left=${popup.left},top=${popup.top}`);
-
-            if (!this.authPopup) {
-              const message = 'Login popup was blocked! Please check your popup blocker settings.';
-              this.mavo.error(message);
-              reject(Error(message));
-            }
-
-            addEventListener('message', evt => {
-              if (evt.source === this.authPopup) {
-                if (evt.data.backend === this.id) {
-                  this.accessToken = localStorage[`mavo:${id}token`] = evt.data.token;
-                }
-
-                if (!this.accessToken) {
-                  reject(Error('Authentication error'));
-                }
-
-                resolve(this.accessToken);
-
-              // Log in to other similar backends that are logged out
-                for (const appid in Mavo.all) {
-                  const storage = Mavo.all[appid].primaryBackend;
-
-                  if (storage &&
-                  storage.id === this.id &&
-                  storage !== this &&
-                  !storage.isAuthenticated()) {
-                    storage.login(true);
-                  }
-                }
-              }
-            });
-          }
-        });
-      });
-    },
-
-  /**
-   * OAuth logout helper
-   */
-    oAuthLogout() {
-      if (this.isAuthenticated()) {
-        const id = this.id.toLowerCase();
-
-        localStorage.removeItem(`mavo:${id}token`);
-        delete this.accessToken;
-
-        this.permissions.off(['edit', 'add', 'delete', 'save']).on('login');
-
-        $.fire(this.mavo.element, 'mv-logout', {backend: this});
-      }
-
-      return Promise.resolve();
     },
 
     static: {
@@ -2743,7 +2239,7 @@ Preview my changes here: {previewURL}`,
     },
 
     static: {
-      test: url => false
+      test: () => false
     }
   }));
 
@@ -2830,52 +2326,6 @@ Preview my changes here: {previewURL}`,
       extensions: ['.txt'],
       parse: (serialized, me) => Promise.resolve({[me ? me.property : 'content']: serialized}),
       stringify: (data, me) => Promise.resolve(data[me ? me.property : 'content'])
-    }
-  });
-
-  var csv = _.CSV = $.Class({
-    extends: _.Base,
-    constructor(backend) {
-      this.property = this.mavo.root.getNames('Collection')[0];
-      this.options = $.extend({}, _.CSV.defaultOptions);
-    },
-
-    static: {
-      extensions: ['.csv', '.tsv'],
-      defaultOptions: {
-        header: true,
-        dynamicTyping: true,
-        skipEmptyLines: true
-      },
-      dependencies: [{
-        test: () => self.Papa,
-        url: 'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.4/papaparse.min.js'
-      }],
-      ready: base.ready,
-      parse: (serialized, me) => csv.ready().then(() => {
-        const data = Papa.parse(serialized, csv.defaultOptions);
-        const property = me ? me.property : 'content';
-
-        if (me) {
-        // Get delimiter & linebreak for serialization
-          me.options.delimiter = data.meta.delimiter;
-          me.options.linebreak = data.meta.linebreak;
-        }
-
-        if (data.meta.aborted) {
-          throw data.meta.errors.pop();
-        }
-
-        return {
-          [property]: data.data
-        };
-      }),
-
-      stringify: (data, me) => csv.ready().then(() => {
-        const property = me ? me.property : 'content';
-        const options = me ? me.options : csv.defaultOptions;
-        return Papa.unparse(data[property], options);
-      })
     }
   });
 
@@ -4719,7 +4169,7 @@ Preview my changes here: {previewURL}`,
 
       lazy: {
         formatNumber: () => {
-          const numberFormat = new Intl.NumberFormat(Mavo.locale, {maximumFractionDigits: 2});
+          const numberFormat = new Intl.NumberFormat('en-US', {maximumFractionDigits: 2});
 
           return function (value) {
             if (value === Infinity || value === -Infinity) {
@@ -4744,7 +4194,7 @@ Preview my changes here: {previewURL}`,
       this.primitive = primitive;
 
     // Need to be defined here so that this is what expected
-      this.position = evt => {
+      this.position = () => {
         const bounds = this.primitive.element.getBoundingClientRect();
         const x = bounds.left;
         let y = bounds.bottom;
@@ -4850,7 +4300,7 @@ Preview my changes here: {previewURL}`,
 
     prepare() {
       $.bind(this.primitive.element, {
-        'click.mavo:edit': evt => {
+        'click.mavo:edit': () => {
           this.show();
         },
         'keyup.mavo:edit': evt => {
@@ -5028,132 +4478,6 @@ Preview my changes here: {previewURL}`,
       datatype: 'number'
     },
 
-    media: {
-      default: true,
-      selector: 'img, video, audio',
-      attribute: 'src',
-      editor() {
-        const mainInput = $.create('input', {
-          type: 'url',
-          placeholder: 'http://example.com/image.png',
-          className: 'mv-output',
-          'aria-label': 'URL to image'
-        });
-
-        if (this.mavo.uploadBackend && self.FileReader) {
-          let popup;
-          let type = this.element.nodeName.toLowerCase();
-          type = type === 'img' ? 'image' : type;
-          const path = this.element.getAttribute('mv-uploads') || type + 's';
-
-          const upload = (file, name = file.name) => {
-            if (!file || file.type.indexOf(type + '/') !== 0) {
-              return;
-            }
-
-            const tempURL = URL.createObjectURL(file);
-
-            this.sneak(() => this.element.src = tempURL);
-
-            this.mavo.upload(file, path + '/' + name).then(url => {
-            // Backend claims image is uploaded, we should load it from remote to make sure everything went well
-              let attempts = 0;
-              const load = Mavo.rr(() => Mavo.timeout(1000 + attempts * 500).then(() => {
-                attempts++;
-                this.element.src = url;
-              }));
-              const cleanup = () => {
-                URL.revokeObjectURL(tempURL);
-                this.element.removeEventListener('load', onload);
-                this.element.removeEventListener('error', onload);
-              };
-              var onload = evt => {
-                if (this.element.src != tempURL) {
-                // Actual uploaded image has loaded, yay!
-                  this.element.src = url;
-                  cleanup();
-                }
-              };
-              const onerror = evt => {
-              // Oops, failed. Put back temp URL and try again
-                if (attempts <= 10) {
-                  this.sneak(() => this.element.src = tempURL);
-                  load();
-                } else {
-                // 11 + 0.5*10*11/2 = 38.5 seconds later, giving up
-                  this.mavo.error(this.mavo._('cannot-load-uploaded-file') + ' ' + url);
-                  cleanup();
-                }
-              };
-
-              mainInput.value = url;
-              this.element.addEventListener('load', onload);
-              this.element.addEventListener('error', onerror);
-            });
-          };
-
-          const uploadEvents = {
-            paste: evt => {
-              const item = evt.clipboardData.items[0];
-
-              if (item.kind === 'file' && item.type.indexOf(type + '/') === 0) {
-              // Is a file of the correct type, upload!
-                const name = `pasted-${type}-${Date.now()}.${item.type.slice(6)}`; // Image, video, audio are all 5 chars
-                upload(item.getAsFile(), name);
-                evt.preventDefault();
-              }
-            },
-            'drag dragstart dragend dragover dragenter dragleave drop': evt => {
-              evt.preventDefault();
-              evt.stopPropagation();
-            },
-            'dragover dragenter': evt => {
-              popup.classList.add('mv-dragover');
-              this.element.classList.add('mv-dragover');
-            },
-            'dragleave dragend drop': evt => {
-              popup.classList.remove('mv-dragover');
-              this.element.classList.remove('mv-dragover');
-            },
-            drop: evt => {
-              upload(evt.dataTransfer.files[0]);
-            }
-          };
-
-          $.bind(this.element, uploadEvents);
-
-          return popup = $.create({
-            className: 'mv-upload-popup',
-            contents: [
-              mainInput, {
-                tag: 'input',
-                type: 'file',
-                'aria-label': 'Upload image',
-                accept: type + '/*',
-                events: {
-                  change: evt => {
-                    const file = evt.target.files[0];
-
-                    if (!file) {
-                      return;
-                    }
-
-                    upload(file);
-                  }
-                }
-              }, {
-                className: 'mv-tip',
-                innerHTML: '<strong>Tip:</strong> You can also drag & drop or paste!'
-              }
-            ],
-            events: uploadEvents
-          });
-        }
-
-        return mainInput;
-      }
-    },
-
     'video, audio': {
       attribute: ['autoplay', 'buffered', 'loop'],
       datatype: 'boolean'
@@ -5214,7 +4538,7 @@ Preview my changes here: {previewURL}`,
         if (!isNaN(value) && element.value != value && !Mavo.data(element, 'boundObserver')) {
         // Value out of bounds, maybe race condition? See #295
         // Observe min/max attrs until user interaction or data change
-          const observer = new Mavo.Observer(element, attribute, r => {
+          const observer = new Mavo.Observer(element, attribute, () => {
             element.value = value;
           });
 
@@ -5280,7 +4604,7 @@ Preview my changes here: {previewURL}`,
         if (this.attribute === 'mv-clicked') {
           element.setAttribute('mv-clicked', '0');
 
-          element.addEventListener('click', evt => {
+          element.addEventListener('click', () => {
             let clicked = Number(element.getAttribute('mv-clicked')) || 0;
             this.value = ++clicked;
           });
@@ -6024,7 +5348,7 @@ Preview my changes here: {previewURL}`,
         if (!button) {
           button = $.create('button', {
             className: 'mv-add',
-            textContent: this.mavo._('add-item', this)
+            textContent: 'add-item'
           });
         }
 
@@ -6094,19 +5418,15 @@ Preview my changes here: {previewURL}`,
         const buttons = [
           {
             tag: 'button',
-            title: this.mavo._('delete-item', this.item),
+            title: 'delete-item',
             className: 'mv-delete'
-          }, {
-            tag: 'button',
-            title: this.mavo._(`add-item-${this.collection.bottomUp ? 'after' : 'before'}`, this.item),
-            className: 'mv-add'
           }
         ];
 
         if (this.item instanceof Mavo.Group) {
           this.dragHandle = $.create({
             tag: 'button',
-            title: this.mavo._('drag-to-reorder', this.item),
+            title: 'drag-to-reorder',
             className: 'mv-drag-handle'
           });
 
@@ -6126,10 +5446,10 @@ Preview my changes here: {previewURL}`,
       $.bind([this.item.element, this.element], 'focusin mouseover', this);
 
       $.bind(this.element, {
-        mouseenter: evt => {
+        mouseenter: () => {
           this.item.element.classList.add('mv-highlight');
         },
-        mouseleave: evt => {
+        mouseleave: () => {
           this.item.element.classList.remove('mv-highlight');
         }
       });
@@ -6924,110 +6244,9 @@ Not an expression? Use mv-expressions="none" to disable expressions on an elemen
 
       THROTTLE: 50,
 
-      directive(name, o) {
+      directive(name) {
         _.directives.push(name);
         Mavo.attributes.push(name);
-        Mavo.Plugins.register(name, o);
-      }
-    }
-  });
-})(Bliss, Bliss.$);
-
-/* global Mavo, Bliss */
-
-// Mv-if plugin
-(function ($, $$) {
-  Mavo.Expressions.directive('mv-if', {
-    extend: {
-      Primitive: {
-        live: {
-          hidden(value) {
-            if (this._hidden !== value) {
-              this._hidden = value;
-              this.dataChanged();
-            }
-          }
-        }
-      },
-      DOMExpression: {
-        lazy: {
-          childProperties() {
-            const properties = $$(Mavo.selectors.property, this.element)
-                  .filter(el => el.closest('[mv-if]') === this.element)
-                  .map(el => Mavo.Node.get(el));
-
-          // When the element is detached, datachange events from properties
-          // do not propagate up to the group so expressions do not recalculate.
-          // We must do this manually.
-            this.element.addEventListener('mv-change', evt => {
-            // Cannot redispatch synchronously [why??]
-              requestAnimationFrame(() => {
-                if (!this.element.parentNode) { // Out of the DOM?
-                  this.item.element.dispatchEvent(evt);
-                }
-              });
-            });
-
-            return properties;
-          }
-        }
-      }
-    },
-    hooks: {
-      'domexpression-init-start'() {
-        if (this.attribute !== 'mv-if') {
-          return;
-        }
-
-        this.expression = this.element.getAttribute('mv-if');
-        this.parsed = [new Mavo.Expression(this.expression)];
-        this.expression = this.syntax.start + this.expression + this.syntax.end;
-
-        this.parentIf = this.element.parentNode && Mavo.DOMExpression.search(this.element.parentNode.closest('[mv-if]'), 'mv-if');
-
-        if (this.parentIf) {
-          this.parentIf.childIfs = (this.parentIf.childIfs || new Set()).add(this);
-        }
-      },
-      'domexpression-update-end'() {
-        if (this.attribute !== 'mv-if') {
-          return;
-        }
-
-        let value = this.value[0];
-        const oldValue = this.oldValue[0];
-
-      // Only apply this after the tree is built, otherwise any properties inside the if will go missing!
-        this.item.mavo.treeBuilt.then(() => {
-          if (this.parentIf) {
-            var parentValue = this.parentIf.value[0];
-            this.value[0] = value = value && parentValue;
-          }
-
-          if (parentValue !== false) { // If parent if was false, it wouldn't matter whether this is in the DOM or not
-            if (value) {
-            // Is removed from the DOM and needs to get back
-              Mavo.revocably.add(this.element);
-            } else if (this.element.parentNode) {
-            // Is in the DOM and needs to be removed
-              Mavo.revocably.remove(this.element, 'mv-if');
-            }
-          }
-
-          if (value !== oldValue) {
-          // Mark any properties inside as hidden or not
-            if (this.childProperties) {
-              this.childProperties.forEach(property => property.hidden = !value);
-            }
-
-            if (this.childIfs) {
-              this.childIfs.forEach(childIf => childIf.update());
-            }
-          }
-        });
-      },
-      'unit-isdatanull'(env) {
-        env.result = env.result || (this.hidden && env.options.live);
       }
     }
   });
@@ -7518,7 +6737,7 @@ Not an expression? Use mv-expressions="none" to disable expressions on an elemen
   }
 
   function toLocaleString(date, options) {
-    let ret = date.toLocaleString(Mavo.locale, options);
+    let ret = date.toLocaleString('en-US', options);
 
     ret = ret.replace(/\u200e/g, ''); // Stupid Edge bug
 
@@ -7930,488 +7149,5 @@ Not an expression? Use mv-expressions="none" to disable expressions on an elemen
     aliases[name].split(/\s+/g).forEach(alias => Mavo.Functions[alias] = Mavo.Functions[name]);
   }
 })(Bliss, Mavo.value, Mavo.Functions.util);
-
-/* global Mavo, Bliss */
-/* eslint new-cap: "off" */
-
-(function ($) {
-  const _ = Mavo.Backend.register($.Class({
-    extends: Mavo.Backend,
-    id: 'Dropbox',
-    constructor() {
-      this.permissions.on(['login', 'read']);
-
-      this.key = this.mavo.element.getAttribute('mv-dropbox-key') || '2mx6061p054bpbp';
-
-    // Transform the dropbox shared URL into something raw and CORS-enabled
-      this.url = _.fixShareURL(this.url);
-
-      this.login(true);
-    },
-
-    upload(file, path) {
-      path = this.path.replace(/[^/]+$/, '') + path;
-
-      return this.put(file, path).then(fileInfo => this.getURL(path));
-    },
-
-    getURL(path) {
-      return this.request('sharing/create_shared_link_with_settings', {path}, 'POST')
-      .then(shareInfo => _.fixShareURL(shareInfo.url));
-    },
-
-  /**
-   * Saves a file to the backend.
-   * @param {Object} file - An object with name & data keys
-   * @return {Promise} A promise that resolves when the file is saved.
-   */
-    put(serialized, path = this.path, o = {}) {
-      return this.request('https://content.dropboxapi.com/2/files/upload', serialized, 'POST', {
-        headers: {
-          'Dropbox-API-Arg': JSON.stringify({
-            path,
-            mode: 'overwrite'
-          }),
-          'Content-Type': 'application/octet-stream'
-        }
-      });
-    },
-
-    oAuthParams: () => `&redirect_uri=${encodeURIComponent('https://auth.mavo.io')}&response_type=code`,
-
-    getUser() {
-      if (this.user) {
-        return Promise.resolve(this.user);
-      }
-
-      return this.request('users/get_current_account', 'null', 'POST')
-      .then(info => {
-        this.user = {
-          username: info.email,
-          name: info.name.display_name,
-          avatar: info.profile_photo_url,
-          info
-        };
-      });
-    },
-
-    login(passive) {
-      return this.oAuthenticate(passive)
-      .then(() => this.getUser())
-      .then(u => {
-        if (this.user) {
-          this.permissions.logout = true;
-
-          // Check if can actually edit the file
-          this.request('sharing/get_shared_link_metadata', {
-            url: this.source
-          }, 'POST').then(info => {
-            this.path = info.path_lower;
-            this.permissions.on(['edit', 'save']);
-          });
-        }
-      });
-    },
-
-    logout() {
-      return this.oAuthLogout();
-    },
-
-    static: {
-      apiDomain: 'https://api.dropboxapi.com/2/',
-      oAuth: 'https://www.dropbox.com/oauth2/authorize',
-
-      test(url) {
-        url = new URL(url, Mavo.base);
-        return /dropbox.com/.test(url.host);
-      },
-
-      fixShareURL: url => {
-        url = new URL(url, Mavo.base);
-        url.hostname = 'dl.dropboxusercontent.com';
-        url.search = url.search.replace(/\bdl=0|^$/, 'raw=1');
-        return url;
-      }
-    }
-  }));
-})(Bliss);
-
-/* global Mavo, Bliss */
-/* eslint new-cap: "off" */
-
-(function ($) {
-  const _ = Mavo.Backend.register($.Class({
-    extends: Mavo.Backend,
-    id: 'Github',
-    constructor() {
-      this.permissions.on(['login', 'read']);
-
-      this.key = this.mavo.element.getAttribute('mv-github-key') || '7e08e016048000bc594e';
-
-    // Extract info for username, repo, branch, filepath from URL
-      const extension = this.format.constructor.extensions[0] || '.json';
-
-      this.defaults = {
-        repo: 'mv-data',
-        filename: `${this.mavo.id}${extension}`
-      };
-
-      this.info = _.parseURL(this.source, this.defaults);
-      $.extend(this, this.info);
-
-      this.login(true);
-    },
-
-    get(url) {
-      if (this.isAuthenticated() || !this.path || url) {
-      // Authenticated or raw API call
-        const info = url ? _.parseURL(url) : this.info;
-
-        if (info.apiData) {
-        // GraphQL
-          return this.request(info.apiCall, info.apiData, 'POST')
-          .then(response => {
-            if (response.errors && response.errors.length) {
-              return Promise.reject(response.errors.map(x => x.message).join('\n'));
-            }
-
-            return response.data;
-          });
-        }
-
-        return this.request(info.apiCall, null, 'GET', {
-          headers: {
-            Accept: 'application/vnd.github.squirrel-girl-preview'
-          }
-        }).then(response => Promise.resolve(info.repo ? _.atob(response.content) : response));
-      }
-
-      // Unauthenticated, use simple GET request to avoid rate limit
-      url = new URL(`https://raw.githubusercontent.com/${this.username}/${this.repo}/${this.branch || 'master'}/${this.path}`);
-      url.searchParams.set('timestamp', Date.now()); // Ensure fresh copy
-
-      return $.fetch(url.href, {
-        headers: {
-          Accept: 'application/vnd.github.squirrel-girl-preview'
-        }
-      }).then(xhr => Promise.resolve(xhr.responseText), () => Promise.resolve(null));
-    },
-
-    upload(file, path = this.path) {
-      return Mavo.readFile(file).then(dataURL => {
-        let base64 = dataURL.slice(5); // Remove data:
-        const media = base64.match(/^\w+\/[\w+]+/)[0];
-        base64 = base64.replace(RegExp(`^${media}(;base64)?,`), '');
-        path = this.path.replace(/[^/]+$/, '') + path; // Make upload path relative to existing path
-
-        return this.put(base64, path, {isEncoded: true});
-      })
-      .then(fileInfo => this.getURL(path, fileInfo.commit.sha));
-    },
-
-  /**
-   * Saves a file to the backend.
-   * @param {String} serialized - Serialized data
-   * @param {String} path - Optional file path
-   * @return {Promise} A promise that resolves when the file is saved.
-   */
-    put(serialized, path = this.path, o = {}) {
-      if (!path) {
-      // Raw API calls are read-only for now
-        return;
-      }
-
-      const repoCall = `repos/${this.username}/${this.repo}`;
-      let fileCall = `${repoCall}/contents/${path}`;
-      const commitPrefix = this.mavo.element.getAttribute('mv-github-commit-prefix') || '';
-
-    // Create repo if it doesn’t exist
-      const repoInfo = this.repoInfo || this.request('user/repos', {name: this.repo}, 'POST').then(repoInfo => this.repoInfo = repoInfo);
-
-      serialized = o.isEncoded ? serialized : _.btoa(serialized);
-
-      return Promise.resolve(repoInfo)
-      .then(repoInfo => {
-        if (!this.canPush()) {
-          // Does not have permission to commit, create a fork
-          return this.request(`${repoCall}/forks`, {name: this.repo}, 'POST')
-            .then(forkInfo => {
-              fileCall = `repos/${forkInfo.full_name}/contents/${path}`;
-              return this.forkInfo = forkInfo;
-            })
-            .then(forkInfo => {
-              // Ensure that fork is created (they take a while)
-              let timeout;
-              const test = (resolve, reject) => {
-                clearTimeout(timeout);
-                this.request(`repos/${forkInfo.full_name}/commits`, {until: '1970-01-01T00:00:00Z'}, 'HEAD')
-                  .then(x => {
-                    resolve(forkInfo);
-                  })
-                  .catch(x => {
-                    // Try again after 1 second
-                    timeout = setTimeout(test, 1000);
-                  });
-              };
-
-              return new Promise(test);
-            });
-        }
-
-        return repoInfo;
-      })
-      .then(repoInfo => {
-        return this.request(fileCall, {
-          ref: this.branch
-        }).then(fileInfo => this.request(fileCall, {
-          message: commitPrefix + this.mavo._('gh-updated-file', {name: fileInfo.name || 'file'}),
-          content: serialized,
-          branch: this.branch,
-          sha: fileInfo.sha
-        }, 'PUT'), xhr => {
-          if (xhr.status === 404) {
-            // File does not exist, create it
-            return this.request(fileCall, {
-              message: commitPrefix + 'Created file',
-              content: serialized,
-              branch: this.branch
-            }, 'PUT');
-          }
-
-          return xhr;
-        });
-      })
-      .then(fileInfo => {
-        if (this.forkInfo) {
-          // We saved in a fork, do we have a pull request?
-          this.request(`repos/${this.username}/${this.repo}/pulls`, {
-            head: `${this.user.username}:${this.branch}`,
-            base: this.branch
-          }).then(prs => {
-            this.pullRequest(prs[0]);
-          });
-        }
-
-        return fileInfo;
-      });
-    },
-
-    pullRequest(existing) {
-      const previewURL = new URL(location);
-      previewURL.searchParams.set(this.mavo.id + '-storage', `https://github.com/${this.forkInfo.full_name}/${this.path}`);
-      const message = this.mavo._('gh-edit-suggestion-saved-in-profile', {previewURL});
-
-      if (this.notice) {
-        this.notice.close();
-      }
-
-      if (existing) {
-      // We already have a pull request, ask about closing it
-        this.notice = this.mavo.message(`${message}
-        ${this.mavo._('gh-edit-suggestion-notreviewed')}
-        <form onsubmit="return false">
-          <button class="mv-danger">${this.mavo._('gh-edit-suggestion-revoke')}</button>
-        </form>`, {
-          classes: 'mv-inline',
-          dismiss: ['button', 'submit']
-        });
-
-        this.notice.closed.then(form => {
-          if (!form) {
-            return;
-          }
-
-        // Close PR
-          this.request(`repos/${this.username}/${this.repo}/pulls/${existing.number}`, {
-            state: 'closed'
-          }, 'POST').then(prInfo => {
-            new Mavo.UI.Message(this.mavo, `<a href="${prInfo.html_url}">${this.mavo._('gh-edit-suggestion-cancelled')}</a>`, {
-              dismiss: ['button', 'timeout']
-            });
-
-            this.pullRequest();
-          });
-        });
-      } else {
-      // Ask about creating a PR
-        this.notice = this.mavo.message(`${message}
-        ${this.mavo._('gh-edit-suggestion-instructions')}
-        <form onsubmit="return false">
-          <textarea name="edits" class="mv-autosize" placeholder="${this.mavo._('gh-edit-suggestion-reason-placeholder')}"></textarea>
-          <button>${this.mavo._('gh-edit-suggestion-send')}</button>
-        </form>`, {
-          classes: 'mv-inline',
-          dismiss: ['button', 'submit']
-        });
-
-        this.notice.closed.then(form => {
-          if (!form) {
-            return;
-          }
-
-        // We want to send a pull request
-          this.request(`repos/${this.username}/${this.repo}/pulls`, {
-            title: this.mavo._('gh-edit-suggestion-title'),
-            body: this.mavo._('gh-edit-suggestion-body', {
-              description: form.elements.edits.value,
-              previewURL
-            }),
-            head: `${this.user.username}:${this.branch}`,
-            base: this.branch
-          }, 'POST').then(prInfo => {
-            new Mavo.UI.Message(this.mavo, `<a href="${prInfo.html_url}">${this.mavo._('gh-edit-suggestion-sent')}</a>`, {
-              dismiss: ['button', 'timeout']
-            });
-
-            this.pullRequest(prInfo);
-          });
-        });
-      }
-    },
-
-    login(passive) {
-      return this.oAuthenticate(passive)
-      .then(() => this.getUser())
-      .catch(xhr => {
-        if (xhr.status === 401) {
-          // Unauthorized. Access token we have is invalid, discard it
-          this.logout();
-        }
-      })
-      .then(u => {
-        if (this.user) {
-          this.permissions.on(['edit', 'save', 'logout']);
-
-          if (this.repo) {
-            return this.request(`repos/${this.username}/${this.repo}`)
-              .then(repoInfo => {
-                if (this.branch === undefined) {
-                  this.branch = repoInfo.default_branch;
-                }
-
-                return this.repoInfo = repoInfo;
-              });
-          }
-        }
-      });
-    },
-
-    canPush() {
-      if (this.repoInfo) {
-        return this.repoInfo.permissions.push;
-      }
-
-    // Repo does not exist so we can't check permissions
-    // Just check if authenticated user is the same as our URL username
-      return this.user && this.user.username.toLowerCase() === this.username.toLowerCase();
-    },
-
-    oAuthParams: () => '&scope=repo,gist',
-
-    logout() {
-      return this.oAuthLogout().then(() => {
-        this.user = null;
-      });
-    },
-
-    getUser() {
-      if (this.user) {
-        return Promise.resolve(this.user);
-      }
-
-      return this.request('user').then(info => {
-        this.user = {
-          username: info.login,
-          name: info.name || info.login,
-          avatar: info.avatar_url,
-          url: 'https://github.com/' + info.login,
-          info
-        };
-
-        $.fire(this.mavo.element, 'mv-login', {backend: this});
-      });
-    },
-
-    getURL(path = this.path, sha) {
-      const repoInfo = this.forkInfo || this.repoInfo;
-      const repo = repoInfo.full_name;
-      path = path.replace(/ /g, '%20');
-
-      repoInfo.pagesInfo = repoInfo.pagesInfo || this.request(`repos/${repo}/pages`, {}, 'GET', {
-        headers: {
-          Accept: 'application/vnd.github.mister-fantastic-preview+json'
-        }
-      });
-
-      return repoInfo.pagesInfo.then(pagesInfo => pagesInfo.html_url + path)
-      .catch(xhr => {
-        // No Github Pages, return rawgit URL
-        if (sha) {
-          return `https://cdn.rawgit.com/${repo}/${sha}/${path}`;
-        }
-
-        return `https://rawgit.com/${repo}/${this.branch}/${path}`;
-      });
-    },
-
-    static: {
-      apiDomain: 'https://api.github.com/',
-      oAuth: 'https://github.com/login/oauth/authorize',
-
-      test(url) {
-        url = new URL(url, Mavo.base);
-        return /\bgithub.com|raw.githubusercontent.com/.test(url.host);
-      },
-
-    /**
-     * Parse Github URLs, return username, repo, branch, path
-     */
-      parseURL(source, defaults = {}) {
-        const ret = {};
-        const url = new URL(source, Mavo.base);
-        const path = url.pathname.slice(1).split('/');
-
-        ret.username = path.shift();
-        ret.repo = path.shift() || defaults.repo;
-
-        if (/raw.githubusercontent.com$/.test(url.host)) {
-          ret.branch = path.shift();
-        } else if (/api.github.com$/.test(url.host)) {
-        // Raw API call
-          const apiCall = url.pathname.slice(1) + url.search;
-          const data = Mavo.Functions.from(source, '#'); // Url.* drops line breaks
-
-          return {
-            apiCall,
-            apiData: apiCall === 'graphql' ? {query: data} : data
-          };
-        } else if (path[0] === 'blob') {
-          path.shift();
-          ret.branch = path.shift();
-        }
-
-        const lastSegment = path[path.length - 1];
-
-        if (/\.\w+$/.test(lastSegment)) {
-          ret.filename = lastSegment;
-          path.splice(path.length - 1, 1);
-        } else {
-          ret.filename = defaults.filename;
-        }
-
-        ret.filepath = path.join('/') || defaults.filepath || '';
-        ret.path = (ret.filepath ? ret.filepath + '/' : '') + ret.filename;
-
-        ret.apiCall = `repos/${ret.username}/${ret.repo}/contents/${ret.path}`;
-
-        return ret;
-      },
-
-    // Fix atob() and btoa() so they can handle Unicode
-      btoa: str => btoa(unescape(encodeURIComponent(str))),
-      atob: str => decodeURIComponent(escape(window.atob(str)))
-    }
-  }));
-})(Bliss);
 
 //# sourceMappingURL=maps/mavo.js.map

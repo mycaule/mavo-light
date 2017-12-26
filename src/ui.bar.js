@@ -65,7 +65,7 @@
         } else if (!this[id]) {
           this[id] = $.create('button', {
             className: `mv-${id}`,
-            textContent: this.mavo._(id)
+            textContent: id
           });
         }
 
@@ -105,7 +105,7 @@
         this.resize();
 
         if (self.ResizeObserver) {
-          this.resizeObserver = Mavo.observeResize(this.element, entries => {
+          this.resizeObserver = Mavo.observeResize(this.element, () => {
             this.resize();
           });
         }
@@ -227,8 +227,6 @@
               if (user.url) {
                 html = `<a href="${user.url}" target="_blank">${html}</a>`;
               }
-
-              this.bar.status.innerHTML = `<span>${this._('logged-in-as', backend)}</span> ` + html;
             }
           },
           permission: 'logout'
@@ -283,7 +281,7 @@
             } else {
               a = $.create('a', {
                 className: 'mv-export mv-button',
-                textContent: this._('export')
+                textContent: 'export'
               });
             }
 
@@ -306,9 +304,9 @@
               role: 'button',
               tabIndex: '0',
               className: 'mv-import mv-button',
-              textContent: this._('import'),
+              textContent: 'import',
               events: {
-                focus: evt => {
+                focus: () => {
                   input.focus();
                 }
               }
@@ -329,16 +327,16 @@
                         try {
                           const json = JSON.parse(reader.result);
                           this.render(json);
-                        } catch (e) {
-                          this.error(this._('cannot-parse'));
+                        } catch (err) {
+                          this.error('cannot-parse');
                         }
                       },
-                      onerror: evt => {
-                        this.error(this._('problem-loading'));
+                      onerror: () => {
+                        this.error('problem-loading');
                       }
                     });
 
-                    this.inProgress = this._('uploading');
+                    this.inProgress = 'uploading';
                     reader.readAsText(file);
                   }
                 }

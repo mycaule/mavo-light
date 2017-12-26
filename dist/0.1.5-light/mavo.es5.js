@@ -14,9 +14,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /* eslint new-cap: "off" */
 
 /**
- * Mavo: Create web applications by writing HTML and CSS!
- * @author Lea Verou and contributors
- * @version v0.1.5
+ * Mavo vv0.1.5
  */
 (function ($, $$) {
   var _ = self.Mavo = $.Class({
@@ -61,8 +59,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       _.all[this.id] = this;
       this.element.setAttribute('mv-app', this.id);
 
-      var lang = $.value(this.element.closest('[lang]'), 'lang') || Mavo.locale;
-      this.locale = Mavo.Locale.get(lang);
+      var lang = $.value(this.element.closest('[lang]'), 'lang');
+      this.locale = 'en-US';
 
       // Should we start in edit mode?
       this.autoEdit = this.element.classList.contains('mv-autoedit');
@@ -348,17 +346,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     toJSON: function toJSON() {
       return _.toJSON(this.getData());
     },
-    message: function message(_message, options) {
-      return new _.UI.Message(this, _message, options);
-    },
     error: function error(message) {
-      this.message(message, {
-        type: 'error',
-        dismiss: ['button', 'timeout']
-      });
-
-      // Log more info for programmers
-
       for (var _len = arguments.length, log = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
         log[_key - 1] = arguments[_key];
       }
@@ -537,10 +525,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           if (xhr && xhr.status === 404) {
             _this3.render(null);
           } else {
-            var message = _this3._('problem-loading');
+            var message = 'problem-loading';
 
             if (xhr) {
-              message += xhr.status ? _this3._('http-error', err) : ': ' + _this3._('cant-connect');
+              message += xhr.status ? 'http-error' : ': cant-connect';
             }
 
             _this3.error(message, err);
@@ -568,10 +556,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
       return this.storage.store(this.getData()).catch(function (err) {
         if (err) {
-          var message = _this4._('problem-saving');
+          var message = 'problem-saving';
 
           if (err instanceof XMLHttpRequest) {
-            message += ': ' + (err.status ? _this4._('http-error', err) : _this4._('cant-connect'));
+            message += ': ' + (err.status ? 'http-error' : 'cant-connect');
           }
 
           _this4.error(message, err);
@@ -583,36 +571,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         return saved;
       });
     },
-    upload: function upload(file) {
-      var _this5 = this;
-
-      var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'images/' + file.name;
-
-      if (!this.uploadBackend) {
-        return Promise.reject();
-      }
-
-      this.inProgress = this._('uploading');
-
-      return this.uploadBackend.upload(file, path).then(function (url) {
-        _this5.inProgress = false;
-        return url;
-      }).catch(function (err) {
-        _this5.error(_this5._('error-uploading'), err);
-        _this5.inProgress = false;
-        return null;
-      });
-    },
     save: function save() {
-      var _this6 = this;
+      var _this5 = this;
 
       return this.store().then(function (saved) {
         if (saved) {
-          $.fire(_this6.element, 'mv-save', saved);
+          $.fire(_this5.element, 'mv-save', saved);
 
-          _this6.lastSaved = Date.now();
-          _this6.root.save();
-          _this6.unsavedChanges = false;
+          _this5.lastSaved = Date.now();
+          _this5.root.save();
+          _this5.unsavedChanges = false;
         }
       });
     },
@@ -644,7 +612,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       inProgress: function inProgress(value) {
         $.toggleAttribute(this.element, 'mv-progress', value, value);
         $.toggleAttribute(this.element, 'aria-busy', Boolean(value), Boolean(value));
-        this.element.style.setProperty('--mv-progress-text', value ? '"' + this._(value) + '"' : '');
+        this.element.style.setProperty('--mv-progress-text', value ? '"' + value + '"' : '');
       },
       unsavedChanges: function unsavedChanges(value) {
         this.element.classList.toggle('mv-unsaved-changes', value);
@@ -729,7 +697,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
       lazy: {
         locale: function locale() {
-          return document.documentElement.lang || 'en-GB';
+          return document.documentElement.lang || 'en-US';
         },
         toNode: function toNode() {
           return Symbol('toNode');
@@ -822,11 +790,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       return a + '|gated';
     }).join(',');
 
-    _.dependencies.push(
-    // Plugins.load() must be run after DOM load to pick up all mv-plugins attributes
-    $.ready().then(function () {
-      return _.Plugins.load();
-    }), $.include(!polyfills.length, polyfillURL));
+    _.dependencies.push($.include(!polyfills.length, polyfillURL));
 
     _.inited = $.ready().then(function () {
       $.attributes($$(_.selectors.init), { 'mv-progress': 'Loading' });
@@ -980,14 +944,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       return arr === undefined ? [] : Array.isArray(arr) ? arr : [arr];
     },
 
-    delete: function _delete(arr, element, all) {
-      do {
-        var _index = arr && arr.indexOf(element);
+    delete: function _delete(arr, element) {
+      var index = void 0;
 
-        if (_index > -1) {
-          arr.splice(_index, 1);
+      do {
+        index = arr && arr.indexOf(element);
+        if (index > -1) {
+          arr.splice(index, 1);
         }
-      } while (index > -1 && all);
+      } while (index > -1);
     },
 
     // Recursively flatten a multi-dimensional array
@@ -1105,7 +1070,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       var path = [];
 
       for (var _parent = element; _parent && _parent != ancestor; _parent = _parent.parentNode) {
-        var _index2 = 0;
+        var index = 0;
         var countNonElementSiblings = _parent === element && element.nodeType !== 1;
         var _offset = countNonElementSiblings ? 1 : 0;
         var sibling = _parent;
@@ -1118,15 +1083,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
               countNonElementSiblings = false;
             }
           } else {
-            _index2++;
+            index++;
           }
         }
 
         if (_offset > 0) {
-          _index2 = _index2 - 1 + '.' + _offset;
+          index = index - 1 + '.' + _offset;
         }
 
-        path.unshift(_index2);
+        path.unshift(index);
       }
 
       return parent ? path : null;
@@ -1683,275 +1648,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /* global Mavo, Bliss */
 /* eslint new-cap: "off" */
 
-(function ($, $$) {
-  var _ = Mavo.Locale = $.Class({
-    constructor: function constructor(lang, phrases) {
-      this.lang = lang;
-      this.phrases = {};
-      this.extend(phrases);
-    },
-
-
-    get fallback() {
-      // -TODO should we fallback to other dialects? I.e. should en-US fallback to en-GB if en didn't exist?
-      if (_.all[this.baseLang]) {
-        return _.all[this.baseLang];
-      }
-
-      if (this !== _.default) {
-        return _.default;
-      }
-    },
-
-    extend: function extend(phrases) {
-      $.extend(this.phrases, phrases);
-    },
-    phrase: function phrase(id, vars) {
-      var key = id.toLowerCase();
-      var phrase = this.phrases[key];
-
-      if (phrase === undefined && this.fallback) {
-        phrase = this.fallback.phrase(key);
-      }
-
-      if (phrase === undefined) {
-        // Everything failed, use id
-        phrase = Mavo.Functions.readable(key);
-      } else if (vars) {
-        var keys = Mavo.matches(phrase, /\{\w+(?=\})/g).map(function (v) {
-          return v.slice(1);
-        });
-        Mavo.Functions.unique(keys).forEach(function (name) {
-          if (name in vars) {
-            phrase = phrase.replace(RegExp('{' + name + '}', 'gi'), vars[name]);
-          }
-        });
-      }
-
-      return phrase;
-    },
-
-
-    live: {
-      lang: function lang(_lang) {
-        this.baseLang = _.getBaseLang(_lang);
-
-        if (_lang === this.baseLang) {
-          this.baseLang = null;
-        }
-      }
-    },
-
-    static: {
-      all: {},
-
-      /**
-       * Register new locale or extend existing locale
-       */
-      register: function register(lang, phrases) {
-        if (_.all[lang]) {
-          _.all[lang].extend(phrases);
-        } else {
-          _.all[lang] = new _(lang, phrases);
-        }
-      },
-      match: function match() {
-        var lang = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-
-        return _.all[lang] || _.all[_.getBaseLang(lang)];
-      },
-      get: function get(lang) {
-        return _.match(lang) || _.default;
-      },
-      getBaseLang: function getBaseLang(lang) {
-        return lang.split('-')[0];
-      },
-
-
-      lazy: {
-        default: function _default() {
-          return _.match(Mavo.locale) || _.all.en;
-        }
-      }
-    }
-  });
-
-  /**
-   * Use phrase
-   */
-  Mavo.prototype._ = function (id, vars) {
-    return this.locale && id ? this.locale.phrase(id, vars) : id;
-  };
-
-  $.ready().then(function () {
-    $$('datalist.mv-phrases[lang]').forEach(function (datalist) {
-      var phrases = $$('option', datalist).reduce(function (o, option) {
-        o[option.value] = option.textContent.trim();
-        return o;
-      }, {});
-
-      Mavo.Locale.register(datalist.lang, phrases);
-    });
-  });
-})(Bliss, Bliss.$);
-'use strict';
-
-/* global Mavo */
-
-Mavo.Locale.register('en', {
-  edit: 'Edit',
-  save: 'Save',
-  import: 'Import',
-  export: 'Export',
-  logout: 'Logout',
-  login: 'Login',
-  loading: 'Loading',
-  uploading: 'Uploading',
-  saving: 'Saving',
-  'logged-in-as': 'Logged in to {id} as ',
-  'login-to': 'Login to {id}',
-  'error-uploading': 'Error uploading file',
-  'cannot-load-uploaded-file': 'Cannot load uploaded file',
-  'problem-saving': 'Problem saving data',
-  'problem-loading': 'Problem loading data',
-  'cannot-parse': 'Can’t understand this file',
-  'http-error': 'HTTP error {status}: {statusText}',
-  'cant-connect': 'Can’t connect to the Internet',
-  'add-item': 'Add {name}',
-  'add-item-before': 'Add new {name} before',
-  'add-item-after': 'Add new {name} after',
-  'drag-to-reorder': 'Drag to reorder {name}',
-  'delete-item': 'Delete this {name}',
-  'gh-updated-file': 'Updated {name}',
-  'gh-edit-suggestion-saved-in-profile': 'Your edits are saved to <a href="{previewURL}" target="_blank">your own profile</a>, because you are not allowed to edit this page.',
-  'gh-edit-suggestion-instructions': 'Write a short description of your edits below to suggest them to the page admins:',
-  'gh-edit-suggestion-notreviewed': 'You have selected to suggest your edits to the page admins. Your suggestions have not been reviewed yet.',
-  'gh-edit-suggestion-send': 'Send edit suggestion',
-  'gh-edit-suggestion-revoke': 'Revoke edit suggestion',
-  'gh-edit-suggestion-reason-placeholder': 'I added / corrected / deleted ...',
-  'gh-edit-suggestion-cancelled': 'Edit suggestion cancelled successfully!',
-  'gh-edit-suggestion-title': 'Suggested edits to data',
-  'gh-edit-suggestion-body': 'Hello there! I used Mavo to suggest the following edits:\n{description}\nPreview my changes here: {previewURL}',
-  'gh-edit-suggestion-sent': 'Edit suggestion sent successfully!'
-});
-'use strict';
-
-var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
-
-var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/* global Mavo, Bliss */
-/* eslint new-cap: "off" */
-
-(function ($, $$) {
-  Mavo.attributes.push('mv-plugins');
-
-  var _ = Mavo.Plugins = {
-    loaded: {},
-
-    load: function load() {
-      _.plugins = new Set();
-
-      $$('[mv-plugins]').forEach(function (element) {
-        element.getAttribute('mv-plugins').trim().split(/\s+/).forEach(function (plugin) {
-          return _.plugins.add(plugin);
-        });
-      });
-
-      if (!_.plugins.size) {
-        return Promise.resolve();
-      }
-
-      // Fetch plugin index
-      return $.fetch(_.url + '/plugins.json', {
-        responseType: 'json'
-      }).then(function (xhr) {
-        // Fetch plugins
-        return Mavo.thenAll(xhr.response.plugin.filter(function (plugin) {
-          return _.plugins.has(plugin.id);
-        }).map(function (plugin) {
-          // Load plugin
-          var filename = 'mavo-' + plugin.id + '.js';
-
-          if (plugin.repo) {
-            // Plugin hosted in a separate repo
-            var url = 'https://raw.githubusercontent.com/' + plugin.repo + '/master/' + filename;
-
-            return _.loaded[plugin.id] ? Promise.resolve() : $.fetch(url).then(function (xhr) {
-              $.create('script', {
-                textContent: xhr.responseText,
-                inside: document.head
-              });
-            });
-          }
-
-          // Plugin hosted in the mavo-plugins repo
-          var url = _.url + '/' + plugin.id + '/' + filename;
-
-          return $.include(_.loaded[plugin.id], url);
-        }));
-      });
-    },
-    register: function register(name) {
-      var o = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-      if (_.loaded[name]) {
-        // Do not register same plugin twice
-        return;
-      }
-
-      Mavo.hooks.add(o.hooks);
-
-      for (var Class in o.extend) {
-        var existing = Class === 'Mavo' ? Mavo : Mavo[Class];
-
-        if ($.type(existing) === 'function') {
-          $.Class(existing, o.extend[Class]);
-        } else {
-          $.extend(existing, o.extend[Class]);
-        }
-      }
-
-      var ready = [];
-
-      if (o.ready) {
-        ready.push(o.ready);
-      }
-
-      if (o.dependencies) {
-        var base = document.currentScript ? document.currentScript.src : location;
-        var dependencies = o.dependencies.map(function (url) {
-          return Mavo.load(url, base);
-        });
-        ready.push.apply(ready, (0, _toConsumableArray3.default)(dependencies));
-      }
-
-      if (ready.length) {
-        var _Mavo$dependencies;
-
-        (_Mavo$dependencies = Mavo.dependencies).push.apply(_Mavo$dependencies, ready);
-      }
-
-      _.loaded[name] = o;
-
-      if (o.init) {
-        Promise.all(ready).then(function () {
-          return o.init();
-        });
-      }
-    },
-
-
-    url: 'https://plugins.mavo.io'
-  };
-})(Bliss, Bliss.$);
-'use strict';
-
-/* global Mavo, Bliss */
-/* eslint new-cap: "off" */
-
 (function ($) {
   Mavo.attributes.push('mv-bar');
 
@@ -2018,7 +1714,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         } else if (!_this[id]) {
           _this[id] = $.create('button', {
             className: 'mv-' + id,
-            textContent: _this.mavo._(id)
+            textContent: id
           });
         }
 
@@ -2062,7 +1758,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         this.resize();
 
         if (self.ResizeObserver) {
-          this.resizeObserver = Mavo.observeResize(this.element, function (entries) {
+          this.resizeObserver = Mavo.observeResize(this.element, function () {
             _this.resize();
           });
         }
@@ -2192,8 +1888,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
               if (user.url) {
                 html = '<a href="' + user.url + '" target="_blank">' + html + '</a>';
               }
-
-              this.bar.status.innerHTML = '<span>' + this._('logged-in-as', backend) + '</span> ' + html;
             }
           },
 
@@ -2251,7 +1945,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
             } else {
               a = $.create('a', {
                 className: 'mv-export mv-button',
-                textContent: this._('export')
+                textContent: 'export'
               });
             }
 
@@ -2277,9 +1971,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
               role: 'button',
               tabIndex: '0',
               className: 'mv-import mv-button',
-              textContent: this._('import'),
+              textContent: 'import',
               events: {
-                focus: function focus(evt) {
+                focus: function focus() {
                   input.focus();
                 }
               }
@@ -2300,16 +1994,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
                         try {
                           var json = JSON.parse(reader.result);
                           _this4.render(json);
-                        } catch (e) {
-                          _this4.error(_this4._('cannot-parse'));
+                        } catch (err) {
+                          _this4.error('cannot-parse');
                         }
                       },
-                      onerror: function onerror(evt) {
-                        _this4.error(_this4._('problem-loading'));
+                      onerror: function onerror() {
+                        _this4.error('problem-loading');
                       }
                     });
 
-                    _this4.inProgress = _this4._('uploading');
+                    _this4.inProgress = 'uploading';
                     reader.readAsText(file);
                   }
                 }
@@ -2338,104 +2032,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           permission: 'logout'
         }
       }
-    }
-  });
-})(Bliss);
-'use strict';
-
-var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
-
-var _defineProperty3 = _interopRequireDefault(_defineProperty2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/* global Mavo, Bliss */
-/* eslint new-cap: "off" */
-
-(function ($) {
-  var _ = Mavo.UI.Message = $.Class({
-    constructor: function constructor(mavo, message, o) {
-      var _this = this;
-
-      this.mavo = mavo;
-      this.message = message;
-      this.closed = Mavo.defer();
-
-      this.element = $.create((0, _defineProperty3.default)({
-        className: 'mv-ui mv-message' + (o.type ? ' mv-' + o.type : ''),
-        innerHTML: this.message,
-        events: {
-          click: function click(e) {
-            return Mavo.scrollIntoViewIfNeeded(_this.mavo.element);
-          }
-        }
-      }, this.mavo.bar ? 'after' : 'start', (this.mavo.bar || this.mavo).element));
-
-      if (o.classes) {
-        this.element.classList.add(o.classes);
-      }
-
-      if (o.type === 'error') {
-        this.element.setAttribute('role', 'alert');
-      } else {
-        this.element.setAttribute('aria-live', 'polite');
-      }
-
-      o.dismiss = o.dismiss || {};
-
-      if (typeof o.dismiss === 'string' || Array.isArray(o.dismiss)) {
-        var dismiss = {};
-
-        Mavo.toArray(o.dismiss).forEach(function (prop) {
-          dismiss[prop] = true;
-        });
-
-        o.dismiss = dismiss;
-      }
-
-      if (o.dismiss.button) {
-        $.create('button', {
-          className: 'mv-close mv-ui',
-          textContent: '×',
-          events: {
-            click: function click(evt) {
-              return _this.close();
-            }
-          },
-          start: this.element
-        });
-      }
-
-      if (o.dismiss.timeout) {
-        var timeout = typeof o.dismiss.timeout === 'number' ? o.dismiss.timeout : 5000;
-        var closeTimeout = void 0;
-
-        $.bind(this.element, {
-          mouseenter: function mouseenter(e) {
-            return clearTimeout(closeTimeout);
-          },
-          mouseleave: Mavo.rr(function (e) {
-            return closeTimeout = setTimeout(function () {
-              return _this.close();
-            }, timeout);
-          })
-        });
-      }
-
-      if (o.dismiss.submit) {
-        this.element.addEventListener('submit', function (evt) {
-          evt.preventDefault();
-          _this.close(evt.target);
-        });
-      }
-    },
-    close: function close(resolve) {
-      var _this2 = this;
-
-      $.transition(this.element, { opacity: 0 }).then(function () {
-        $.remove(_this2.element);
-        _this2.closed.resolve(resolve);
-      });
     }
   });
 })(Bliss);
@@ -2790,162 +2386,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       return Promise.reject();
     },
 
-    isAuthenticated: function isAuthenticated() {
-      return Boolean(this.accessToken);
-    },
-
-
-    // Any extra params to be passed to the oAuth URL.
-    oAuthParams: function oAuthParams() {
-      return '';
-    },
-
     toString: function toString() {
       return this.id + ' (' + this.url + ')';
     },
     equals: function equals(backend) {
       return backend === this || backend && this.id === backend.id && this.source === backend.source;
-    },
-
-
-    /**
-     * Helper for making OAuth requests with JSON-based APIs.
-     */
-    request: function request(call, data) {
-      var _this3 = this;
-
-      var method = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'GET';
-      var req = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-
-      req.method = req.method || method;
-      req.responseType = req.responseType || 'json';
-
-      req.headers = $.extend({
-        'Content-Type': 'application/json; charset=utf-8'
-      }, req.headers || {});
-
-      req.data = data;
-
-      if (this.isAuthenticated()) {
-        req.headers.Authorization = req.headers.Authorization || 'Bearer ' + this.accessToken;
-      }
-
-      if ($.type(req.data) === 'object') {
-        if (req.method === 'GET') {
-          req.data = Object.keys(req.data).map(function (p) {
-            return p + '=' + encodeURIComponent(req.data[p]);
-          }).join('&');
-        } else {
-          req.data = JSON.stringify(req.data);
-        }
-      }
-
-      call = new URL(call, this.constructor.apiDomain);
-
-      // Prevent getting a cached response. Cache-control is often not allowed via CORS
-      if (req.method === 'GET') {
-        call.searchParams.set('timestamp', Date.now());
-      }
-
-      return $.fetch(call, req).catch(function (err) {
-        if (err && err.xhr) {
-          return Promise.reject(err.xhr);
-        }
-
-        _this3.mavo.error('Something went wrong while connecting to ' + _this3.id, err);
-      }).then(function (xhr) {
-        return req.method === 'HEAD' ? xhr : xhr.response;
-      });
-    },
-
-
-    /**
-     * Helper method for authenticating in OAuth APIs
-     */
-    oAuthenticate: function oAuthenticate(passive) {
-      var _this4 = this;
-
-      return this.ready.then(function () {
-        if (_this4.isAuthenticated()) {
-          return Promise.resolve();
-        }
-
-        return new Promise(function (resolve, reject) {
-          var id = _this4.id.toLowerCase();
-
-          if (passive) {
-            _this4.accessToken = localStorage['mavo:' + id + 'token'];
-
-            if (_this4.accessToken) {
-              resolve(_this4.accessToken);
-            }
-          } else {
-            // Show window
-            var popup = {
-              width: Math.min(1000, innerWidth - 100),
-              height: Math.min(800, innerHeight - 100)
-            };
-
-            popup.top = (screen.height - popup.height) / 2;
-            popup.left = (screen.width - popup.width) / 2;
-
-            var state = {
-              url: location.href,
-              backend: _this4.id
-            };
-
-            _this4.authPopup = open(_this4.constructor.oAuth + '?client_id=' + _this4.key + '&state=' + encodeURIComponent(JSON.stringify(state)) + _this4.oAuthParams(), 'popup', 'width=' + popup.width + ',height=' + popup.height + ',left=' + popup.left + ',top=' + popup.top);
-
-            if (!_this4.authPopup) {
-              var message = 'Login popup was blocked! Please check your popup blocker settings.';
-              _this4.mavo.error(message);
-              reject(Error(message));
-            }
-
-            addEventListener('message', function (evt) {
-              if (evt.source === _this4.authPopup) {
-                if (evt.data.backend === _this4.id) {
-                  _this4.accessToken = localStorage['mavo:' + id + 'token'] = evt.data.token;
-                }
-
-                if (!_this4.accessToken) {
-                  reject(Error('Authentication error'));
-                }
-
-                resolve(_this4.accessToken);
-
-                // Log in to other similar backends that are logged out
-                for (var appid in Mavo.all) {
-                  var storage = Mavo.all[appid].primaryBackend;
-
-                  if (storage && storage.id === _this4.id && storage !== _this4 && !storage.isAuthenticated()) {
-                    storage.login(true);
-                  }
-                }
-              }
-            });
-          }
-        });
-      });
-    },
-
-
-    /**
-     * OAuth logout helper
-     */
-    oAuthLogout: function oAuthLogout() {
-      if (this.isAuthenticated()) {
-        var id = this.id.toLowerCase();
-
-        localStorage.removeItem('mavo:' + id + 'token');
-        delete this.accessToken;
-
-        this.permissions.off(['edit', 'add', 'delete', 'save']).on('login');
-
-        $.fire(this.mavo.element, 'mv-logout', { backend: this });
-      }
-
-      return Promise.resolve();
     },
 
 
@@ -3018,7 +2463,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
     static: {
-      test: function test(url) {
+      test: function test() {
         return false;
       }
     }
@@ -3135,57 +2580,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       },
       stringify: function stringify(data, me) {
         return Promise.resolve(data[me ? me.property : 'content']);
-      }
-    }
-  });
-
-  var csv = _.CSV = $.Class({
-    extends: _.Base,
-    constructor: function constructor(backend) {
-      this.property = this.mavo.root.getNames('Collection')[0];
-      this.options = $.extend({}, _.CSV.defaultOptions);
-    },
-
-
-    static: {
-      extensions: ['.csv', '.tsv'],
-      defaultOptions: {
-        header: true,
-        dynamicTyping: true,
-        skipEmptyLines: true
-      },
-      dependencies: [{
-        test: function test() {
-          return self.Papa;
-        },
-        url: 'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.4/papaparse.min.js'
-      }],
-      ready: base.ready,
-      parse: function parse(serialized, me) {
-        return csv.ready().then(function () {
-          var data = Papa.parse(serialized, csv.defaultOptions);
-          var property = me ? me.property : 'content';
-
-          if (me) {
-            // Get delimiter & linebreak for serialization
-            me.options.delimiter = data.meta.delimiter;
-            me.options.linebreak = data.meta.linebreak;
-          }
-
-          if (data.meta.aborted) {
-            throw data.meta.errors.pop();
-          }
-
-          return (0, _defineProperty3.default)({}, property, data.data);
-        });
-      },
-
-      stringify: function stringify(data, me) {
-        return csv.ready().then(function () {
-          var property = me ? me.property : 'content';
-          var options = me ? me.options : csv.defaultOptions;
-          return Papa.unparse(data[property], options);
-        });
       }
     }
   });
@@ -5188,7 +4582,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
       lazy: {
         formatNumber: function formatNumber() {
-          var numberFormat = new Intl.NumberFormat(Mavo.locale, { maximumFractionDigits: 2 });
+          var numberFormat = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
 
           return function (value) {
             if (value === Infinity || value === -Infinity) {
@@ -5216,7 +4610,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       this.primitive = primitive;
 
       // Need to be defined here so that this is what expected
-      this.position = function (evt) {
+      this.position = function () {
         var bounds = _this.primitive.element.getBoundingClientRect();
         var x = bounds.left;
         var y = bounds.bottom;
@@ -5322,7 +4716,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       var _this4 = this;
 
       $.bind(this.primitive.element, {
-        'click.mavo:edit': function clickMavoEdit(evt) {
+        'click.mavo:edit': function clickMavoEdit() {
           _this4.show();
         },
         'keyup.mavo:edit': function keyupMavoEdit(evt) {
@@ -5510,140 +4904,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       datatype: 'number'
     },
 
-    media: {
-      default: true,
-      selector: 'img, video, audio',
-      attribute: 'src',
-      editor: function editor() {
-        var _this = this;
-
-        var mainInput = $.create('input', {
-          type: 'url',
-          placeholder: 'http://example.com/image.png',
-          className: 'mv-output',
-          'aria-label': 'URL to image'
-        });
-
-        if (this.mavo.uploadBackend && self.FileReader) {
-          var popup = void 0;
-          var type = this.element.nodeName.toLowerCase();
-          type = type === 'img' ? 'image' : type;
-          var path = this.element.getAttribute('mv-uploads') || type + 's';
-
-          var upload = function upload(file) {
-            var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : file.name;
-
-            if (!file || file.type.indexOf(type + '/') !== 0) {
-              return;
-            }
-
-            var tempURL = URL.createObjectURL(file);
-
-            _this.sneak(function () {
-              return _this.element.src = tempURL;
-            });
-
-            _this.mavo.upload(file, path + '/' + name).then(function (url) {
-              // Backend claims image is uploaded, we should load it from remote to make sure everything went well
-              var attempts = 0;
-              var load = Mavo.rr(function () {
-                return Mavo.timeout(1000 + attempts * 500).then(function () {
-                  attempts++;
-                  _this.element.src = url;
-                });
-              });
-              var cleanup = function cleanup() {
-                URL.revokeObjectURL(tempURL);
-                _this.element.removeEventListener('load', onload);
-                _this.element.removeEventListener('error', onload);
-              };
-              var onload = function onload(evt) {
-                if (_this.element.src != tempURL) {
-                  // Actual uploaded image has loaded, yay!
-                  _this.element.src = url;
-                  cleanup();
-                }
-              };
-              var onerror = function onerror(evt) {
-                // Oops, failed. Put back temp URL and try again
-                if (attempts <= 10) {
-                  _this.sneak(function () {
-                    return _this.element.src = tempURL;
-                  });
-                  load();
-                } else {
-                  // 11 + 0.5*10*11/2 = 38.5 seconds later, giving up
-                  _this.mavo.error(_this.mavo._('cannot-load-uploaded-file') + ' ' + url);
-                  cleanup();
-                }
-              };
-
-              mainInput.value = url;
-              _this.element.addEventListener('load', onload);
-              _this.element.addEventListener('error', onerror);
-            });
-          };
-
-          var uploadEvents = {
-            paste: function paste(evt) {
-              var item = evt.clipboardData.items[0];
-
-              if (item.kind === 'file' && item.type.indexOf(type + '/') === 0) {
-                // Is a file of the correct type, upload!
-                var name = 'pasted-' + type + '-' + Date.now() + '.' + item.type.slice(6); // Image, video, audio are all 5 chars
-                upload(item.getAsFile(), name);
-                evt.preventDefault();
-              }
-            },
-            'drag dragstart dragend dragover dragenter dragleave drop': function dragDragstartDragendDragoverDragenterDragleaveDrop(evt) {
-              evt.preventDefault();
-              evt.stopPropagation();
-            },
-            'dragover dragenter': function dragoverDragenter(evt) {
-              popup.classList.add('mv-dragover');
-              _this.element.classList.add('mv-dragover');
-            },
-            'dragleave dragend drop': function dragleaveDragendDrop(evt) {
-              popup.classList.remove('mv-dragover');
-              _this.element.classList.remove('mv-dragover');
-            },
-            drop: function drop(evt) {
-              upload(evt.dataTransfer.files[0]);
-            }
-          };
-
-          $.bind(this.element, uploadEvents);
-
-          return popup = $.create({
-            className: 'mv-upload-popup',
-            contents: [mainInput, {
-              tag: 'input',
-              type: 'file',
-              'aria-label': 'Upload image',
-              accept: type + '/*',
-              events: {
-                change: function change(evt) {
-                  var file = evt.target.files[0];
-
-                  if (!file) {
-                    return;
-                  }
-
-                  upload(file);
-                }
-              }
-            }, {
-              className: 'mv-tip',
-              innerHTML: '<strong>Tip:</strong> You can also drag & drop or paste!'
-            }],
-            events: uploadEvents
-          });
-        }
-
-        return mainInput;
-      }
-    },
-
     'video, audio': {
       attribute: ['autoplay', 'buffered', 'loop'],
       datatype: 'boolean'
@@ -5708,7 +4968,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         if (!isNaN(value) && element.value != value && !Mavo.data(element, 'boundObserver')) {
           // Value out of bounds, maybe race condition? See #295
           // Observe min/max attrs until user interaction or data change
-          var observer = new Mavo.Observer(element, attribute, function (r) {
+          var observer = new Mavo.Observer(element, attribute, function () {
             element.value = value;
           });
 
@@ -5757,11 +5017,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         $.properties(toCheck, { checked: true });
       },
       init: function init(element) {
-        var _this2 = this;
+        var _this = this;
 
         this.mavo.element.addEventListener('change', function (evt) {
           if (evt.target.name === element.name) {
-            _this2.value = _this2.getValue();
+            _this.value = _this.getValue();
           }
         });
       }
@@ -5773,14 +5033,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       attribute: 'mv-clicked',
       datatype: 'number',
       init: function init(element) {
-        var _this3 = this;
+        var _this2 = this;
 
         if (this.attribute === 'mv-clicked') {
           element.setAttribute('mv-clicked', '0');
 
-          element.addEventListener('click', function (evt) {
+          element.addEventListener('click', function () {
             var clicked = Number(element.getAttribute('mv-clicked')) || 0;
-            _this3.value = ++clicked;
+            _this2.value = ++clicked;
           });
         }
       }
@@ -5910,14 +5170,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       attribute: 'aria-checked',
       datatype: 'boolean',
       edit: function edit() {
-        var _this4 = this;
+        var _this3 = this;
 
         Mavo.revocably.setAttribute(this.element, 'role', 'checkbox');
 
         $.bind(this.element, 'click.mavo:edit keyup.mavo:edit keydown.mavo:edit', function (evt) {
           if (evt.type === 'click' || evt.key === ' ' || evt.key === 'Enter') {
             if (evt.type != 'keydown') {
-              _this4.value = !_this4.value;
+              _this3.value = !_this3.value;
             }
 
             evt.preventDefault();
@@ -6588,7 +5848,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         if (!button) {
           button = $.create('button', {
             className: 'mv-add',
-            textContent: this.mavo._('add-item', this)
+            textContent: 'add-item'
           });
         }
 
@@ -6662,18 +5922,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
         var buttons = [{
           tag: 'button',
-          title: this.mavo._('delete-item', this.item),
+          title: 'delete-item',
           className: 'mv-delete'
-        }, {
-          tag: 'button',
-          title: this.mavo._('add-item-' + (this.collection.bottomUp ? 'after' : 'before'), this.item),
-          className: 'mv-add'
         }];
 
         if (this.item instanceof Mavo.Group) {
           this.dragHandle = $.create({
             tag: 'button',
-            title: this.mavo._('drag-to-reorder', this.item),
+            title: 'drag-to-reorder',
             className: 'mv-drag-handle'
           });
 
@@ -6693,10 +5949,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       $.bind([this.item.element, this.element], 'focusin mouseover', this);
 
       $.bind(this.element, {
-        mouseenter: function mouseenter(evt) {
+        mouseenter: function mouseenter() {
           _this.item.element.classList.add('mv-highlight');
         },
-        mouseleave: function mouseleave(evt) {
+        mouseleave: function mouseleave() {
           _this.item.element.classList.remove('mv-highlight');
         }
       });
@@ -7548,123 +6804,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
       THROTTLE: 50,
 
-      directive: function directive(name, o) {
+      directive: function directive(name) {
         _.directives.push(name);
         Mavo.attributes.push(name);
-        Mavo.Plugins.register(name, o);
-      }
-    }
-  });
-})(Bliss, Bliss.$);
-'use strict';
-
-/* global Mavo, Bliss */
-
-// Mv-if plugin
-(function ($, $$) {
-  Mavo.Expressions.directive('mv-if', {
-    extend: {
-      Primitive: {
-        live: {
-          hidden: function hidden(value) {
-            if (this._hidden !== value) {
-              this._hidden = value;
-              this.dataChanged();
-            }
-          }
-        }
-      },
-      DOMExpression: {
-        lazy: {
-          childProperties: function childProperties() {
-            var _this = this;
-
-            var properties = $$(Mavo.selectors.property, this.element).filter(function (el) {
-              return el.closest('[mv-if]') === _this.element;
-            }).map(function (el) {
-              return Mavo.Node.get(el);
-            });
-
-            // When the element is detached, datachange events from properties
-            // do not propagate up to the group so expressions do not recalculate.
-            // We must do this manually.
-            this.element.addEventListener('mv-change', function (evt) {
-              // Cannot redispatch synchronously [why??]
-              requestAnimationFrame(function () {
-                if (!_this.element.parentNode) {
-                  // Out of the DOM?
-                  _this.item.element.dispatchEvent(evt);
-                }
-              });
-            });
-
-            return properties;
-          }
-        }
-      }
-    },
-    hooks: {
-      'domexpression-init-start': function domexpressionInitStart() {
-        if (this.attribute !== 'mv-if') {
-          return;
-        }
-
-        this.expression = this.element.getAttribute('mv-if');
-        this.parsed = [new Mavo.Expression(this.expression)];
-        this.expression = this.syntax.start + this.expression + this.syntax.end;
-
-        this.parentIf = this.element.parentNode && Mavo.DOMExpression.search(this.element.parentNode.closest('[mv-if]'), 'mv-if');
-
-        if (this.parentIf) {
-          this.parentIf.childIfs = (this.parentIf.childIfs || new Set()).add(this);
-        }
-      },
-      'domexpression-update-end': function domexpressionUpdateEnd() {
-        var _this2 = this;
-
-        if (this.attribute !== 'mv-if') {
-          return;
-        }
-
-        var value = this.value[0];
-        var oldValue = this.oldValue[0];
-
-        // Only apply this after the tree is built, otherwise any properties inside the if will go missing!
-        this.item.mavo.treeBuilt.then(function () {
-          if (_this2.parentIf) {
-            var parentValue = _this2.parentIf.value[0];
-            _this2.value[0] = value = value && parentValue;
-          }
-
-          if (parentValue !== false) {
-            // If parent if was false, it wouldn't matter whether this is in the DOM or not
-            if (value) {
-              // Is removed from the DOM and needs to get back
-              Mavo.revocably.add(_this2.element);
-            } else if (_this2.element.parentNode) {
-              // Is in the DOM and needs to be removed
-              Mavo.revocably.remove(_this2.element, 'mv-if');
-            }
-          }
-
-          if (value !== oldValue) {
-            // Mark any properties inside as hidden or not
-            if (_this2.childProperties) {
-              _this2.childProperties.forEach(function (property) {
-                return property.hidden = !value;
-              });
-            }
-
-            if (_this2.childIfs) {
-              _this2.childIfs.forEach(function (childIf) {
-                return childIf.update();
-              });
-            }
-          }
-        });
-      },
-      'unit-isdatanull': function unitIsdatanull(env) {
-        env.result = env.result || this.hidden && env.options.live;
       }
     }
   });
@@ -8245,7 +7387,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   }
 
   function toLocaleString(date, options) {
-    var ret = date.toLocaleString(Mavo.locale, options);
+    var ret = date.toLocaleString('en-US', options);
 
     ret = ret.replace(/\u200e/g, ''); // Stupid Edge bug
 
@@ -8773,537 +7915,4 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     _loop2(_name);
   }
 })(Bliss, Mavo.value, Mavo.Functions.util);
-'use strict';
-
-/* global Mavo, Bliss */
-/* eslint new-cap: "off" */
-
-(function ($) {
-  var _ = Mavo.Backend.register($.Class({
-    extends: Mavo.Backend,
-    id: 'Dropbox',
-    constructor: function constructor() {
-      this.permissions.on(['login', 'read']);
-
-      this.key = this.mavo.element.getAttribute('mv-dropbox-key') || '2mx6061p054bpbp';
-
-      // Transform the dropbox shared URL into something raw and CORS-enabled
-      this.url = _.fixShareURL(this.url);
-
-      this.login(true);
-    },
-    upload: function upload(file, path) {
-      var _this = this;
-
-      path = this.path.replace(/[^/]+$/, '') + path;
-
-      return this.put(file, path).then(function (fileInfo) {
-        return _this.getURL(path);
-      });
-    },
-    getURL: function getURL(path) {
-      return this.request('sharing/create_shared_link_with_settings', { path: path }, 'POST').then(function (shareInfo) {
-        return _.fixShareURL(shareInfo.url);
-      });
-    },
-
-
-    /**
-     * Saves a file to the backend.
-     * @param {Object} file - An object with name & data keys
-     * @return {Promise} A promise that resolves when the file is saved.
-     */
-    put: function put(serialized) {
-      var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.path;
-      var o = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
-      return this.request('https://content.dropboxapi.com/2/files/upload', serialized, 'POST', {
-        headers: {
-          'Dropbox-API-Arg': JSON.stringify({
-            path: path,
-            mode: 'overwrite'
-          }),
-          'Content-Type': 'application/octet-stream'
-        }
-      });
-    },
-
-
-    oAuthParams: function oAuthParams() {
-      return '&redirect_uri=' + encodeURIComponent('https://auth.mavo.io') + '&response_type=code';
-    },
-
-    getUser: function getUser() {
-      var _this2 = this;
-
-      if (this.user) {
-        return Promise.resolve(this.user);
-      }
-
-      return this.request('users/get_current_account', 'null', 'POST').then(function (info) {
-        _this2.user = {
-          username: info.email,
-          name: info.name.display_name,
-          avatar: info.profile_photo_url,
-          info: info
-        };
-      });
-    },
-    login: function login(passive) {
-      var _this3 = this;
-
-      return this.oAuthenticate(passive).then(function () {
-        return _this3.getUser();
-      }).then(function (u) {
-        if (_this3.user) {
-          _this3.permissions.logout = true;
-
-          // Check if can actually edit the file
-          _this3.request('sharing/get_shared_link_metadata', {
-            url: _this3.source
-          }, 'POST').then(function (info) {
-            _this3.path = info.path_lower;
-            _this3.permissions.on(['edit', 'save']);
-          });
-        }
-      });
-    },
-    logout: function logout() {
-      return this.oAuthLogout();
-    },
-
-
-    static: {
-      apiDomain: 'https://api.dropboxapi.com/2/',
-      oAuth: 'https://www.dropbox.com/oauth2/authorize',
-
-      test: function test(url) {
-        url = new URL(url, Mavo.base);
-        return (/dropbox.com/.test(url.host)
-        );
-      },
-
-
-      fixShareURL: function fixShareURL(url) {
-        url = new URL(url, Mavo.base);
-        url.hostname = 'dl.dropboxusercontent.com';
-        url.search = url.search.replace(/\bdl=0|^$/, 'raw=1');
-        return url;
-      }
-    }
-  }));
-})(Bliss);
-'use strict';
-
-/* global Mavo, Bliss */
-/* eslint new-cap: "off" */
-
-(function ($) {
-  var _ = Mavo.Backend.register($.Class({
-    extends: Mavo.Backend,
-    id: 'Github',
-    constructor: function constructor() {
-      this.permissions.on(['login', 'read']);
-
-      this.key = this.mavo.element.getAttribute('mv-github-key') || '7e08e016048000bc594e';
-
-      // Extract info for username, repo, branch, filepath from URL
-      var extension = this.format.constructor.extensions[0] || '.json';
-
-      this.defaults = {
-        repo: 'mv-data',
-        filename: '' + this.mavo.id + extension
-      };
-
-      this.info = _.parseURL(this.source, this.defaults);
-      $.extend(this, this.info);
-
-      this.login(true);
-    },
-    get: function get(url) {
-      if (this.isAuthenticated() || !this.path || url) {
-        // Authenticated or raw API call
-        var info = url ? _.parseURL(url) : this.info;
-
-        if (info.apiData) {
-          // GraphQL
-          return this.request(info.apiCall, info.apiData, 'POST').then(function (response) {
-            if (response.errors && response.errors.length) {
-              return Promise.reject(response.errors.map(function (x) {
-                return x.message;
-              }).join('\n'));
-            }
-
-            return response.data;
-          });
-        }
-
-        return this.request(info.apiCall, null, 'GET', {
-          headers: {
-            Accept: 'application/vnd.github.squirrel-girl-preview'
-          }
-        }).then(function (response) {
-          return Promise.resolve(info.repo ? _.atob(response.content) : response);
-        });
-      }
-
-      // Unauthenticated, use simple GET request to avoid rate limit
-      url = new URL('https://raw.githubusercontent.com/' + this.username + '/' + this.repo + '/' + (this.branch || 'master') + '/' + this.path);
-      url.searchParams.set('timestamp', Date.now()); // Ensure fresh copy
-
-      return $.fetch(url.href, {
-        headers: {
-          Accept: 'application/vnd.github.squirrel-girl-preview'
-        }
-      }).then(function (xhr) {
-        return Promise.resolve(xhr.responseText);
-      }, function () {
-        return Promise.resolve(null);
-      });
-    },
-    upload: function upload(file) {
-      var _this = this;
-
-      var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.path;
-
-      return Mavo.readFile(file).then(function (dataURL) {
-        var base64 = dataURL.slice(5); // Remove data:
-        var media = base64.match(/^\w+\/[\w+]+/)[0];
-        base64 = base64.replace(RegExp('^' + media + '(;base64)?,'), '');
-        path = _this.path.replace(/[^/]+$/, '') + path; // Make upload path relative to existing path
-
-        return _this.put(base64, path, { isEncoded: true });
-      }).then(function (fileInfo) {
-        return _this.getURL(path, fileInfo.commit.sha);
-      });
-    },
-
-
-    /**
-     * Saves a file to the backend.
-     * @param {String} serialized - Serialized data
-     * @param {String} path - Optional file path
-     * @return {Promise} A promise that resolves when the file is saved.
-     */
-    put: function put(serialized) {
-      var _this2 = this;
-
-      var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.path;
-      var o = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
-      if (!path) {
-        // Raw API calls are read-only for now
-        return;
-      }
-
-      var repoCall = 'repos/' + this.username + '/' + this.repo;
-      var fileCall = repoCall + '/contents/' + path;
-      var commitPrefix = this.mavo.element.getAttribute('mv-github-commit-prefix') || '';
-
-      // Create repo if it doesn’t exist
-      var repoInfo = this.repoInfo || this.request('user/repos', { name: this.repo }, 'POST').then(function (repoInfo) {
-        return _this2.repoInfo = repoInfo;
-      });
-
-      serialized = o.isEncoded ? serialized : _.btoa(serialized);
-
-      return Promise.resolve(repoInfo).then(function (repoInfo) {
-        if (!_this2.canPush()) {
-          // Does not have permission to commit, create a fork
-          return _this2.request(repoCall + '/forks', { name: _this2.repo }, 'POST').then(function (forkInfo) {
-            fileCall = 'repos/' + forkInfo.full_name + '/contents/' + path;
-            return _this2.forkInfo = forkInfo;
-          }).then(function (forkInfo) {
-            // Ensure that fork is created (they take a while)
-            var timeout = void 0;
-            var test = function test(resolve, reject) {
-              clearTimeout(timeout);
-              _this2.request('repos/' + forkInfo.full_name + '/commits', { until: '1970-01-01T00:00:00Z' }, 'HEAD').then(function (x) {
-                resolve(forkInfo);
-              }).catch(function (x) {
-                // Try again after 1 second
-                timeout = setTimeout(test, 1000);
-              });
-            };
-
-            return new Promise(test);
-          });
-        }
-
-        return repoInfo;
-      }).then(function (repoInfo) {
-        return _this2.request(fileCall, {
-          ref: _this2.branch
-        }).then(function (fileInfo) {
-          return _this2.request(fileCall, {
-            message: commitPrefix + _this2.mavo._('gh-updated-file', { name: fileInfo.name || 'file' }),
-            content: serialized,
-            branch: _this2.branch,
-            sha: fileInfo.sha
-          }, 'PUT');
-        }, function (xhr) {
-          if (xhr.status === 404) {
-            // File does not exist, create it
-            return _this2.request(fileCall, {
-              message: commitPrefix + 'Created file',
-              content: serialized,
-              branch: _this2.branch
-            }, 'PUT');
-          }
-
-          return xhr;
-        });
-      }).then(function (fileInfo) {
-        if (_this2.forkInfo) {
-          // We saved in a fork, do we have a pull request?
-          _this2.request('repos/' + _this2.username + '/' + _this2.repo + '/pulls', {
-            head: _this2.user.username + ':' + _this2.branch,
-            base: _this2.branch
-          }).then(function (prs) {
-            _this2.pullRequest(prs[0]);
-          });
-        }
-
-        return fileInfo;
-      });
-    },
-    pullRequest: function pullRequest(existing) {
-      var _this3 = this;
-
-      var previewURL = new URL(location);
-      previewURL.searchParams.set(this.mavo.id + '-storage', 'https://github.com/' + this.forkInfo.full_name + '/' + this.path);
-      var message = this.mavo._('gh-edit-suggestion-saved-in-profile', { previewURL: previewURL });
-
-      if (this.notice) {
-        this.notice.close();
-      }
-
-      if (existing) {
-        // We already have a pull request, ask about closing it
-        this.notice = this.mavo.message(message + '\n        ' + this.mavo._('gh-edit-suggestion-notreviewed') + '\n        <form onsubmit="return false">\n          <button class="mv-danger">' + this.mavo._('gh-edit-suggestion-revoke') + '</button>\n        </form>', {
-          classes: 'mv-inline',
-          dismiss: ['button', 'submit']
-        });
-
-        this.notice.closed.then(function (form) {
-          if (!form) {
-            return;
-          }
-
-          // Close PR
-          _this3.request('repos/' + _this3.username + '/' + _this3.repo + '/pulls/' + existing.number, {
-            state: 'closed'
-          }, 'POST').then(function (prInfo) {
-            new Mavo.UI.Message(_this3.mavo, '<a href="' + prInfo.html_url + '">' + _this3.mavo._('gh-edit-suggestion-cancelled') + '</a>', {
-              dismiss: ['button', 'timeout']
-            });
-
-            _this3.pullRequest();
-          });
-        });
-      } else {
-        // Ask about creating a PR
-        this.notice = this.mavo.message(message + '\n        ' + this.mavo._('gh-edit-suggestion-instructions') + '\n        <form onsubmit="return false">\n          <textarea name="edits" class="mv-autosize" placeholder="' + this.mavo._('gh-edit-suggestion-reason-placeholder') + '"></textarea>\n          <button>' + this.mavo._('gh-edit-suggestion-send') + '</button>\n        </form>', {
-          classes: 'mv-inline',
-          dismiss: ['button', 'submit']
-        });
-
-        this.notice.closed.then(function (form) {
-          if (!form) {
-            return;
-          }
-
-          // We want to send a pull request
-          _this3.request('repos/' + _this3.username + '/' + _this3.repo + '/pulls', {
-            title: _this3.mavo._('gh-edit-suggestion-title'),
-            body: _this3.mavo._('gh-edit-suggestion-body', {
-              description: form.elements.edits.value,
-              previewURL: previewURL
-            }),
-            head: _this3.user.username + ':' + _this3.branch,
-            base: _this3.branch
-          }, 'POST').then(function (prInfo) {
-            new Mavo.UI.Message(_this3.mavo, '<a href="' + prInfo.html_url + '">' + _this3.mavo._('gh-edit-suggestion-sent') + '</a>', {
-              dismiss: ['button', 'timeout']
-            });
-
-            _this3.pullRequest(prInfo);
-          });
-        });
-      }
-    },
-    login: function login(passive) {
-      var _this4 = this;
-
-      return this.oAuthenticate(passive).then(function () {
-        return _this4.getUser();
-      }).catch(function (xhr) {
-        if (xhr.status === 401) {
-          // Unauthorized. Access token we have is invalid, discard it
-          _this4.logout();
-        }
-      }).then(function (u) {
-        if (_this4.user) {
-          _this4.permissions.on(['edit', 'save', 'logout']);
-
-          if (_this4.repo) {
-            return _this4.request('repos/' + _this4.username + '/' + _this4.repo).then(function (repoInfo) {
-              if (_this4.branch === undefined) {
-                _this4.branch = repoInfo.default_branch;
-              }
-
-              return _this4.repoInfo = repoInfo;
-            });
-          }
-        }
-      });
-    },
-    canPush: function canPush() {
-      if (this.repoInfo) {
-        return this.repoInfo.permissions.push;
-      }
-
-      // Repo does not exist so we can't check permissions
-      // Just check if authenticated user is the same as our URL username
-      return this.user && this.user.username.toLowerCase() === this.username.toLowerCase();
-    },
-
-
-    oAuthParams: function oAuthParams() {
-      return '&scope=repo,gist';
-    },
-
-    logout: function logout() {
-      var _this5 = this;
-
-      return this.oAuthLogout().then(function () {
-        _this5.user = null;
-      });
-    },
-    getUser: function getUser() {
-      var _this6 = this;
-
-      if (this.user) {
-        return Promise.resolve(this.user);
-      }
-
-      return this.request('user').then(function (info) {
-        _this6.user = {
-          username: info.login,
-          name: info.name || info.login,
-          avatar: info.avatar_url,
-          url: 'https://github.com/' + info.login,
-          info: info
-        };
-
-        $.fire(_this6.mavo.element, 'mv-login', { backend: _this6 });
-      });
-    },
-    getURL: function getURL() {
-      var _this7 = this;
-
-      var path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.path;
-      var sha = arguments[1];
-
-      var repoInfo = this.forkInfo || this.repoInfo;
-      var repo = repoInfo.full_name;
-      path = path.replace(/ /g, '%20');
-
-      repoInfo.pagesInfo = repoInfo.pagesInfo || this.request('repos/' + repo + '/pages', {}, 'GET', {
-        headers: {
-          Accept: 'application/vnd.github.mister-fantastic-preview+json'
-        }
-      });
-
-      return repoInfo.pagesInfo.then(function (pagesInfo) {
-        return pagesInfo.html_url + path;
-      }).catch(function (xhr) {
-        // No Github Pages, return rawgit URL
-        if (sha) {
-          return 'https://cdn.rawgit.com/' + repo + '/' + sha + '/' + path;
-        }
-
-        return 'https://rawgit.com/' + repo + '/' + _this7.branch + '/' + path;
-      });
-    },
-
-
-    static: {
-      apiDomain: 'https://api.github.com/',
-      oAuth: 'https://github.com/login/oauth/authorize',
-
-      test: function test(url) {
-        url = new URL(url, Mavo.base);
-        return (/\bgithub.com|raw.githubusercontent.com/.test(url.host)
-        );
-      },
-
-
-      /**
-       * Parse Github URLs, return username, repo, branch, path
-       */
-      parseURL: function parseURL(source) {
-        var defaults = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-        var ret = {};
-        var url = new URL(source, Mavo.base);
-        var path = url.pathname.slice(1).split('/');
-
-        ret.username = path.shift();
-        ret.repo = path.shift() || defaults.repo;
-
-        if (/raw.githubusercontent.com$/.test(url.host)) {
-          ret.branch = path.shift();
-        } else if (/api.github.com$/.test(url.host)) {
-          // Raw API call
-          var apiCall = url.pathname.slice(1) + url.search;
-          var data = Mavo.Functions.from(source, '#'); // Url.* drops line breaks
-
-          return {
-            apiCall: apiCall,
-            apiData: apiCall === 'graphql' ? { query: data } : data
-          };
-        } else if (path[0] === 'blob') {
-          path.shift();
-          ret.branch = path.shift();
-        }
-
-        var lastSegment = path[path.length - 1];
-
-        if (/\.\w+$/.test(lastSegment)) {
-          ret.filename = lastSegment;
-          path.splice(path.length - 1, 1);
-        } else {
-          ret.filename = defaults.filename;
-        }
-
-        ret.filepath = path.join('/') || defaults.filepath || '';
-        ret.path = (ret.filepath ? ret.filepath + '/' : '') + ret.filename;
-
-        ret.apiCall = 'repos/' + ret.username + '/' + ret.repo + '/contents/' + ret.path;
-
-        return ret;
-      },
-
-
-      // Fix atob() and btoa() so they can handle Unicode
-      btoa: function (_btoa) {
-        function btoa(_x6) {
-          return _btoa.apply(this, arguments);
-        }
-
-        btoa.toString = function () {
-          return _btoa.toString();
-        };
-
-        return btoa;
-      }(function (str) {
-        return btoa(unescape(encodeURIComponent(str)));
-      }),
-      atob: function atob(str) {
-        return decodeURIComponent(escape(window.atob(str)));
-      }
-    }
-  }));
-})(Bliss);
 //# sourceMappingURL=maps/mavo.es5.js.map

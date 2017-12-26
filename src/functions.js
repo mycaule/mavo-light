@@ -483,7 +483,7 @@
   }
 
   function toLocaleString(date, options) {
-    let ret = date.toLocaleString(Mavo.locale, options);
+    let ret = date.toLocaleString('en-US', options);
 
     ret = ret.replace(/\u200e/g, ''); // Stupid Edge bug
 
