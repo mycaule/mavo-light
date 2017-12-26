@@ -5786,63 +5786,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       }
     },
 
-    'meter, progress': {
-      default: true,
-      attribute: 'value',
-      datatype: 'number',
-      edit: function edit() {
-        var _this4 = this;
-
-        var min = Number(this.element.getAttribute('min')) || 0;
-        var max = Number(this.element.getAttribute('max')) || 1;
-        var range = max - min;
-        var step = Number(this.element.getAttribute('mv-edit-step')) || (range > 1 ? 1 : range / 100);
-
-        $.bind(this.element, 'mousemove.mavo:edit', function (evt) {
-          // Change property as mouse moves
-          var left = _this4.element.getBoundingClientRect().left;
-          var offset = Math.max(0, (evt.clientX - left) / _this4.element.offsetWidth);
-          var newValue = min + range * offset;
-          var mod = newValue % step;
-
-          newValue += mod > step / 2 ? step - mod : -mod;
-          newValue = Math.max(min, Math.min(newValue, max));
-
-          _this4.sneak(function () {
-            return _this4.element.setAttribute('value', newValue);
-          });
-        });
-
-        $.bind(this.element, 'mouseleave.mavo:edit', function (evt) {
-          // Return to actual value
-          _this4.sneak(function () {
-            return _this4.element.setAttribute('value', _this4.value);
-          });
-        });
-
-        $.bind(this.element, 'click.mavo:edit', function (evt) {
-          // Register change
-          _this4.value = _this4.getValue();
-        });
-
-        $.bind(this.element, 'keydown.mavo:edit', function (evt) {
-          // Edit with arrow keys
-          if (evt.target === _this4.element && (evt.keyCode === 37 || evt.keyCode === 39)) {
-            var increment = step * (evt.keyCode === 39 ? 1 : -1) * (evt.shiftKey ? 10 : 1);
-            var newValue = _this4.value + increment;
-            newValue = Math.max(min, Math.min(newValue, max));
-
-            _this4.element.setAttribute('value', newValue);
-
-            evt.preventDefault();
-          }
-        });
-      },
-      done: function done() {
-        $.unbind(this.element, '.mavo:edit');
-      }
-    },
-
     meta: {
       default: true,
       attribute: 'content'
@@ -5967,14 +5910,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       attribute: 'aria-checked',
       datatype: 'boolean',
       edit: function edit() {
-        var _this5 = this;
+        var _this4 = this;
 
         Mavo.revocably.setAttribute(this.element, 'role', 'checkbox');
 
         $.bind(this.element, 'click.mavo:edit keyup.mavo:edit keydown.mavo:edit', function (evt) {
           if (evt.type === 'click' || evt.key === ' ' || evt.key === 'Enter') {
             if (evt.type != 'keydown') {
-              _this5.value = !_this5.value;
+              _this4.value = !_this4.value;
             }
 
             evt.preventDefault();

@@ -413,57 +413,6 @@
       }
     },
 
-    'meter, progress': {
-      default: true,
-      attribute: 'value',
-      datatype: 'number',
-      edit() {
-        const min = Number(this.element.getAttribute('min')) || 0;
-        const max = Number(this.element.getAttribute('max')) || 1;
-        const range = max - min;
-        const step = Number(this.element.getAttribute('mv-edit-step')) || (range > 1 ? 1 : range / 100);
-
-        $.bind(this.element, 'mousemove.mavo:edit', evt => {
-        // Change property as mouse moves
-          const left = this.element.getBoundingClientRect().left;
-          const offset = Math.max(0, (evt.clientX - left) / this.element.offsetWidth);
-          let newValue = min + range * offset;
-          const mod = newValue % step;
-
-          newValue += mod > step / 2 ? step - mod : -mod;
-          newValue = Math.max(min, Math.min(newValue, max));
-
-          this.sneak(() => this.element.setAttribute('value', newValue));
-        });
-
-        $.bind(this.element, 'mouseleave.mavo:edit', evt => {
-        // Return to actual value
-          this.sneak(() => this.element.setAttribute('value', this.value));
-        });
-
-        $.bind(this.element, 'click.mavo:edit', evt => {
-        // Register change
-          this.value = this.getValue();
-        });
-
-        $.bind(this.element, 'keydown.mavo:edit', evt => {
-        // Edit with arrow keys
-          if (evt.target === this.element && (evt.keyCode === 37 || evt.keyCode === 39)) {
-            const increment = step * (evt.keyCode === 39 ? 1 : -1) * (evt.shiftKey ? 10 : 1);
-            let newValue = this.value + increment;
-            newValue = Math.max(min, Math.min(newValue, max));
-
-            this.element.setAttribute('value', newValue);
-
-            evt.preventDefault();
-          }
-        });
-      },
-      done() {
-        $.unbind(this.element, '.mavo:edit');
-      }
-    },
-
     meta: {
       default: true,
       attribute: 'content'
