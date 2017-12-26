@@ -747,10 +747,8 @@
     const polyfillURL = 'https://cdn.polyfill.io/v2/polyfill.min.js?unknown=polyfill&features=' + polyfills.map(a => a + '|gated').join(',');
 
     _.dependencies.push(
-    // Plugins.load() must be run after DOM load to pick up all mv-plugins attributes
-    $.ready().then(() => _.Plugins.load()),
-    $.include(!polyfills.length, polyfillURL)
-  );
+      $.include(!polyfills.length, polyfillURL)
+    );
 
     _.inited = $.ready().then(() => {
       $.attributes($$(_.selectors.init), {'mv-progress': 'Loading'});

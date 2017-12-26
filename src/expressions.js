@@ -147,10 +147,9 @@
 
       THROTTLE: 50,
 
-      directive(name, o) {
+      directive(name) {
         _.directives.push(name);
         Mavo.attributes.push(name);
-        Mavo.Plugins.register(name, o);
       }
     }
   });

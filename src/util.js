@@ -107,14 +107,15 @@
       return arr === undefined ? [] : Array.isArray(arr) ? arr : [arr];
     },
 
-    delete: (arr, element, all) => {
-      do {
-        const index = arr && arr.indexOf(element);
+    delete: (arr, element) => {
+      let index;
 
+      do {
+        index = arr && arr.indexOf(element);
         if (index > -1) {
           arr.splice(index, 1);
         }
-      } while (index > -1 && all);
+      } while (index > -1);
     },
 
   // Recursively flatten a multi-dimensional array

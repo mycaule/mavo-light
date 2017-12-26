@@ -41,9 +41,12 @@ Please visit https://mavo.io for info on using Mavo.
 Useful commands
 
 ```
+# Running the tests
 npm test
+
 # Running old build method
 gulp watch
+
 # Running new build method
 parcel build src/index.js
 ```

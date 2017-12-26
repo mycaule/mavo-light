@@ -1,561 +1,511 @@
 
   locale.js:5:13
-  ⚠   13:5    Unexpected todo comment.                                                                                     no-warning-comments
-  ✖    5:13   Unexpected chained assignment.                                                                               no-multi-assign
-
-  backend.dropbox.js:22:40
-  ✖   22:40   fileInfo is defined but never used.                                                                          no-unused-vars
-  ✖   35:39   o is assigned a value but never used.                                                                        no-unused-vars
-  ✖   68:13   u is defined but never used.                                                                                 no-unused-vars
-
-  mv-if.js:68:13
-  ✖   68:13   Unexpected var, use let or const instead.                                                                    no-var
-  ✖   69:29   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   72:15   parentValue used outside of binding context.                                                                 block-scoped-var
-  ✖   85:44   Arrow function should not return assignment.                                                                 no-return-assign
-
-  ui.popup.js:5:9
-  ⚠  110:88   Unexpected todo comment.                                                                                     no-warning-comments
-  ✖    5:9    _ is assigned a value but never used.                                                                        no-unused-vars
-  ✖    5:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   10:23   evt is defined but never used.                                                                               no-unused-vars
-  ✖  115:28   evt is defined but never used.                                                                               no-unused-vars
+  ✖    5:13  Unexpected chained assignment.                                                                               no-multi-assign
 
   expression.js:7:13
-  ✖    7:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   21:16   The catch parameter should be named err.                                                                     unicorn/catch-error-name
-  ✖   97:7    Split let declarations into multiple statements.                                                             one-var
-  ✖   98:9    ret is never reassigned. Use const instead.                                                                  prefer-const
+  ✖    7:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   21:16  The catch parameter should be named err.                                                                     unicorn/catch-error-name
+  ✖   97:7   Split let declarations into multiple statements.                                                             one-var
+  ✖   98:9   ret is never reassigned. Use const instead.                                                                  prefer-const
+
+  ui.popup.js:5:9
+  ✖    5:9   _ is assigned a value but never used.                                                                        no-unused-vars
+  ✖    5:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   10:23  evt is defined but never used.                                                                               no-unused-vars
+  ✖  116:28  evt is defined but never used.                                                                               no-unused-vars
 
   permissions.js:5:13
-  ✖    5:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   18:7    The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖   25:37   Arrow function should not return assignment.                                                                 no-return-assign
-  ✖   34:23   Arrow function should not return assignment.                                                                 no-return-assign
-  ✖  226:18   Unexpected chained assignment.                                                                               no-multi-assign
+  ✖    5:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   18:7   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖   25:37  Arrow function should not return assignment.                                                                 no-return-assign
+  ✖   34:23  Arrow function should not return assignment.                                                                 no-return-assign
+  ✖  226:18  Unexpected chained assignment.                                                                               no-multi-assign
 
   backend.js:8:13
-  ✖    8:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  159:38   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  169:17   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖  251:7    Return statement should not contain assignment.                                                              no-return-assign
-  ✖  268:13   url is defined but never used.                                                                               no-unused-vars
-  ✖  286:7    Unexpected negated condition.                                                                                no-negated-condition
+  ✖    8:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  159:38  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  169:17  The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖  251:7   Return statement should not contain assignment.                                                              no-return-assign
+  ✖  268:13  url is defined but never used.                                                                               no-unused-vars
+  ✖  286:7   Unexpected negated condition.                                                                                no-negated-condition
 
   ui.message.js:5:9
-  ✖    5:9    _ is assigned a value but never used.                                                                        no-unused-vars
-  ✖    5:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   15:18   e is defined but never used.                                                                                 no-unused-vars
-  ✖   47:20   evt is defined but never used.                                                                               no-unused-vars
-  ✖   58:23   e is defined but never used.                                                                                 no-unused-vars
-  ✖   59:31   e is defined but never used.                                                                                 no-unused-vars
-  ✖   59:31   Arrow function should not return assignment.                                                                 no-return-assign
+  ✖    5:9   _ is assigned a value but never used.                                                                        no-unused-vars
+  ✖    5:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   15:18  e is defined but never used.                                                                                 no-unused-vars
+  ✖   47:20  evt is defined but never used.                                                                               no-unused-vars
+  ✖   58:23  e is defined but never used.                                                                                 no-unused-vars
+  ✖   59:31  e is defined but never used.                                                                                 no-unused-vars
+  ✖   59:31  Arrow function should not return assignment.                                                                 no-return-assign
 
   ui.itembar.js:5:13
-  ✖    5:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   59:21   evt is defined but never used.                                                                               no-unused-vars
-  ✖   62:21   evt is defined but never used.                                                                               no-unused-vars
-  ✖   99:13   Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
-  ✖  113:22   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  121:47   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖  121:57   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-
-  plugins.js:7:13
-  ✖    7:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   36:13   Unexpected var, use let or const instead.                                                                    no-var
-  ✖   47:11   Unexpected var, use let or const instead.                                                                    no-var
-  ✖   47:15   url used outside of binding context.                                                                         block-scoped-var
-  ✖   47:15   url is already defined.                                                                                      no-redeclare
-  ✖   49:49   url used outside of binding context.                                                                         block-scoped-var
-  ✖   62:7    The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖   84:11   length property should be compared to a value.                                                               unicorn/explicit-length-check
+  ✖    5:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   59:21  evt is defined but never used.                                                                               no-unused-vars
+  ✖   62:21  evt is defined but never used.                                                                               no-unused-vars
+  ✖   99:13  Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
+  ✖  113:22  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  121:47  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖  121:57  Unexpected mix of || and &&.                                                                                 no-mixed-operators
 
   expressions.js:5:13
-  ✖    5:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   26:29   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   52:7    Split let declarations into multiple statements.                                                             one-var
-  ✖   68:32   length property should be compared to a value.                                                               unicorn/explicit-length-check
-  ✖   85:21   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖   85:66   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖   85:66   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖   86:50   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖  122:9    Split let declarations into multiple statements.                                                             one-var
+  ✖    5:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   26:29  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   52:7   Split let declarations into multiple statements.                                                             one-var
+  ✖   68:32  length property should be compared to a value.                                                               unicorn/explicit-length-check
+  ✖   85:21  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖   85:66  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖   85:66  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖   86:50  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖  122:9   Split let declarations into multiple statements.                                                             one-var
 
   ui.bar.js:7:13
-  ✖    7:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   19:9    The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖   46:11   length property should be compared to a value.                                                               unicorn/explicit-length-check
-  ✖   86:9    The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖   91:7    The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖  104:11   length property should be compared to a value.                                                               unicorn/explicit-length-check
-  ✖  108:66   entries is defined but never used.                                                                           no-unused-vars
-  ✖  122:7    Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
-  ✖  136:7    Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
-  ✖  311:24   evt is defined but never used.                                                                               no-unused-vars
-  ✖  312:19   input was used before it was defined.                                                                        no-use-before-define
-  ✖  326:31   evt is defined but never used.                                                                               no-unused-vars
-  ✖  332:34   The catch parameter should be named err.                                                                     unicorn/catch-error-name
-  ✖  336:32   evt is defined but never used.                                                                               no-unused-vars
-
-  backend.github.js:36:36
-  ✖   36:36   length property should be compared to a value.                                                               unicorn/explicit-length-check
-  ✖   91:100  Arrow function should not return assignment.                                                                 no-return-assign
-  ✖  102:15   Return statement should not contain assignment.                                                              no-return-assign
-  ✖  107:38   reject is defined but never used.                                                                            no-unused-vars
-  ✖  110:25   x is defined but never used.                                                                                 no-unused-vars
-  ✖  113:26   x is defined but never used.                                                                                 no-unused-vars
-  ✖  113:26   The catch parameter should be named err.                                                                     unicorn/catch-error-name
-  ✖  125:13   repoInfo is defined but never used.                                                                          no-unused-vars
-  ✖  190:13   Do not use new for side effects.                                                                             no-new
-  ✖  224:13   Do not use new for side effects.                                                                             no-new
-  ✖  237:14   The catch parameter should be named err.                                                                     unicorn/catch-error-name
-  ✖  243:13   u is defined but never used.                                                                                 no-unused-vars
-  ✖  254:17   Return statement should not contain assignment.                                                              no-return-assign
-  ✖  309:14   xhr is defined but never used.                                                                               no-unused-vars
-  ✖  309:14   The catch parameter should be named err.                                                                     unicorn/catch-error-name
+  ✖    7:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   19:9   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖   46:11  length property should be compared to a value.                                                               unicorn/explicit-length-check
+  ✖   86:9   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖   91:7   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖  104:11  length property should be compared to a value.                                                               unicorn/explicit-length-check
+  ✖  108:66  entries is defined but never used.                                                                           no-unused-vars
+  ✖  122:7   Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
+  ✖  136:7   Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
+  ✖  311:24  evt is defined but never used.                                                                               no-unused-vars
+  ✖  312:19  input was used before it was defined.                                                                        no-use-before-define
+  ✖  326:31  evt is defined but never used.                                                                               no-unused-vars
+  ✖  332:34  The catch parameter should be named err.                                                                     unicorn/catch-error-name
+  ✖  336:32  evt is defined but never used.                                                                               no-unused-vars
 
   mavoscript.js:4:13
-  ✖    4:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   10:11   jsep is not defined.                                                                                         no-undef
-  ✖   14:7    Return statement should not contain assignment.                                                              no-return-assign
-  ✖   30:13   jsep is not defined.                                                                                         no-undef
-  ✖   37:7    Return statement should not contain assignment.                                                              no-return-assign
-  ✖   49:9    Split let declarations into multiple statements.                                                             one-var
-  ✖  132:13   Split let declarations into multiple statements.                                                             one-var
-  ✖  132:17   dateA is never reassigned. Use const instead.                                                                prefer-const
-  ✖  133:15   dateB is never reassigned. Use const instead.                                                                prefer-const
-  ✖  202:29   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  238:9    Split let declarations into multiple statements.                                                             one-var
-  ✖  238:13   da is never reassigned. Use const instead.                                                                   prefer-const
-  ✖  239:11   db is never reassigned. Use const instead.                                                                   prefer-const
-  ✖  265:23   node is defined but never used.                                                                              no-unused-vars
-  ✖  322:16   The catch parameter should be named err.                                                                     unicorn/catch-error-name
-  ✖  331:14   The Function constructor is eval.                                                                            no-new-func
-  ✖  343:3    The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖  364:3    The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖  365:41   Arrow function should not return assignment.                                                                 no-return-assign
+  ✖    4:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   10:11  jsep is not defined.                                                                                         no-undef
+  ✖   14:7   Return statement should not contain assignment.                                                              no-return-assign
+  ✖   30:13  jsep is not defined.                                                                                         no-undef
+  ✖   37:7   Return statement should not contain assignment.                                                              no-return-assign
+  ✖   49:9   Split let declarations into multiple statements.                                                             one-var
+  ✖  132:13  Split let declarations into multiple statements.                                                             one-var
+  ✖  132:17  dateA is never reassigned. Use const instead.                                                                prefer-const
+  ✖  133:15  dateB is never reassigned. Use const instead.                                                                prefer-const
+  ✖  202:29  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  238:9   Split let declarations into multiple statements.                                                             one-var
+  ✖  238:13  da is never reassigned. Use const instead.                                                                   prefer-const
+  ✖  239:11  db is never reassigned. Use const instead.                                                                   prefer-const
+  ✖  265:23  node is defined but never used.                                                                              no-unused-vars
+  ✖  322:16  The catch parameter should be named err.                                                                     unicorn/catch-error-name
+  ✖  331:14  The Function constructor is eval.                                                                            no-new-func
+  ✖  343:3   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖  364:3   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖  365:41  Arrow function should not return assignment.                                                                 no-return-assign
 
   domexpression.js:5:13
-  ✖    5:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖    8:34   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖    8:57   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖   41:14   length property should be compared to a value.                                                               unicorn/explicit-length-check
-  ✖   77:23   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  130:19   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  144:22   Unexpected negated condition.                                                                                no-negated-condition
-  ✖  192:32   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  222:16   length property should be compared to a value.                                                               unicorn/explicit-length-check
-  ✖  234:15   name used outside of binding context.                                                                        block-scoped-var
-  ✖  235:33   name used outside of binding context.                                                                        block-scoped-var
-  ✖  237:56   name used outside of binding context.                                                                        block-scoped-var
-  ✖  249:13   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖  249:18   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  249:22   name is already defined.                                                                                     no-redeclare
-  ✖  256:15   name used outside of binding context.                                                                        block-scoped-var
-  ✖  257:33   name used outside of binding context.                                                                        block-scoped-var
-  ✖  267:13   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖  267:18   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  267:22   name is already defined.                                                                                     no-redeclare
-  ✖  302:15   Unexpected var, use let or const instead.                                                                    no-var
+  ✖    5:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖    8:34  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖    8:57  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖   41:14  length property should be compared to a value.                                                               unicorn/explicit-length-check
+  ✖   77:23  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  130:19  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  144:22  Unexpected negated condition.                                                                                no-negated-condition
+  ✖  192:32  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  222:16  length property should be compared to a value.                                                               unicorn/explicit-length-check
+  ✖  234:15  name used outside of binding context.                                                                        block-scoped-var
+  ✖  235:33  name used outside of binding context.                                                                        block-scoped-var
+  ✖  237:56  name used outside of binding context.                                                                        block-scoped-var
+  ✖  249:13  The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖  249:18  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  249:22  name is already defined.                                                                                     no-redeclare
+  ✖  256:15  name used outside of binding context.                                                                        block-scoped-var
+  ✖  257:33  name used outside of binding context.                                                                        block-scoped-var
+  ✖  267:13  The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖  267:18  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  267:22  name is already defined.                                                                                     no-redeclare
+  ✖  302:15  Unexpected var, use let or const instead.                                                                    no-var
 
   elements.js:18:13
-  ⚠  540:11   Unexpected todo comment.                                                                                     no-warning-comments
-  ✖   18:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   25:11   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖   85:9    The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖   89:60   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖   89:73   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖  181:24   Arrow function should not return assignment.                                                                 no-return-assign
-  ✖  186:60   Unexpected mix of + and *.                                                                                   no-mixed-operators
-  ✖  186:71   Unexpected mix of + and *.                                                                                   no-mixed-operators
-  ✖  192:58   onload was used before it was defined.                                                                       no-use-before-define
-  ✖  193:59   onload was used before it was defined.                                                                       no-use-before-define
-  ✖  195:15   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  195:28   evt is defined but never used.                                                                               no-unused-vars
-  ✖  196:38   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  202:31   evt is defined but never used.                                                                               no-unused-vars
-  ✖  205:30   Arrow function should not return assignment.                                                                 no-return-assign
-  ✖  235:35   evt is defined but never used.                                                                               no-unused-vars
-  ✖  239:39   evt is defined but never used.                                                                               no-unused-vars
-  ✖  250:11   Return statement should not contain assignment.                                                              no-return-assign
-  ✖  326:17   Arrow function should not return assignment.                                                                 no-return-assign
-  ✖  339:44   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  342:66   r is defined but never used.                                                                                 no-unused-vars
-  ✖  408:45   evt is defined but never used.                                                                               no-unused-vars
-  ✖  430:30   Unexpected mix of + and *.                                                                                   no-mixed-operators
-  ✖  430:38   Unexpected mix of + and *.                                                                                   no-mixed-operators
-  ✖  439:54   evt is defined but never used.                                                                               no-unused-vars
-  ✖  444:49   evt is defined but never used.                                                                               no-unused-vars
-  ✖  501:44   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  531:16   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  537:27   type used outside of binding context.                                                                        block-scoped-var
-  ✖  589:26   Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖   18:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   25:11  The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖   85:9   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖   89:60  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖   89:73  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖  181:24  Arrow function should not return assignment.                                                                 no-return-assign
+  ✖  186:60  Unexpected mix of + and *.                                                                                   no-mixed-operators
+  ✖  186:71  Unexpected mix of + and *.                                                                                   no-mixed-operators
+  ✖  192:58  onload was used before it was defined.                                                                       no-use-before-define
+  ✖  193:59  onload was used before it was defined.                                                                       no-use-before-define
+  ✖  195:15  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  195:28  evt is defined but never used.                                                                               no-unused-vars
+  ✖  196:38  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  202:31  evt is defined but never used.                                                                               no-unused-vars
+  ✖  205:30  Arrow function should not return assignment.                                                                 no-return-assign
+  ✖  235:35  evt is defined but never used.                                                                               no-unused-vars
+  ✖  239:39  evt is defined but never used.                                                                               no-unused-vars
+  ✖  250:11  Return statement should not contain assignment.                                                              no-return-assign
+  ✖  326:17  Arrow function should not return assignment.                                                                 no-return-assign
+  ✖  339:44  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  342:66  r is defined but never used.                                                                                 no-unused-vars
+  ✖  408:45  evt is defined but never used.                                                                               no-unused-vars
+  ✖  450:44  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  480:16  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  486:27  type used outside of binding context.                                                                        block-scoped-var
+  ✖  538:26  Expected !== and instead saw !=.                                                                             eqeqeq
 
   formats.js:5:13
-  ✖    5:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖    7:16   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   36:9    json is assigned a value but never used.                                                                     no-unused-vars
-  ✖   36:16   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   45:9    text is assigned a value but never used.                                                                     no-unused-vars
-  ✖   45:16   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   47:17   backend is defined but never used.                                                                           no-unused-vars
-  ✖   58:3    Unexpected var, use let or const instead.                                                                    no-var
-  ✖   58:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   60:17   backend is defined but never used.                                                                           no-unused-vars
-  ✖   78:22   Papa is not defined.                                                                                         no-undef
-  ✖   99:16   Papa is not defined.                                                                                         no-undef
-  ✖  114:9    The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖  114:14   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  114:18   id used outside of binding context.                                                                          block-scoped-var
-  ✖  115:11   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  115:15   Format used outside of binding context.                                                                      block-scoped-var
-  ✖  115:26   id used outside of binding context.                                                                          block-scoped-var
-  ✖  117:15   id used outside of binding context.                                                                          block-scoped-var
-  ✖  118:24   Format used outside of binding context.                                                                      block-scoped-var
-  ✖  126:9    Unexpected var, use let or const instead.                                                                    no-var
-  ✖  126:13   Format used outside of binding context.                                                                      block-scoped-var
-  ✖  126:13   Format is already defined.                                                                                   no-redeclare
-  ✖  128:14   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  128:18   id is already defined.                                                                                       no-redeclare
-  ✖  128:18   id used outside of binding context.                                                                          block-scoped-var
-  ✖  129:17   id used outside of binding context.                                                                          block-scoped-var
-  ✖  132:13   Format used outside of binding context.                                                                      block-scoped-var
-  ✖  132:24   id used outside of binding context.                                                                          block-scoped-var
-  ✖  136:20   Format used outside of binding context.                                                                      block-scoped-var
-
-  group.js:5:13
-  ✖    5:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖    8:32   o is defined but never used.                                                                                 no-unused-vars
-  ✖   17:15   obj is assigned a value but never used.                                                                      no-unused-vars
-  ✖   17:21   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   38:16   Unexpected negated condition.                                                                                no-negated-condition
-  ✖   38:52   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖   84:9    The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖  103:14   length property should be compared to a value.                                                               unicorn/explicit-length-check
-  ✖  108:38   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  147:7    Split let declarations into multiple statements.                                                             one-var
-  ✖  147:11   results is never reassigned. Use const instead.                                                              prefer-const
-  ✖  150:7    The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖  188:9    Unexpected var, use let or const instead.                                                                    no-var
-  ✖  192:11   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  192:15   property used outside of binding context.                                                                    block-scoped-var
-  ✖  192:15   property used outside of binding context.                                                                    block-scoped-var
-  ✖  197:11   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  197:15   property used outside of binding context.                                                                    block-scoped-var
-  ✖  197:15   property is already defined.                                                                                 no-redeclare
-  ✖  197:15   property used outside of binding context.                                                                    block-scoped-var
-  ✖  203:18   property used outside of binding context.                                                                    block-scoped-var
-  ✖  203:18   property used outside of binding context.                                                                    block-scoped-var
-  ✖  203:18   property used outside of binding context.                                                                    block-scoped-var
-  ✖  234:12   wasPrimitive used outside of binding context.                                                                block-scoped-var
-  ✖  239:14   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  239:18   property is already defined.                                                                                 no-redeclare
-  ✖  239:18   property used outside of binding context.                                                                    block-scoped-var
-  ✖  239:18   property used outside of binding context.                                                                    block-scoped-var
-  ✖  240:17   property used outside of binding context.                                                                    block-scoped-var
-  ✖  240:17   property used outside of binding context.                                                                    block-scoped-var
-  ✖  241:32   property used outside of binding context.                                                                    block-scoped-var
-  ✖  241:32   property used outside of binding context.                                                                    block-scoped-var
-  ✖  243:67   property used outside of binding context.                                                                    block-scoped-var
-  ✖  243:67   property used outside of binding context.                                                                    block-scoped-var
-  ✖  243:77   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  244:51   property used outside of binding context.                                                                    block-scoped-var
-  ✖  244:51   property used outside of binding context.                                                                    block-scoped-var
+  ✖    5:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖    7:16  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   36:9   json is assigned a value but never used.                                                                     no-unused-vars
+  ✖   36:16  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   45:9   text is assigned a value but never used.                                                                     no-unused-vars
+  ✖   45:16  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   47:17  backend is defined but never used.                                                                           no-unused-vars
+  ✖   58:3   Unexpected var, use let or const instead.                                                                    no-var
+  ✖   58:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   60:17  backend is defined but never used.                                                                           no-unused-vars
+  ✖   78:22  Papa is not defined.                                                                                         no-undef
+  ✖   99:16  Papa is not defined.                                                                                         no-undef
+  ✖  114:9   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖  114:14  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  114:18  id used outside of binding context.                                                                          block-scoped-var
+  ✖  115:11  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  115:15  Format used outside of binding context.                                                                      block-scoped-var
+  ✖  115:26  id used outside of binding context.                                                                          block-scoped-var
+  ✖  117:15  id used outside of binding context.                                                                          block-scoped-var
+  ✖  118:24  Format used outside of binding context.                                                                      block-scoped-var
+  ✖  126:9   Unexpected var, use let or const instead.                                                                    no-var
+  ✖  126:13  Format used outside of binding context.                                                                      block-scoped-var
+  ✖  126:13  Format is already defined.                                                                                   no-redeclare
+  ✖  128:14  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  128:18  id is already defined.                                                                                       no-redeclare
+  ✖  128:18  id used outside of binding context.                                                                          block-scoped-var
+  ✖  129:17  id used outside of binding context.                                                                          block-scoped-var
+  ✖  132:13  Format used outside of binding context.                                                                      block-scoped-var
+  ✖  132:24  id used outside of binding context.                                                                          block-scoped-var
+  ✖  136:20  Format used outside of binding context.                                                                      block-scoped-var
 
   util.js:38:25
-  ✖   38:25   f is defined but never used.                                                                                 no-unused-vars
-  ✖   39:26   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   93:25   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  117:16   index is not defined.                                                                                        no-undef
-  ✖  117:30   all is not modified in this loop.                                                                            no-unmodified-loop-condition
-  ✖  172:7    Split let declarations into multiple statements.                                                             one-var
-  ✖  172:11   data is never reassigned. Use const instead.                                                                 prefer-const
-  ✖  180:15   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  207:18   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  226:51   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  232:16   Expected a conditional expression and instead saw an assignment.                                             no-cond-assign
-  ✖  331:31   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖  331:58   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖  331:58   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖  331:72   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖  332:28   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖  332:53   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖  332:53   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖  332:68   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖  336:26   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  380:34   Expected a conditional expression and instead saw an assignment.                                             no-cond-assign
-  ✖  445:13   length property should be compared to a value.                                                               unicorn/explicit-length-check
-  ✖  460:53   length property should be compared to a value.                                                               unicorn/explicit-length-check
-  ✖  492:7    Split let declarations into multiple statements.                                                             one-var
-  ✖  496:9    Split let declarations into multiple statements.                                                             one-var
-  ✖  496:13   context is never reassigned. Use const instead.                                                              prefer-const
-  ✖  497:11   args is never reassigned. Use const instead.                                                                 prefer-const
-  ✖  512:37   Unnecessary escape character: \/.                                                                            no-useless-escape
-  ✖  527:48   ResizeObserver is not defined.                                                                               no-undef
-  ✖  527:90   ResizeObserver is not defined.                                                                               no-undef
-  ✖  604:17   ret is assigned a value but never used.                                                                      no-unused-vars
-  ✖  607:11   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  610:16   ret used outside of binding context.                                                                         block-scoped-var
-  ✖  615:25   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  626:7    Split let declarations into multiple statements.                                                             one-var
-  ✖  663:29   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  723:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  766:9    idObserver is assigned a value but never used.                                                               no-unused-vars
+  ✖   38:25  f is defined but never used.                                                                                 no-unused-vars
+  ✖   39:26  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   93:25  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  173:7   Split let declarations into multiple statements.                                                             one-var
+  ✖  173:11  data is never reassigned. Use const instead.                                                                 prefer-const
+  ✖  181:15  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  208:18  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  227:51  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  233:16  Expected a conditional expression and instead saw an assignment.                                             no-cond-assign
+  ✖  332:31  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖  332:58  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖  332:58  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖  332:72  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖  333:28  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖  333:53  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖  333:53  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖  333:68  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖  337:26  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  381:34  Expected a conditional expression and instead saw an assignment.                                             no-cond-assign
+  ✖  446:13  length property should be compared to a value.                                                               unicorn/explicit-length-check
+  ✖  461:53  length property should be compared to a value.                                                               unicorn/explicit-length-check
+  ✖  493:7   Split let declarations into multiple statements.                                                             one-var
+  ✖  497:9   Split let declarations into multiple statements.                                                             one-var
+  ✖  497:13  context is never reassigned. Use const instead.                                                              prefer-const
+  ✖  498:11  args is never reassigned. Use const instead.                                                                 prefer-const
+  ✖  513:37  Unnecessary escape character: \/.                                                                            no-useless-escape
+  ✖  528:48  ResizeObserver is not defined.                                                                               no-undef
+  ✖  528:90  ResizeObserver is not defined.                                                                               no-undef
+  ✖  605:17  ret is assigned a value but never used.                                                                      no-unused-vars
+  ✖  608:11  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  611:16  ret used outside of binding context.                                                                         block-scoped-var
+  ✖  616:25  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  627:7   Split let declarations into multiple statements.                                                             one-var
+  ✖  664:29  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  724:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  767:9   idObserver is assigned a value but never used.                                                               no-unused-vars
+
+  group.js:5:13
+  ✖    5:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖    8:32  o is defined but never used.                                                                                 no-unused-vars
+  ✖   17:15  obj is assigned a value but never used.                                                                      no-unused-vars
+  ✖   17:21  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   38:16  Unexpected negated condition.                                                                                no-negated-condition
+  ✖   38:52  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖   84:9   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖  103:14  length property should be compared to a value.                                                               unicorn/explicit-length-check
+  ✖  108:38  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  147:7   Split let declarations into multiple statements.                                                             one-var
+  ✖  147:11  results is never reassigned. Use const instead.                                                              prefer-const
+  ✖  150:7   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖  188:9   Unexpected var, use let or const instead.                                                                    no-var
+  ✖  192:11  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  192:15  property used outside of binding context.                                                                    block-scoped-var
+  ✖  192:15  property used outside of binding context.                                                                    block-scoped-var
+  ✖  197:11  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  197:15  property used outside of binding context.                                                                    block-scoped-var
+  ✖  197:15  property is already defined.                                                                                 no-redeclare
+  ✖  197:15  property used outside of binding context.                                                                    block-scoped-var
+  ✖  203:18  property used outside of binding context.                                                                    block-scoped-var
+  ✖  203:18  property used outside of binding context.                                                                    block-scoped-var
+  ✖  203:18  property used outside of binding context.                                                                    block-scoped-var
+  ✖  234:12  wasPrimitive used outside of binding context.                                                                block-scoped-var
+  ✖  239:14  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  239:18  property is already defined.                                                                                 no-redeclare
+  ✖  239:18  property used outside of binding context.                                                                    block-scoped-var
+  ✖  239:18  property used outside of binding context.                                                                    block-scoped-var
+  ✖  240:17  property used outside of binding context.                                                                    block-scoped-var
+  ✖  240:17  property used outside of binding context.                                                                    block-scoped-var
+  ✖  241:32  property used outside of binding context.                                                                    block-scoped-var
+  ✖  241:32  property used outside of binding context.                                                                    block-scoped-var
+  ✖  243:67  property used outside of binding context.                                                                    block-scoped-var
+  ✖  243:67  property used outside of binding context.                                                                    block-scoped-var
+  ✖  243:77  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  244:51  property used outside of binding context.                                                                    block-scoped-var
+  ✖  244:51  property used outside of binding context.                                                                    block-scoped-var
 
   primitive.js:5:13
-  ⚠    8:16   Method constructor has a complexity of 26.                                                                   complexity
-  ⚠  453:15   Blocks are nested too deeply (5).                                                                            max-depth
-  ✖    5:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖    8:32   o is defined but never used.                                                                                 no-unused-vars
-  ✖   54:89   records is defined but never used.                                                                           no-unused-vars
-  ✖  111:78   record is defined but never used.                                                                            no-unused-vars
-  ✖  118:57   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  143:73   records is defined but never used.                                                                           no-unused-vars
-  ✖  194:7    Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
-  ✖  195:7    Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
-  ✖  226:18   length property should be compared to a value.                                                               unicorn/explicit-length-check
-  ✖  264:25   evt is defined but never used.                                                                               no-unused-vars
-  ✖  278:47   evt is defined but never used.                                                                               no-unused-vars
-  ✖  279:11   Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
-  ✖  305:55   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖  305:74   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖  363:13   timer is defined but never used.                                                                             no-unused-vars
-  ✖  387:40   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  446:11   Split let declarations into multiple statements.                                                             one-var
-  ✖  446:15   properties is never reassigned. Use const instead.                                                           prefer-const
-  ✖  486:14   o is defined but never used.                                                                                 no-unused-vars
-  ✖  500:9    Expected a default case.                                                                                     default-case
-  ✖  534:51   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  559:35   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  620:15   existingType is assigned a value but never used.                                                             no-unused-vars
-  ✖  654:9    Expected a default case.                                                                                     default-case
-  ✖  722:25   Unexpected negated condition.                                                                                no-negated-condition
-  ✖  723:24   Unexpected negated condition.                                                                                no-negated-condition
-  ✖  735:15   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  736:15   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  736:30   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  737:22   The catch parameter should be named err.                                                                     unicorn/catch-error-name
-  ✖  739:17   previousValue used outside of binding context.                                                               block-scoped-var
-  ✖  739:31   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  739:34   newValue used outside of binding context.                                                                    block-scoped-var
-  ✖  747:23   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  750:56   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  756:11   Unexpected negated condition.                                                                                no-negated-condition
-  ✖  788:16   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  788:35   Expected a conditional expression and instead saw an assignment.                                             no-cond-assign
-  ✖  796:52   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖  796:65   Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ⚠    8:16  Method constructor has a complexity of 26.                                                                   complexity
+  ⚠  453:15  Blocks are nested too deeply (5).                                                                            max-depth
+  ✖    5:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖    8:32  o is defined but never used.                                                                                 no-unused-vars
+  ✖   54:89  records is defined but never used.                                                                           no-unused-vars
+  ✖  111:78  record is defined but never used.                                                                            no-unused-vars
+  ✖  118:57  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  143:73  records is defined but never used.                                                                           no-unused-vars
+  ✖  194:7   Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
+  ✖  195:7   Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
+  ✖  226:18  length property should be compared to a value.                                                               unicorn/explicit-length-check
+  ✖  264:25  evt is defined but never used.                                                                               no-unused-vars
+  ✖  278:47  evt is defined but never used.                                                                               no-unused-vars
+  ✖  279:11  Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
+  ✖  305:55  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖  305:74  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖  363:13  timer is defined but never used.                                                                             no-unused-vars
+  ✖  387:40  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  446:11  Split let declarations into multiple statements.                                                             one-var
+  ✖  446:15  properties is never reassigned. Use const instead.                                                           prefer-const
+  ✖  486:14  o is defined but never used.                                                                                 no-unused-vars
+  ✖  500:9   Expected a default case.                                                                                     default-case
+  ✖  534:51  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  559:35  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  620:15  existingType is assigned a value but never used.                                                             no-unused-vars
+  ✖  654:9   Expected a default case.                                                                                     default-case
+  ✖  722:25  Unexpected negated condition.                                                                                no-negated-condition
+  ✖  723:24  Unexpected negated condition.                                                                                no-negated-condition
+  ✖  735:15  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  736:15  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  736:30  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  737:22  The catch parameter should be named err.                                                                     unicorn/catch-error-name
+  ✖  739:17  previousValue used outside of binding context.                                                               block-scoped-var
+  ✖  739:31  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  739:34  newValue used outside of binding context.                                                                    block-scoped-var
+  ✖  747:23  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  750:56  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  756:11  Unexpected negated condition.                                                                                no-negated-condition
+  ✖  788:16  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  788:35  Expected a conditional expression and instead saw an assignment.                                             no-cond-assign
+  ✖  796:52  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖  796:65  Unexpected mix of || and &&.                                                                                 no-mixed-operators
 
   node.js:5:13
-  ⚠   71:7    Unexpected todo comment.                                                                                     no-warning-comments
-  ✖    5:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   25:20   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   54:22   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  145:30   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖  145:45   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖  163:7    Unexpected var, use let or const instead.                                                                    no-var
-  ✖  164:9    Unexpected var, use let or const instead.                                                                    no-var
-  ✖  164:13   ret used outside of binding context.                                                                         block-scoped-var
-  ✖  166:13   ret used outside of binding context.                                                                         block-scoped-var
-  ✖  167:11   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖  171:15   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  171:19   ret is already defined.                                                                                      no-redeclare
-  ✖  180:16   ret used outside of binding context.                                                                         block-scoped-var
-  ✖  189:14   Expected a conditional expression and instead saw an assignment.                                             no-cond-assign
-  ✖  201:21   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  216:21   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  233:7    The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖  252:28   Arrow function should not return assignment.                                                                 no-return-assign
-  ✖  268:25   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  328:13   ret is assigned a value but never used.                                                                      no-unused-vars
-  ✖  386:11   Expected a default case.                                                                                     default-case
-  ✖  419:13   Return statement should not contain assignment.                                                              no-return-assign
-  ✖  436:12   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  436:72   Empty block statement.                                                                                       no-empty
-  ✖  438:25   i used outside of binding context.                                                                           block-scoped-var
-  ✖  469:25   Unexpected mix of + and *.                                                                                   no-mixed-operators
-  ✖  469:29   Unexpected mix of + and *.                                                                                   no-mixed-operators
-  ✖  472:9    Unexpected var, use let or const instead.                                                                    no-var
-  ✖  479:12   item used outside of binding context.                                                                        block-scoped-var
-  ✖  479:20   item used outside of binding context.                                                                        block-scoped-var
-  ✖  479:40   item used outside of binding context.                                                                        block-scoped-var
-  ✖  484:16   item used outside of binding context.                                                                        block-scoped-var
-  ✖  488:14   item used outside of binding context.                                                                        block-scoped-var
-  ✖  528:11   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
-  ✖  555:24   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  557:35   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  578:28   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  578:47   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  584:32   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  606:23   evt is defined but never used.                                                                               no-unused-vars
-  ✖  617:24   evt is defined but never used.                                                                               no-unused-vars
-  ✖  617:24   Arrow function should not return assignment.                                                                 no-return-assign
-  ✖  690:18   node is not defined.                                                                                         no-undef
+  ✖    5:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   25:20  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   54:22  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  145:30  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖  145:45  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖  163:7   Unexpected var, use let or const instead.                                                                    no-var
+  ✖  164:9   Unexpected var, use let or const instead.                                                                    no-var
+  ✖  164:13  ret used outside of binding context.                                                                         block-scoped-var
+  ✖  166:13  ret used outside of binding context.                                                                         block-scoped-var
+  ✖  167:11  The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖  171:15  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  171:19  ret is already defined.                                                                                      no-redeclare
+  ✖  180:16  ret used outside of binding context.                                                                         block-scoped-var
+  ✖  189:14  Expected a conditional expression and instead saw an assignment.                                             no-cond-assign
+  ✖  201:21  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  216:21  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  233:7   The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖  252:28  Arrow function should not return assignment.                                                                 no-return-assign
+  ✖  268:25  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  328:13  ret is assigned a value but never used.                                                                      no-unused-vars
+  ✖  386:11  Expected a default case.                                                                                     default-case
+  ✖  419:13  Return statement should not contain assignment.                                                              no-return-assign
+  ✖  436:12  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  436:72  Empty block statement.                                                                                       no-empty
+  ✖  438:25  i used outside of binding context.                                                                           block-scoped-var
+  ✖  469:25  Unexpected mix of + and *.                                                                                   no-mixed-operators
+  ✖  469:29  Unexpected mix of + and *.                                                                                   no-mixed-operators
+  ✖  472:9   Unexpected var, use let or const instead.                                                                    no-var
+  ✖  479:12  item used outside of binding context.                                                                        block-scoped-var
+  ✖  479:20  item used outside of binding context.                                                                        block-scoped-var
+  ✖  479:40  item used outside of binding context.                                                                        block-scoped-var
+  ✖  484:16  item used outside of binding context.                                                                        block-scoped-var
+  ✖  488:14  item used outside of binding context.                                                                        block-scoped-var
+  ✖  528:11  The body of a for-in should be wrapped in an if statement to filter unwanted properties from the prototype.  guard-for-in
+  ✖  555:24  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  557:35  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  578:28  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  578:47  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  584:32  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  606:23  evt is defined but never used.                                                                               no-unused-vars
+  ✖  617:24  evt is defined but never used.                                                                               no-unused-vars
+  ✖  617:24  Arrow function should not return assignment.                                                                 no-return-assign
+  ✖  690:18  node is not defined.                                                                                         no-undef
 
   functions.js:8:13
-  ⚠   69:9    Unexpected todo comment.                                                                                     no-warning-comments
-  ⚠   92:3    Unexpected todo comment.                                                                                     no-warning-comments
-  ✖    8:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   17:18   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   22:9    Unexpected var, use let or const instead.                                                                    no-var
-  ✖   44:11   ret used outside of binding context.                                                                         block-scoped-var
-  ✖   56:13   ret used outside of binding context.                                                                         block-scoped-var
-  ✖   56:19   ret used outside of binding context.                                                                         block-scoped-var
-  ✖   59:15   ret used outside of binding context.                                                                         block-scoped-var
-  ✖   61:22   ret used outside of binding context.                                                                         block-scoped-var
-  ✖   65:18   ret used outside of binding context.                                                                         block-scoped-var
-  ✖   85:9    Unexpected var, use let or const instead.                                                                    no-var
-  ✖   89:14   ret used outside of binding context.                                                                         block-scoped-var
-  ✖   89:62   ret used outside of binding context.                                                                         block-scoped-var
-  ✖   93:23   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖   93:33   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖   94:22   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖   94:45   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖  125:14   $u was used before it was defined.                                                                           no-use-before-define
-  ✖  134:15   $u was used before it was defined.                                                                           no-use-before-define
-  ✖  143:26   $u was used before it was defined.                                                                           no-use-before-define
-  ✖  150:26   $u was used before it was defined.                                                                           no-use-before-define
-  ✖  177:11   ord was used before it was defined.                                                                          no-use-before-define
-  ✖  177:11   ord used outside of binding context.                                                                         block-scoped-var
-  ✖  177:23   ord was used before it was defined.                                                                          no-use-before-define
-  ✖  177:23   ord used outside of binding context.                                                                         block-scoped-var
-  ✖  178:9    Unexpected var, use let or const instead.                                                                    no-var
-  ✖  181:7    ord used outside of binding context.                                                                         block-scoped-var
-  ✖  181:13   ord used outside of binding context.                                                                         block-scoped-var
-  ✖  183:20   ord used outside of binding context.                                                                         block-scoped-var
-  ✖  212:7    Split let declarations into multiple statements.                                                             one-var
-  ✖  216:18   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  256:31   Unnecessary escape character: \/.                                                                            no-useless-escape
-  ✖  274:16   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖  274:29   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖  309:14   $u was used before it was defined.                                                                           no-use-before-define
-  ✖  314:14   $u was used before it was defined.                                                                           no-use-before-define
-  ✖  344:56   $$ is not defined.                                                                                           no-undef
-  ✖  360:9    Unexpected negated condition.                                                                                no-negated-condition
-  ✖  368:9    Unexpected negated condition.                                                                                no-negated-condition
-  ✖  373:32   Unnecessary escape character: \-.                                                                            no-useless-escape
-  ✖  390:18   $u was used before it was defined.                                                                           no-use-before-define
-  ✖  424:3    Unexpected var, use let or const instead.                                                                    no-var
-  ✖  463:44   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  522:21   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  523:52   Unexpected mix of + and %.                                                                                   no-mixed-operators
-  ✖  523:58   Unexpected mix of + and %.                                                                                   no-mixed-operators
+  ✖    8:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   17:18  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   22:9   Unexpected var, use let or const instead.                                                                    no-var
+  ✖   44:11  ret used outside of binding context.                                                                         block-scoped-var
+  ✖   56:13  ret used outside of binding context.                                                                         block-scoped-var
+  ✖   56:19  ret used outside of binding context.                                                                         block-scoped-var
+  ✖   59:15  ret used outside of binding context.                                                                         block-scoped-var
+  ✖   61:22  ret used outside of binding context.                                                                         block-scoped-var
+  ✖   65:18  ret used outside of binding context.                                                                         block-scoped-var
+  ✖   85:9   Unexpected var, use let or const instead.                                                                    no-var
+  ✖   89:14  ret used outside of binding context.                                                                         block-scoped-var
+  ✖   89:62  ret used outside of binding context.                                                                         block-scoped-var
+  ✖   93:23  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖   93:33  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖   94:22  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖   94:45  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖  125:14  $u was used before it was defined.                                                                           no-use-before-define
+  ✖  134:15  $u was used before it was defined.                                                                           no-use-before-define
+  ✖  143:26  $u was used before it was defined.                                                                           no-use-before-define
+  ✖  150:26  $u was used before it was defined.                                                                           no-use-before-define
+  ✖  177:11  ord used outside of binding context.                                                                         block-scoped-var
+  ✖  177:11  ord was used before it was defined.                                                                          no-use-before-define
+  ✖  177:23  ord was used before it was defined.                                                                          no-use-before-define
+  ✖  177:23  ord used outside of binding context.                                                                         block-scoped-var
+  ✖  178:9   Unexpected var, use let or const instead.                                                                    no-var
+  ✖  181:7   ord used outside of binding context.                                                                         block-scoped-var
+  ✖  181:13  ord used outside of binding context.                                                                         block-scoped-var
+  ✖  183:20  ord used outside of binding context.                                                                         block-scoped-var
+  ✖  212:7   Split let declarations into multiple statements.                                                             one-var
+  ✖  216:18  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  256:31  Unnecessary escape character: \/.                                                                            no-useless-escape
+  ✖  274:16  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖  274:29  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖  309:14  $u was used before it was defined.                                                                           no-use-before-define
+  ✖  314:14  $u was used before it was defined.                                                                           no-use-before-define
+  ✖  344:56  $$ is not defined.                                                                                           no-undef
+  ✖  360:9   Unexpected negated condition.                                                                                no-negated-condition
+  ✖  368:9   Unexpected negated condition.                                                                                no-negated-condition
+  ✖  373:32  Unnecessary escape character: \-.                                                                            no-useless-escape
+  ✖  390:18  $u was used before it was defined.                                                                           no-use-before-define
+  ✖  424:3   Unexpected var, use let or const instead.                                                                    no-var
+  ✖  463:44  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  522:21  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  523:52  Unexpected mix of + and %.                                                                                   no-mixed-operators
+  ✖  523:58  Unexpected mix of + and %.                                                                                   no-mixed-operators
 
   mavo.js:10:13
-  ✖   10:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   41:14   Unexpected var, use let or const instead.                                                                    no-var
-  ✖   41:52   Empty block statement.                                                                                       no-empty
-  ✖   42:29   i used outside of binding context.                                                                           block-scoped-var
-  ✖   70:28   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖   70:49   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖   96:15   roles is assigned a value but never used.                                                                    no-unused-vars
-  ✖  107:31   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖  107:47   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖  115:50   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖  115:70   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖  135:26   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  148:69   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  167:17   Split let declarations into multiple statements.                                                             one-var
-  ✖  167:21   previousMode is never reassigned. Use const instead.                                                         prefer-const
-  ✖  187:34   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  198:11   Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
-  ✖  214:44   evt is defined but never used.                                                                               no-unused-vars
-  ✖  216:28   records is defined but never used.                                                                           no-unused-vars
-  ✖  226:19   observer was used before it was defined.                                                                     no-use-before-define
-  ✖  226:19   observer used outside of binding context.                                                                    block-scoped-var
-  ✖  227:17   observer was used before it was defined.                                                                     no-use-before-define
-  ✖  227:17   observer used outside of binding context.                                                                    block-scoped-var
-  ✖  228:17   observer was used before it was defined.                                                                     no-use-before-define
-  ✖  228:17   observer used outside of binding context.                                                                    block-scoped-var
-  ✖  237:13   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  245:30   evt is defined but never used.                                                                               no-unused-vars
-  ✖  281:13   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  291:19   editor used outside of binding context.                                                                      block-scoped-var
-  ✖  394:7    Return statement should not contain assignment.                                                              no-return-assign
-  ✖  409:7    Split let declarations into multiple statements.                                                             one-var
-  ✖  409:11   previous is never reassigned. Use const instead.                                                             prefer-const
-  ✖  430:22   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  476:34   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  574:24   test is defined but never used.                                                                              no-unused-vars
-  ✖  577:23   path is defined but never used.                                                                              no-unused-vars
-  ✖  584:48   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  618:19   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  641:16   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  650:9    Unexpected var, use let or const instead.                                                                    no-var
-  ✖  650:13   name used outside of binding context.                                                                        block-scoped-var
-  ✖  650:13   name is already defined.                                                                                     no-redeclare
-  ✖  652:22   name used outside of binding context.                                                                        block-scoped-var
-  ✖  692:15   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  710:17   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  711:17   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  712:16   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  713:17   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  714:7    Split let declarations into multiple statements.                                                             one-var
-  ✖  714:11   ret is never reassigned. Use const instead.                                                                  prefer-const
-  ✖  715:9    arr2 is never reassigned. Use const instead.                                                                 prefer-const
-  ✖  721:20   Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   10:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   41:14  Unexpected var, use let or const instead.                                                                    no-var
+  ✖   41:52  Empty block statement.                                                                                       no-empty
+  ✖   42:29  i used outside of binding context.                                                                           block-scoped-var
+  ✖   70:28  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖   70:49  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖   96:15  roles is assigned a value but never used.                                                                    no-unused-vars
+  ✖  107:31  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖  107:47  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖  115:50  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖  115:70  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖  135:26  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  148:69  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  167:17  Split let declarations into multiple statements.                                                             one-var
+  ✖  167:21  previousMode is never reassigned. Use const instead.                                                         prefer-const
+  ✖  187:34  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  198:11  Expected an assignment or function call and instead saw an expression.                                       no-unused-expressions
+  ✖  214:44  evt is defined but never used.                                                                               no-unused-vars
+  ✖  216:28  records is defined but never used.                                                                           no-unused-vars
+  ✖  226:19  observer was used before it was defined.                                                                     no-use-before-define
+  ✖  226:19  observer used outside of binding context.                                                                    block-scoped-var
+  ✖  227:17  observer was used before it was defined.                                                                     no-use-before-define
+  ✖  227:17  observer used outside of binding context.                                                                    block-scoped-var
+  ✖  228:17  observer was used before it was defined.                                                                     no-use-before-define
+  ✖  228:17  observer used outside of binding context.                                                                    block-scoped-var
+  ✖  237:13  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  245:30  evt is defined but never used.                                                                               no-unused-vars
+  ✖  281:13  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  291:19  editor used outside of binding context.                                                                      block-scoped-var
+  ✖  394:7   Return statement should not contain assignment.                                                              no-return-assign
+  ✖  409:7   Split let declarations into multiple statements.                                                             one-var
+  ✖  409:11  previous is never reassigned. Use const instead.                                                             prefer-const
+  ✖  430:22  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  476:34  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  574:24  test is defined but never used.                                                                              no-unused-vars
+  ✖  577:23  path is defined but never used.                                                                              no-unused-vars
+  ✖  584:48  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  618:19  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  641:16  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  650:9   Unexpected var, use let or const instead.                                                                    no-var
+  ✖  650:13  name used outside of binding context.                                                                        block-scoped-var
+  ✖  650:13  name is already defined.                                                                                     no-redeclare
+  ✖  652:22  name used outside of binding context.                                                                        block-scoped-var
+  ✖  692:15  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  710:17  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  711:17  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  712:16  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  713:17  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  714:7   Split let declarations into multiple statements.                                                             one-var
+  ✖  714:11  ret is never reassigned. Use const instead.                                                                  prefer-const
+  ✖  715:9   arr2 is never reassigned. Use const instead.                                                                 prefer-const
+  ✖  721:20  Unexpected chained assignment.                                                                               no-multi-assign
 
   collection.js:7:13
-  ⚠  211:5    Unexpected fixme comment.                                                                                    no-warning-comments
-  ✖    7:13   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖   10:32   o is defined but never used.                                                                                 no-unused-vars
-  ✖  149:27   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  188:33   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  252:23   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  282:31   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  282:53   Unexpected chained assignment.                                                                               no-multi-assign
-  ✖  384:7    Unexpected negated condition.                                                                                no-negated-condition
-  ✖  388:14   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  389:11   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  389:15   item used outside of binding context.                                                                        block-scoped-var
-  ✖  392:13   item used outside of binding context.                                                                        block-scoped-var
-  ✖  394:13   item used outside of binding context.                                                                        block-scoped-var
-  ✖  395:25   item used outside of binding context.                                                                        block-scoped-var
-  ✖  400:27   i used outside of binding context.                                                                           block-scoped-var
-  ✖  405:16   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  405:20   j used outside of binding context.                                                                           block-scoped-var
-  ✖  405:24   i used outside of binding context.                                                                           block-scoped-var
-  ✖  405:27   j used outside of binding context.                                                                           block-scoped-var
-  ✖  405:44   j used outside of binding context.                                                                           block-scoped-var
-  ✖  406:13   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  406:17   item used outside of binding context.                                                                        block-scoped-var
-  ✖  406:17   item is already defined.                                                                                     no-redeclare
-  ✖  408:13   item used outside of binding context.                                                                        block-scoped-var
-  ✖  408:30   j used outside of binding context.                                                                           block-scoped-var
-  ✖  410:32   item used outside of binding context.                                                                        block-scoped-var
-  ✖  411:13   item used outside of binding context.                                                                        block-scoped-var
-  ✖  411:26   j used outside of binding context.                                                                           block-scoped-var
-  ✖  413:34   item used outside of binding context.                                                                        block-scoped-var
-  ✖  415:41   item used outside of binding context.                                                                        block-scoped-var
-  ✖  420:31   i used outside of binding context.                                                                           block-scoped-var
-  ✖  420:53   i used outside of binding context.                                                                           block-scoped-var
-  ✖  425:16   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  425:20   j used outside of binding context.                                                                           block-scoped-var
-  ✖  425:20   j is already defined.                                                                                        no-redeclare
-  ✖  425:24   i used outside of binding context.                                                                           block-scoped-var
-  ✖  425:27   j used outside of binding context.                                                                           block-scoped-var
-  ✖  425:53   j used outside of binding context.                                                                           block-scoped-var
-  ✖  426:27   j used outside of binding context.                                                                           block-scoped-var
-  ✖  429:86   j used outside of binding context.                                                                           block-scoped-var
-  ✖  456:55   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖  456:72   Unexpected mix of || and &&.                                                                                 no-mixed-operators
-  ✖  487:9    Return statement should not contain assignment.                                                              no-return-assign
-  ✖  490:13   me is assigned a value but never used.                                                                       no-unused-vars
-  ✖  491:22   dragula is not defined.                                                                                      no-undef
-  ✖  494:15   length property should be compared to a value.                                                               unicorn/explicit-length-check
-  ✖  525:44   source is defined but never used.                                                                            no-unused-vars
-  ✖  527:15   oldIndex is assigned a value but never used.                                                                 no-unused-vars
-  ✖  533:51   Expected !== and instead saw !=.                                                                             eqeqeq
-  ✖  588:11   Unexpected var, use let or const instead.                                                                    no-var
-  ✖  594:14   button used outside of binding context.                                                                      block-scoped-var
-  ✖  595:11   button used outside of binding context.                                                                      block-scoped-var
-  ✖  601:9    button used outside of binding context.                                                                      block-scoped-var
-  ✖  602:19   button used outside of binding context.                                                                      block-scoped-var
-  ✖  605:11   button used outside of binding context.                                                                      block-scoped-var
-  ✖  608:9    button used outside of binding context.                                                                      block-scoped-var
-  ✖  614:16   button used outside of binding context.                                                                      block-scoped-var
-  ✖  631:21   Unexpected mix of && and ||.                                                                                 no-mixed-operators
-  ✖  631:40   Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ⚠  211:5   Unexpected fixme comment.                                                                                    no-warning-comments
+  ✖    7:13  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖   10:32  o is defined but never used.                                                                                 no-unused-vars
+  ✖  149:27  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  188:33  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  252:23  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  282:31  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  282:53  Unexpected chained assignment.                                                                               no-multi-assign
+  ✖  384:7   Unexpected negated condition.                                                                                no-negated-condition
+  ✖  388:14  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  389:11  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  389:15  item used outside of binding context.                                                                        block-scoped-var
+  ✖  392:13  item used outside of binding context.                                                                        block-scoped-var
+  ✖  394:13  item used outside of binding context.                                                                        block-scoped-var
+  ✖  395:25  item used outside of binding context.                                                                        block-scoped-var
+  ✖  400:27  i used outside of binding context.                                                                           block-scoped-var
+  ✖  405:16  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  405:20  j used outside of binding context.                                                                           block-scoped-var
+  ✖  405:24  i used outside of binding context.                                                                           block-scoped-var
+  ✖  405:27  j used outside of binding context.                                                                           block-scoped-var
+  ✖  405:44  j used outside of binding context.                                                                           block-scoped-var
+  ✖  406:13  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  406:17  item used outside of binding context.                                                                        block-scoped-var
+  ✖  406:17  item is already defined.                                                                                     no-redeclare
+  ✖  408:13  item used outside of binding context.                                                                        block-scoped-var
+  ✖  408:30  j used outside of binding context.                                                                           block-scoped-var
+  ✖  410:32  item used outside of binding context.                                                                        block-scoped-var
+  ✖  411:13  item used outside of binding context.                                                                        block-scoped-var
+  ✖  411:26  j used outside of binding context.                                                                           block-scoped-var
+  ✖  413:34  item used outside of binding context.                                                                        block-scoped-var
+  ✖  415:41  item used outside of binding context.                                                                        block-scoped-var
+  ✖  420:31  i used outside of binding context.                                                                           block-scoped-var
+  ✖  420:53  i used outside of binding context.                                                                           block-scoped-var
+  ✖  425:16  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  425:20  j used outside of binding context.                                                                           block-scoped-var
+  ✖  425:20  j is already defined.                                                                                        no-redeclare
+  ✖  425:24  i used outside of binding context.                                                                           block-scoped-var
+  ✖  425:27  j used outside of binding context.                                                                           block-scoped-var
+  ✖  425:53  j used outside of binding context.                                                                           block-scoped-var
+  ✖  426:27  j used outside of binding context.                                                                           block-scoped-var
+  ✖  429:86  j used outside of binding context.                                                                           block-scoped-var
+  ✖  456:55  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖  456:72  Unexpected mix of || and &&.                                                                                 no-mixed-operators
+  ✖  487:9   Return statement should not contain assignment.                                                              no-return-assign
+  ✖  490:13  me is assigned a value but never used.                                                                       no-unused-vars
+  ✖  491:22  dragula is not defined.                                                                                      no-undef
+  ✖  494:15  length property should be compared to a value.                                                               unicorn/explicit-length-check
+  ✖  525:44  source is defined but never used.                                                                            no-unused-vars
+  ✖  527:15  oldIndex is assigned a value but never used.                                                                 no-unused-vars
+  ✖  533:51  Expected !== and instead saw !=.                                                                             eqeqeq
+  ✖  588:11  Unexpected var, use let or const instead.                                                                    no-var
+  ✖  594:14  button used outside of binding context.                                                                      block-scoped-var
+  ✖  595:11  button used outside of binding context.                                                                      block-scoped-var
+  ✖  601:9   button used outside of binding context.                                                                      block-scoped-var
+  ✖  602:19  button used outside of binding context.                                                                      block-scoped-var
+  ✖  605:11  button used outside of binding context.                                                                      block-scoped-var
+  ✖  608:9   button used outside of binding context.                                                                      block-scoped-var
+  ✖  614:16  button used outside of binding context.                                                                      block-scoped-var
+  ✖  631:21  Unexpected mix of && and ||.                                                                                 no-mixed-operators
+  ✖  631:40  Unexpected mix of && and ||.                                                                                 no-mixed-operators
 
-  9 warnings
-  501 errors
+  3 warnings
+  465 errors
